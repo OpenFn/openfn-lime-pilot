@@ -135,17 +135,17 @@ fn(state => {
                 )?.value.uuid
               ], //input.attributeType = "3884dc76-c271-4bcb-8df8-81c6fb897f53"
           },
-          // {
-          //   attribute: 'v7k4OcXrWR8', //employment status
-          //   value:
-          //     statusMap[
-          //       patient.person.attributes.find(
-          //         a =>
-          //           a.attributeType.uuid ===
-          //           'dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e'
-          //       )?.value.uuid
-          //     ], //input.attributeType = "dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e"
-          // },
+          {
+            attribute: 'v7k4OcXrWR8', //employment status
+            value:
+              statusMap[
+                patient.person.attributes.find(
+                  a =>
+                    a.attributeType.uuid ===
+                    'dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e'
+                )?.value.uuid
+              ], //input.attributeType = "dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e"
+          },
           {
             attribute: 'SVoT2cVLd5O', //Number of children
             value: patient.person.attributes.find(
