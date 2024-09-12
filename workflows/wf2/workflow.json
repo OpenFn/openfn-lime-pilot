@@ -6,7 +6,7 @@
                 "adaptor": "openmrs",
                 "configuration": "../tmp/openmrs-creds.json",
                 "state": {
-                    "manualCursor": "2023-07-27T07:16:24.544Z"
+                    "manualCursor": "2024-09-01"
                 },
                 "expression": "1-get-patients.js",
                 "next": {
