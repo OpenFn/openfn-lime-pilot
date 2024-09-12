@@ -277,5 +277,13 @@ fn(state => {
     'fc49acaa-ece2-4365-9dfb-70c2105de8b1': 'returnee',
     '1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA': 'unknown',
   };
+
+  state.genderOptions = {
+    M: 'male',
+    F: 'female',
+    U: 'unknown',
+    O: 'prefer_not_to_answer',
+  };
+
   return state;
 });

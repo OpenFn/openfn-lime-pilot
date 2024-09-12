@@ -1,11 +1,5 @@
 fn(state => {
-  const { nationalityMap, statusMap, placeOflivingMap } = state;
-  const genderOptions = {
-    M: 'male',
-    F: 'female',
-    U: 'unknown',
-    O: 'prefer_not_to_answer',
-  };
+  const { nationalityMap, statusMap, placeOflivingMap, genderOptions } = state;
 
   const DHIS2_PATIENT_NUMBER = '8d79403a-c2cc-11de-8d13-0010c6dffd0f'; //DHIS2 ID or DHIS2 Patient Number
   const OPENMRS_AUTO_ID = '05a29f94-c0ed-11e2-94be-8c13b969e334'; //MSF ID or OpenMRS Patient Number
@@ -266,5 +260,18 @@ each(
   upsert('trackedEntityInstances', $.data.query, $.data.data)
 );
 
-// Clean up state
-fn(({ data, ...state }) => state);
+fn(state => {
+  const {
+    data,
+    patients,
+    statusMap,
+    references,
+    patientsUpsert,
+    nationalityMap,
+    placeOflivingMap,
+    genderOptions,
+    response,
+    ...next
+  } = state;
+  return next;
+});

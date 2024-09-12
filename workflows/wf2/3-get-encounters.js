@@ -13,18 +13,29 @@ fn(state => {
   //   'Encounters returned before we filter for most recent ::',
   //   JSON.stringify(data, null, 2)
   // );
-  const encountersFound = data.results.filter(
-    encounter =>
-      encounter.encounterDatetime >= cursor &&
-      encounter.form.uuid == '6a3e1e0e-dd13-3465-b8f5-ee2d42691fe5'
+  state.formUuids = [
+    '82db23a1-4eb1-3f3c-bb65-b7ebfe95b19b',
+    '6a3e1e0e-dd13-3465-b8f5-ee2d42691fe5',
+  ];
+
+  const encountersFound = state.formUuids.map(formUuid =>
+    data.results.filter(
+      encounter =>
+        encounter.encounterDatetime >= cursor && encounter.form.uuid == formUuid
+    )
   );
-  const firstEncounter = encountersFound.slice(0, 1);
 
-  console.log('# of new encounters found in OMRS ::', encountersFound.length);
-  console.log('first encounter:: ', firstEncounter);
-  const encounters =
-    encountersFound.length > 1 ? firstEncounter : encountersFound;
-  console.log('# of new encounters to sync to dhis2 ::', encounters.length);
+  state.encounters = encountersFound.map(encounters => encounters[0]);
 
-  return { ...state, data: {}, references: [], encounters };
+  console.log(
+    '# of new encounters found in OMRS ::',
+    encountersFound.flat().length
+  );
+
+  console.log(
+    '# of new encounters to sync to dhis2 ::',
+    state.encounters.length
+  );
+
+  return { ...state, data: {}, response: {}, references: [] };
 });
