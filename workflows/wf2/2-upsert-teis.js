@@ -1,5 +1,5 @@
 fn(state => {
-  const { nationalityMap, statusMap } = state;
+  const { nationalityMap, statusMap, placeOflivingMap } = state;
   const genderOptions = {
     M: 'male',
     F: 'female',
@@ -95,75 +95,69 @@ fn(state => {
           },
           {
             attribute: 'rBtrjV1Mqkz', //Place of living
-            value: patient.person?.addresses[0]?.cityVillage,
+            value: placeOflivingMap[patient.person?.addresses[0]?.cityVillage],
           },
           {
             attribute: 'Xvzc9e0JJmp', //nationality
             value:
               nationalityMap[
-                patient.person.attributes
-                  .find(
-                    a =>
-                      a.attributeType.uuid ===
-                      '24d1fa23-9778-4a8e-9f7b-93f694fc25e2'
-                  )
-                  ?.display.toLowerCase()
+                patient.person.attributes.find(
+                  a =>
+                    a.attributeType.uuid ===
+                    '24d1fa23-9778-4a8e-9f7b-93f694fc25e2'
+                )?.value.uuid
               ], //input.attributeType = "24d1fa23-9778-4a8e-9f7b-93f694fc25e2"
           },
           {
             attribute: 'YUIQIA2ClN6', //current status
             value:
               statusMap[
-                patient.person.attributes
-                  .find(
-                    a =>
-                      a.attributeType.uuid ===
-                      'e0b6ed99-72c4-4847-a442-e9929eac4a0f'
-                  )
-                  ?.display.toLowerCase()
+                patient.person.attributes.find(
+                  a =>
+                    a.attributeType.uuid ===
+                    'e0b6ed99-72c4-4847-a442-e9929eac4a0f'
+                )?.value.uuid
               ], //input.attributeType = "e0b6ed99-72c4-4847-a442-e9929eac4a0f"
           },
           {
             attribute: 'Qq6xQ2s6LO8', //legal status
             value:
               statusMap[
-                patient.person.attributes
-                  .find(
-                    a =>
-                      a.attributeType.uuid ===
-                      'a9b2c642-097f-43f8-b96b-4d2f50ffd9b1'
-                  )
-                  ?.display.toLowerCase()
+                patient.person.attributes.find(
+                  a =>
+                    a.attributeType.uuid ===
+                    'a9b2c642-097f-43f8-b96b-4d2f50ffd9b1'
+                )?.value.uuid
               ], //input.attributeType = "a9b2c642-097f-43f8-b96b-4d2f50ffd9b1"
           },
           {
             attribute: 'FpuGAOu6itZ', //marital status
             value:
               statusMap[
-                patient.person.attributes
-                  .find(
-                    a =>
-                      a.attributeType.uuid ===
-                      '3884dc76-c271-4bcb-8df8-81c6fb897f53'
-                  )
-                  ?.display.toLowerCase()
+                patient.person.attributes.find(
+                  a =>
+                    a.attributeType.uuid ===
+                    '3884dc76-c271-4bcb-8df8-81c6fb897f53'
+                )?.value.uuid
               ], //input.attributeType = "3884dc76-c271-4bcb-8df8-81c6fb897f53"
           },
-          {
-            attribute: 'v7k4OcXrWR8', //employment status
-            value: patient.person.attributes.find(
-              a =>
-                a.attributeType.uuid === 'dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e'
-            )?.display
-              ? statusMap['permanent_employee']
-              : '', //input.attributeType = "dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e"
-          },
+          // {
+          //   attribute: 'v7k4OcXrWR8', //employment status
+          //   value:
+          //     statusMap[
+          //       patient.person.attributes.find(
+          //         a =>
+          //           a.attributeType.uuid ===
+          //           'dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e'
+          //       )?.value.uuid
+          //     ], //input.attributeType = "dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e"
+          // },
           {
             attribute: 'SVoT2cVLd5O', //Number of children
             value: patient.person.attributes.find(
               a =>
                 a.attributeType.uuid === 'e363161a-9d5c-4331-8463-238938f018ed'
-            )?.display, //input.attributeType = "e363161a-9d5c-4331-8463-238938f018ed"
+            )?.value, //input.attributeType = "e363161a-9d5c-4331-8463-238938f018ed"
           },
         ],
       },
