@@ -261,10 +261,10 @@ each(
 // });
 
 // Upsert TEIs to DHIS2
-// each(
-//   'patientsUpsert[*]',
-//   upsert('trackedEntityInstances', $.data.query, $.data.data)
-// );
+each(
+  'patientsUpsert[*]',
+  upsert('trackedEntityInstances', $.data.query, $.data.data)
+);
 
-// // Clean up state
-// fn(({ data, ...state }) => state);
+// Clean up state
+fn(({ data, ...state }) => state);
