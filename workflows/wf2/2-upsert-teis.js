@@ -208,9 +208,63 @@ each(
 
 // Upsert TEIs to DHIS2
 each(
-  'patientsUpsert[*]',
-  upsert('trackedEntityInstances', $.data.query, $.data.data)
+  '$.patients[*]',
+  get(
+    'trackedEntityInstances',
+    {
+      ou: 'OPjuJMZFLop',
+      filter: [`AYbfTPYMNJH:Eq:${$.data.uuid}`],
+      program: 'w9MSPn5oSqp',
+    },
+    {},
+    async state => {
+      const patient = state.references.at(-1);
+      console.log(patient.uuid, 'patient uuid');
+      const { trackedEntityInstances } = state.data;
+      const isNewPatient = trackedEntityInstances.length === 0;
+
+      state.buildPatientsUpsert(patient, isNewPatient);
+      await delay(2000);
+      return state;
+    }
+  )
 );
 
-// Clean up state
-fn(({ data, ...state }) => state);
+// fn(async state => {
+//   const { buildPatientsUpsert, patients } = state;
+
+//   const getPatient = async patient => {
+//     await new Promise(resolve => setTimeout(resolve, 2000));
+//     await get(
+//       'trackedEntityInstances',
+//       {
+//         ou: 'OPjuJMZFLop',
+//         filter: [`AYbfTPYMNJH:Eq:${patient.uuid}`],
+//         program: 'w9MSPn5oSqp',
+//       },
+//       {},
+//       state => {
+//         const { trackedEntityInstances } = state.data;
+//         const isNewPatient = trackedEntityInstances.length === 0;
+
+//         buildPatientsUpsert(patient, isNewPatient);
+//         return state;
+//       }
+//     )(state);
+//   };
+
+//   for (const patient of patients) {
+//     console.log(patient.uuid, 'patient uuid');
+//     await getPatient(patient);
+//   }
+//   return state;
+// });
+
+// Upsert TEIs to DHIS2
+// each(
+//   'patientsUpsert[*]',
+//   upsert('trackedEntityInstances', $.data.query, $.data.data)
+// );
+
+// // Clean up state
+// fn(({ data, ...state }) => state);
