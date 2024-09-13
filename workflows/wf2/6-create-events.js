@@ -16,15 +16,19 @@ fn(state => {
             value = answer.value;
           }
           if (typeof answer.value === 'object') {
+            value = optsMap.find(
+              o => o['value.uuid - External ID'] == answer?.value?.uuid
+            )?.['DHIS2 Option Code']; //Changed from 'DHIS2 Option UID'
             if (
               answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98' &&
-              conceptUuid === '722dd83a-c1cf-48ad-ac99-45ac131ccc96'
+              conceptUuid === '722dd83a-c1cf-48ad-ac99-45ac131ccc96' &&
+              dataElement === 'pN4iQH4AEzk'
             ) {
               value = 'TRUE';
             } else {
               value = optsMap.find(
                 o => o['value.uuid - External ID'] == answer?.value?.uuid
-              )?.['DHIS2 Option UID'];
+              )?.['DHIS2 Option Code']; //Changed from 'DHIS2 Option UID'
             }
           }
         }
@@ -49,6 +53,11 @@ fn(state => {
       dataValues,
     };
   });
+
+  console.log(
+    'dhis2 events to import:: ',
+    JSON.stringify(state.encountersMapping, null, 2)
+  );
 
   return state;
 });
