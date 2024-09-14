@@ -1,5 +1,5 @@
 get(
-  'https://gist.githubusercontent.com/aleksa-krolls/b22987f7569bc069e963973401832349/raw/066aae1199723144a1b5b7637a65d469a5b7ccd6/msf_mhBaseline_optionsMap.json'
+  'https://gist.githubusercontent.com/aleksa-krolls/2f309595110239cfcc8251017cf11592/raw/2854f388da1cdbd753eb30705609d6374a5af618/msf_wf2_optionsMap.json'
 ); //ak's gist
 
 fn(state => {
