@@ -12,9 +12,6 @@ fn(state => {
         const answer = data.obs.find(o => o.concept.uuid === conceptUuid);
 
         if (answer) {
-          if (typeof answer.value === 'string') {
-            value = answer.value;
-          }
           if (typeof answer.value === 'object') {
             value = optsMap.find(
               o => o['value.uuid - External ID'] == answer?.value?.uuid
@@ -30,6 +27,8 @@ fn(state => {
                 o => o['value.uuid - External ID'] == answer?.value?.uuid
               )?.['DHIS2 Option Code']; //Changed from 'DHIS2 Option UID'
             }
+          } else {
+            value = answer.value;
           }
         }
         if (!answer) {
