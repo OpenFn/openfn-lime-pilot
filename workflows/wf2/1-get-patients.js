@@ -37,7 +37,10 @@ fn(state => {
         : patient.auditInfo.dateChanged) > state.cursor
   );
   console.log('# of patients to sync to dhis2 ::', state.patients.length);
-  console.log('uuids of patients to sync to dhis2 ::', state.patients.map(p => p.uuid));
+  console.log(
+    'uuids of patients to sync to dhis2 ::',
+    state.patients.map(p => p.uuid)
+  );
   // console.log(JSON.stringify(patients, null, 2));
 
   state.lastRunDateTime = new Date().toISOString();
