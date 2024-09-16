@@ -7,7 +7,7 @@
                 "configuration": "../tmp/dhis2-creds.json",
                 "expression": "1-get-teis.js",
                 "state": {
-                    "manualCursor": "2019-06-12T17:00:00.00"
+                    "manualCursor": "2024-09-01"
                 },
                 "next": {
                     "get-locations": "!state.errors"
