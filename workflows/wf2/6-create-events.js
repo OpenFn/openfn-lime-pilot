@@ -4,21 +4,25 @@ fn(state => {
   const optsMap = JSON.parse(state.optsMap);
 
   function getRangePhq(input) {
-    if (input >= 0 && input <= 4) {
-      return '0_4';
-    } else if (input >= 5 && input <= 9) {
-      return '5_9';
-    } else if (input >= 10 && input <= 14) {
-      return '10_14';
-    } else if (input >= 15 && input <= 19) {
-      return '15_19';
-    } else if (input >= 20) {
-      return '>20';
-    } else {
+    if (typeof input !== 'number' || isNaN(input)) {
       return '';
     }
-  }
 
+    switch (true) {
+      case input >= 0 && input <= 4:
+        return '0_4';
+      case input >= 5 && input <= 9:
+        return '5_9';
+      case input >= 10 && input <= 14:
+        return '10_14';
+      case input >= 15 && input <= 19:
+        return '15_19';
+      case input >= 20:
+        return '>20';
+      default:
+        return '';
+    }
+  }
   const dataValuesMapping = (data, formsMap) => {
     return Object.keys(formsMap)
       .map(k => {
