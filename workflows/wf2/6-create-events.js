@@ -16,8 +16,10 @@ const processObjectAnswer = (
     o => o['value.uuid - External ID'] === answerValue.uuid
   );
   switch (true) {
-    case isDiagnosisByPsychologist(answerValue.uuid, conceptUuid, dataElement):
-      return 'TRUE';
+    case isDiagnosisByPsychologist(conceptUuid, dataElement):
+      return answerValue.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98'
+        ? 'TRUE'
+        : 'FALSE';
 
     case matchingOption && Object.keys(matchingOption).length > 0:
       return matchingOption['DHIS2 Option Code'];
@@ -33,8 +35,7 @@ const processOtherAnswer = (answerValue, conceptUuid, dataElement) => {
   }
 };
 
-const isDiagnosisByPsychologist = (uuid, conceptUuid, dataElement) =>
-  uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98' &&
+const isDiagnosisByPsychologist = (conceptUuid, dataElement) =>
   conceptUuid === '722dd83a-c1cf-48ad-ac99-45ac131ccc96' &&
   dataElement === 'pN4iQH4AEzk';
 
@@ -99,83 +100,10 @@ fn(state => {
 fn(state => {
   const optsMap = JSON.parse(state.optsMap);
 
-  function getRangePhq(input) {
-    if (typeof input !== 'number' || isNaN(input)) {
-      return '';
-    }
-
-    switch (true) {
-      case input >= 0 && input <= 4:
-        return '0_4';
-      case input >= 5 && input <= 9:
-        return '5_9';
-      case input >= 10 && input <= 14:
-        return '10_14';
-      case input >= 15 && input <= 19:
-        return '15_19';
-      case input >= 20:
-        return '>20';
-      default:
-        return '';
-    }
-  }
-  const dataValuesMapping = (data, formsMap) => {
-    return Object.keys(formsMap)
-      .map(k => {
-        let value;
-        const dataElement = k;
-        const conceptUuid = mhpssMap[k];
-        const answer = data.obs.find(o => o.concept.uuid === conceptUuid);
-
-        if (answer) {
-          if (typeof answer.value === 'object') {
-            value = optsMap.find(
-              o => o['value.uuid - External ID'] == answer?.value?.uuid
-            )?.['DHIS2 Option Code']; //Changed from 'DHIS2 Option UID'
-            if (
-              //mapping: diagnosis done by psychologist
-
-              conceptUuid === '722dd83a-c1cf-48ad-ac99-45ac131ccc96' &&
-              dataElement === 'pN4iQH4AEzk'
-            ) {
-              if (
-                answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98'
-              ) {
-                value = 'TRUE';
-              } else {
-                value = 'FALSE';
-              }
-            } else {
-              value = optsMap.find(
-                o => o['value.uuid - External ID'] == answer?.value?.uuid
-              )?.['DHIS2 Option Code']; //Changed from 'DHIS2 Option UID'
-              console.log(answer.value.uuid, {
-                dataElement,
-                value,
-                conceptUuid,
-              });
-            }
-          } else if (
-            typeof answer.value === 'number' &&
-            conceptUuid === '5f3d618e-5c89-43bd-8c79-07e4e98c2f23' &&
-            dataElement === 'tsFOVnlc6lz' //mapping: phq9 score
-          ) {
-            value = getRangePhq(answer.value);
-          } else if (!answer) {
-            value = '';
-          } else {
-            value = answer.value;
-          }
-        }
-        return { dataElement, value };
-      })
-      .filter(d => d);
-  };
-
   state.encountersMapping = state.encounters.map(data => {
     const form = state.formMaps[data.form.uuid];
     const eventDate = data.encounterDatetime.replace('+0000', '');
-    const { trackedEntityInstance, enrollment } = TEIs[data.patient.uuid];
+    const { trackedEntityInstance, enrollment } = state.TEIs[data.patient.uuid];
 
     const event = {
       program: 'w9MSPn5oSqp',
@@ -231,5 +159,5 @@ fn(
 //   )
 // );
 
-// // Clean up state
+// Clean up state
 // fn(({ data, references, ...state }) => state);
