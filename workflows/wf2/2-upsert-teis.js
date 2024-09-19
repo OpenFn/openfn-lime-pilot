@@ -232,5 +232,7 @@ fn(state => {
     response,
     ...next
   } = state;
+
+  next.patientUuids = patients.map(p => p.uuid);
   return next;
 });
