@@ -3,9 +3,9 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 each(
   '$.encounters[*]',
   get(
-    'trackedEntityInstances',
+    'tracker/trackedEntities',
     {
-      ou: 'OPjuJMZFLop',
+      orgUnit: 'OPjuJMZFLop',
       program: 'w9MSPn5oSqp',
       filter: [`AYbfTPYMNJH:Eq:${$.data.patient.uuid}`],
       fields: '*',
@@ -16,8 +16,7 @@ each(
       console.log(encounter.patient.uuid, 'Encounter patient uuid');
       state.TEIs ??= {};
 
-      const { trackedEntityInstance, enrollments } =
-        state.data.trackedEntityInstances[0]; // Can one encounter have more that one TEI?
+      const { trackedEntityInstance, enrollments } = state.data.instances[0]; // Can one encounter have more that one TEI?
 
       state.TEIs[encounter.patient.uuid] = {
         trackedEntityInstance,
