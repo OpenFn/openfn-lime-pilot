@@ -1,45 +1,51 @@
 const processAnswer = (answer, conceptUuid, dataElement, optsMap) => {
   if (typeof answer.value === 'object') {
-    return processObjectAnswer(answer.value, conceptUuid, dataElement, optsMap);
+    return processObjectAnswer(answer, conceptUuid, dataElement, optsMap);
   } else {
-    return processOtherAnswer(answer.value, conceptUuid, dataElement);
+    return processOtherAnswer(answer, conceptUuid, dataElement);
   }
 };
 
-const processObjectAnswer = (
-  answerValue,
-  conceptUuid,
-  dataElement,
-  optsMap
-) => {
+const processNoAnswer = (data, conceptUuid, dataElement) => {
+  switch (true) {
+    case isEncounterDate(conceptUuid, dataElement):
+      return data.encounterDatetime.replace('+0000', '');
+    default:
+      return '';
+  }
+};
+
+const processObjectAnswer = (answer, conceptUuid, dataElement, optsMap) => {
   const matchingOption = optsMap.find(
-    o => o['value.uuid - External ID'] === answerValue.uuid
+    o => o['value.uuid - External ID'] === answer.value.uuid
   );
   switch (true) {
     case isDiagnosisByPsychologist(conceptUuid, dataElement):
-      return answerValue.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98'
+      return answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98'
         ? 'true'
         : 'false';
-    case isEncounterDate(conceptUuid, dataElement):
-      return answerValue?.obsDatetime;
+
     case matchingOption && Object.keys(matchingOption).length > 0:
       return matchingOption['DHIS2 Option Code'];
   }
 };
-const processOtherAnswer = (answerValue, conceptUuid, dataElement) => {
-  switch (true) {
-    case isPhq9Score(answerValue, conceptUuid, dataElement):
-      return getRangePhq(answerValue);
 
+const processOtherAnswer = (answer, conceptUuid, dataElement) => {
+  switch (true) {
+    case isPhq9Score(answer.value, conceptUuid, dataElement):
+      return getRangePhq(answer.value);
     default:
-      return answerValue;
+      return answer.value;
   }
 };
 
-const isEncounterDate = (conceptUuid, dataElement) =>
-  (conceptUuid === 'encounter-date' && dataElement === 'CXS4qAJH2qD') ||
-  'I7phgLmRWQq' ||
-  'yUT7HyjWurN';
+const isEncounterDate = (conceptUuid, dataElement) => {
+  return (
+    conceptUuid === 'encounter-date' &&
+    ['CXS4qAJH2qD', 'I7phgLmRWQq', 'yUT7HyjWurN'].includes(dataElement)
+  );
+};
+
 const isDiagnosisByPsychologist = (conceptUuid, dataElement) =>
   conceptUuid === '722dd83a-c1cf-48ad-ac99-45ac131ccc96' &&
   dataElement === 'pN4iQH4AEzk';
@@ -70,10 +76,15 @@ const dataValuesMapping = (data, dataValueMap, optsMap) => {
       let value;
       const conceptUuid = dataValueMap[dataElement];
       const answer = data.obs.find(o => o.concept.uuid === conceptUuid);
+      if (answer) {
+        // console.log('Has answer', conceptUuid, dataElement);
+      } else {
+        console.log('No answer', conceptUuid, dataElement);
+      }
 
       answer
         ? (value = processAnswer(answer, conceptUuid, dataElement, optsMap))
-        : (value = '');
+        : (value = processNoAnswer(data, conceptUuid, dataElement));
 
       return { dataElement, value };
     })
@@ -148,21 +159,21 @@ fn(
 );
 
 //Create events for each encounter
-// each(
-//   '$.encountersMapping[*]',
-//   create(
-//     'events',
-//     state => {
-//       // console.log(state.data);
-//       return state.data;
-//     },
-//     {
-//       params: {
-//         dataElementIdScheme: 'UID',
-//       },
-//     }
-//   )
-// );
+each(
+  '$.encountersMapping[*]',
+  create(
+    'events',
+    state => {
+      // console.log(state.data);
+      return state.data;
+    },
+    {
+      params: {
+        dataElementIdScheme: 'UID',
+      },
+    }
+  )
+);
 
 // Clean up state
-// fn(({ data, references, ...state }) => state);
+fn(({ data, references, ...state }) => state);
