@@ -20,7 +20,8 @@ const processObjectAnswer = (
       return answerValue.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98'
         ? 'true'
         : 'false';
-
+    case isEncounterDate(conceptUuid, dataElement):
+      return answerValue?.obsDatetime;
     case matchingOption && Object.keys(matchingOption).length > 0:
       return matchingOption['DHIS2 Option Code'];
   }
@@ -35,6 +36,10 @@ const processOtherAnswer = (answerValue, conceptUuid, dataElement) => {
   }
 };
 
+const isEncounterDate = (conceptUuid, dataElement) =>
+  (conceptUuid === 'encounter-date' && dataElement === 'CXS4qAJH2qD') ||
+  'I7phgLmRWQq' ||
+  'yUT7HyjWurN';
 const isDiagnosisByPsychologist = (conceptUuid, dataElement) =>
   conceptUuid === '722dd83a-c1cf-48ad-ac99-45ac131ccc96' &&
   dataElement === 'pN4iQH4AEzk';
@@ -143,21 +148,21 @@ fn(
 );
 
 //Create events for each encounter
-each(
-  '$.encountersMapping[*]',
-  create(
-    'events',
-    state => {
-      // console.log(state.data);
-      return state.data;
-    },
-    {
-      params: {
-        dataElementIdScheme: 'UID',
-      },
-    }
-  )
-);
+// each(
+//   '$.encountersMapping[*]',
+//   create(
+//     'events',
+//     state => {
+//       // console.log(state.data);
+//       return state.data;
+//     },
+//     {
+//       params: {
+//         dataElementIdScheme: 'UID',
+//       },
+//     }
+//   )
+// );
 
 // Clean up state
 // fn(({ data, references, ...state }) => state);
