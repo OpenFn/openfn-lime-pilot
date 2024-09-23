@@ -205,7 +205,7 @@ each(
     state => {
       state.newPatientUuid.push({
         patient_number: state.references.at(-1)?.patientNumber,
-        uuid: state.data.body.uuid,
+        uuid: state.data.uuid,
       });
       return state;
     }
