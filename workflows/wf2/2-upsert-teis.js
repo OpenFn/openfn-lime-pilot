@@ -167,13 +167,10 @@ each(
     }
   )
 );
-fn(state => {
-  console.log('patientsToUpsert:: ', state.patientsUpsert);
-  return state;
-});
+
 // Upsert TEIs to DHIS2
 each(
-  'patientsToUpsert[*]',
+  $.patientsUpsert,
   upsert('trackedEntityInstances', $.data.query, $.data.data)
 );
 fn(state => {
