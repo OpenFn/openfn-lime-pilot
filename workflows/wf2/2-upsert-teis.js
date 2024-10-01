@@ -142,7 +142,6 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-// Upsert TEIs to DHIS2
 each(
   '$.patients[*]',
   get(
@@ -168,7 +167,10 @@ each(
     }
   )
 );
-
+fn(state => {
+  console.log('patientsToUpsert:: ', state.patientsUpsert);
+  return state;
+});
 // Upsert TEIs to DHIS2
 each(
   'patientsToUpsert[*]',
