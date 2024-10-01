@@ -13,13 +13,12 @@ each(
     {},
     async state => {
       const encounter = state.references.at(-1);
+      const { trackedEntity, enrollments } = state.data.instances[0];
       console.log(encounter.patient.uuid, 'Encounter patient uuid');
+
       state.TEIs ??= {};
-
-      const { trackedEntityInstance, enrollments } = state.data.instances[0]; // Can one encounter have more that one TEI?
-
       state.TEIs[encounter.patient.uuid] = {
-        trackedEntityInstance,
+        trackedEntity,
         enrollment: enrollments[0]?.enrollment,
       };
 
