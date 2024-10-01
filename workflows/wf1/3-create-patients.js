@@ -91,13 +91,20 @@ fn(state => {
       a => a.attribute === 'SVoT2cVLd5O'
     )?.value;
 
-    // const lonlat = d.attributes.find(a => a.attribute === 'rBtrjV1Mqkz')?.value;
-    // const location = locations.options.find(
-    //   o => o.code === lonlat
-    // )?.displayName;
+    const lonlat = d.attributes.find(a => a.attribute === 'rBtrjV1Mqkz')?.value;
+    const location = lonlat
+      ? locations.options.find(o => o.code === lonlat)?.displayName
+      : undefined;
 
-    // const [countyDistrict, remainder] = location?.split(' (');
-    // const [cityVillage] = remainder?.split(')');
+    let countyDistrict, cityVillage;
+
+    if (location) {
+      const match = location.match(/^(.*?)\s*\((.*?)\)/);
+      if (match) {
+        [, countyDistrict, cityVillage] = match;
+        cityVillage = cityVillage.split('-')[0].trim(); // Remove country code and trim
+      }
+    }
 
     return {
       patientNumber,
@@ -126,8 +133,8 @@ fn(state => {
           {
             country: 'Iraq',
             stateProvince: 'Ninewa',
-            // countyDistrict,
-            // cityVillage,
+            countyDistrict,
+            cityVillage,
           },
         ],
         attributes: [
@@ -182,12 +189,15 @@ fn(state => {
 // Creating patients in openMRS
 each(
   '$.patients[*]',
-  create(
+  upsert(
     'patient',
+    state => {
+      return { q: state.data.patientNumber };
+    },
     state => {
       const { patientNumber, ...patient } = state.data;
       console.log(
-        'Creating patient record\n',
+        'Upserting patient record\n',
         JSON.stringify(patient, null, 2)
       );
       return patient;
@@ -195,7 +205,7 @@ each(
     state => {
       state.newPatientUuid.push({
         patient_number: state.references.at(-1)?.patientNumber,
-        uuid: state.data.body.uuid,
+        uuid: state.data.uuid,
       });
       return state;
     }
