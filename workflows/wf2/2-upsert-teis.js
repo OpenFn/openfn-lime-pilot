@@ -53,7 +53,7 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
           value: genderOptions[patient.person.gender],
         },
         {
-          attribute: 'Rv8WM2mTuS5',
+          attribute: 'T1iX2NuPyqS',
           value: patient.person.age,
         },
         {
