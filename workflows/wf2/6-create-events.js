@@ -105,14 +105,14 @@ fn(state => {
 });
 
 //Create events for each encounter
-each(
-  '$.encountersMapping[*]',
-  create('events', $.data, {
-    params: {
-      dataElementIdScheme: 'UID',
-    },
-  })
-);
+// each(
+//   '$.encountersMapping[*]',
+//   create('events', $.data, {
+//     params: {
+//       dataElementIdScheme: 'UID',
+//     },
+//   })
+// );
 
-// Return only lastRunDateTime
-fn(({ lastRunDateTime }) => ({ lastRunDateTime }));
+// // Return only lastRunDateTime
+// fn(({ lastRunDateTime }) => ({ lastRunDateTime }));

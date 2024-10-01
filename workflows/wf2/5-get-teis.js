@@ -13,14 +13,16 @@ each(
     {},
     async state => {
       const encounter = state.references.at(-1);
-      const { trackedEntity, enrollments } = state.data.instances[0];
       console.log(encounter.patient.uuid, 'Encounter patient uuid');
 
-      state.TEIs ??= {};
-      state.TEIs[encounter.patient.uuid] = {
-        trackedEntity,
-        enrollment: enrollments[0]?.enrollment,
-      };
+      const { trackedEntity, enrollments } = state.data?.instances?.[0] || {};
+      if (trackedEntity && enrollments) {
+        state.TEIs ??= {};
+        state.TEIs[encounter.patient.uuid] = {
+          trackedEntity,
+          enrollment: enrollments[0]?.enrollment,
+        };
+      }
 
       await delay(2000);
       return state;

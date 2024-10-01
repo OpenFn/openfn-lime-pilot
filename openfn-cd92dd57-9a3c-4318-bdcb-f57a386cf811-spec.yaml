@@ -226,7 +226,9 @@ workflows:
       Get-TEIs->Create-Events:
         source_job: Get-TEIs
         target_job: Create-Events
-        condition_type: on_job_success
+        condition_type: js_expression
+        condition_label: has-teis
+        condition_expression: state.TEIs && !state.errors
         enabled: true
       Mappings->Upsert-TEIs:
         source_job: Mappings
