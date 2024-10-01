@@ -3,7 +3,7 @@ get(
 ); //ak's gist
 
 fn(state => {
-  state.optsMap = state.data;
+  state.optsMap = JSON.parse(state.data);
   // console.log(JSON.stringify(state.optsMap, null, 2), 'Options Map');
   delete state.data;
   delete state.references;

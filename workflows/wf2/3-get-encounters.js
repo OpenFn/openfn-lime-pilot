@@ -20,7 +20,7 @@ each(
       state.data.results.filter(
         encounter =>
           encounter.encounterDatetime >= state.cursor &&
-          encounter.form.uuid == formUuid
+          encounter?.form?.uuid === formUuid
       )
     );
 

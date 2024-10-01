@@ -1,42 +1,42 @@
 const processAnswer = (answer, conceptUuid, dataElement, optsMap) => {
-  if (typeof answer.value === 'object') {
-    return processObjectAnswer(answer, conceptUuid, dataElement, optsMap);
-  } else {
-    return processOtherAnswer(answer, conceptUuid, dataElement);
-  }
+  // console.log('Has answer', conceptUuid, dataElement);
+  typeof answer.value === 'object'
+    ? processObjectAnswer(answer, conceptUuid, dataElement, optsMap)
+    : processOtherAnswer(answer, conceptUuid, dataElement);
 };
 
 const processNoAnswer = (data, conceptUuid, dataElement) => {
-  switch (true) {
-    case isEncounterDate(conceptUuid, dataElement):
-      return data.encounterDatetime.replace('+0000', '');
-    default:
-      return '';
+  console.log('No answer', conceptUuid, dataElement);
+  if (isEncounterDate(conceptUuid, dataElement)) {
+    return data.encounterDatetime.replace('+0000', '');
   }
+  return '';
 };
 
 const processObjectAnswer = (answer, conceptUuid, dataElement, optsMap) => {
+  if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {
+    return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';
+  }
+
+  return findMatchingOption(answer, optsMap);
+};
+
+const isDefinedAndNotEmpty = obj => {
+  return obj !== undefined && obj !== null && Object.keys(obj).length > 0;
+};
+const findMatchingOption = (answer, optsMap) => {
   const matchingOption = optsMap.find(
     o => o['value.uuid - External ID'] === answer.value.uuid
   );
-  switch (true) {
-    case isDiagnosisByPsychologist(conceptUuid, dataElement):
-      return answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98'
-        ? 'true'
-        : 'false';
-
-    case matchingOption && Object.keys(matchingOption).length > 0:
-      return matchingOption['DHIS2 Option Code'];
+  if (isDefinedAndNotEmpty(matchingOption)) {
+    return matchingOption['DHIS2 Option Code'];
   }
 };
-
 const processOtherAnswer = (answer, conceptUuid, dataElement) => {
-  switch (true) {
-    case isPhq9Score(answer.value, conceptUuid, dataElement):
-      return getRangePhq(answer.value);
-    default:
-      return answer.value;
+  if (isPhq9Score(answer.value, conceptUuid, dataElement)) {
+    return getRangePhq(answer.value);
   }
+  return answer.value;
 };
 
 const isEncounterDate = (conceptUuid, dataElement) => {
@@ -56,35 +56,21 @@ const isPhq9Score = (value, conceptUuid, dataElement) =>
   dataElement === 'tsFOVnlc6lz';
 
 const getRangePhq = input => {
-  switch (true) {
-    case input >= 0 && input <= 4:
-      return '0_4';
-    case input >= 5 && input <= 9:
-      return '5_9';
-    case input >= 10 && input <= 14:
-      return '10_14';
-    case input >= 15 && input <= 19:
-      return '15_19';
-    case input >= 20:
-      return '>20';
-  }
+  if (input >= 20) return '>20';
+  if (input >= 15) return '15_19';
+  if (input >= 10) return '10_14';
+  if (input >= 5) return '5_9';
+  return '0_4';
 };
 
 const dataValuesMapping = (data, dataValueMap, optsMap) => {
   return Object.keys(dataValueMap)
     .map(dataElement => {
-      let value;
       const conceptUuid = dataValueMap[dataElement];
       const answer = data.obs.find(o => o.concept.uuid === conceptUuid);
-      if (answer) {
-        // console.log('Has answer', conceptUuid, dataElement);
-      } else {
-        console.log('No answer', conceptUuid, dataElement);
-      }
-
-      answer
-        ? (value = processAnswer(answer, conceptUuid, dataElement, optsMap))
-        : (value = processNoAnswer(data, conceptUuid, dataElement));
+      const value = answer
+        ? processAnswer(answer, conceptUuid, dataElement, optsMap)
+        : processNoAnswer(data, conceptUuid, dataElement);
 
       return { dataElement, value };
     })
@@ -116,7 +102,7 @@ fn(state => {
 
 // Prepare DHIS2 data model for create events
 fn(state => {
-  const optsMap = JSON.parse(state.optsMap);
+  const { optsMap } = state;
 
   state.encountersMapping = state.encounters.map(data => {
     const form = state.formMaps[data.form.uuid];
