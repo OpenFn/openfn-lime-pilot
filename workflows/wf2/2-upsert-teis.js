@@ -1,19 +1,10 @@
-const DHIS2_PATIENT_NUMBER = '8d79403a-c2cc-11de-8d13-0010c6dffd0f'; //DHIS2 ID or DHIS2 Patient Number
-const OPENMRS_AUTO_ID = '05a29f94-c0ed-11e2-94be-8c13b969e334'; //MSF ID or OpenMRS Patient Number
-
-const findIdentifierByUuid = (identifiers, targetUuid) => {
-  // Use the `find` method to locate the matching identifier
-  const matchingIdentifier = identifiers.find(
-    identifier => identifier.identifierType.uuid === targetUuid
-  );
-
-  // Return the `identifier` value if a match is found; otherwise, return null
-  return matchingIdentifier ? matchingIdentifier.identifier : undefined;
-};
-
-const patientMapping = (state, patient, isNewPatient) => {
+const buildPatientsUpsert = (state, patient, isNewPatient) => {
   const { nationalityMap, statusMap, placeOflivingMap, genderOptions } = state;
+  const DHIS2_PATIENT_NUMBER = '8d79403a-c2cc-11de-8d13-0010c6dffd0f'; //DHIS2 ID or DHIS2 Patient Number
+  const OPENMRS_AUTO_ID = '05a29f94-c0ed-11e2-94be-8c13b969e334'; //MSF ID or OpenMRS Patient Number
   const dateCreated = patient.auditInfo.dateCreated.substring(0, 10);
+  const findIdentifierByUuid = (identifiers, targetUuid) =>
+    identifiers.find(i => i.identifierType.uuid === targetUuid)?.identifier;
 
   const enrollments = [
     {
@@ -145,9 +136,8 @@ const patientMapping = (state, patient, isNewPatient) => {
     console.log('create enrollment');
     payload.data.enrollments = enrollments;
   }
-  state.patientsToUpsert ??= [];
-  state.patientsToUpsert.push(payload);
-  return state;
+
+  return payload;
 };
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -166,10 +156,13 @@ each(
     async state => {
       const patient = state.references.at(-1);
       console.log(patient.uuid, 'patient uuid');
-      const { instances } = state.data;
-      const isNewPatient = instances.length === 0;
 
-      patientMapping(state, patient, isNewPatient);
+      const isNewPatient = state.data.instances.length === 0;
+
+      state.patientsUpsert ??= [];
+      state.patientsUpsert.push(
+        buildPatientsUpsert(state, patient, isNewPatient)
+      );
       await delay(2000);
       return state;
     }
@@ -184,14 +177,14 @@ each(
 fn(state => {
   const {
     data,
+    response,
+    references,
     patients,
     statusMap,
-    references,
     patientsUpsert,
     nationalityMap,
     placeOflivingMap,
     genderOptions,
-    response,
     ...next
   } = state;
 

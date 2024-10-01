@@ -251,6 +251,7 @@ fn(state => {
     '3ec0432d-ea37-4159-a658-29d6f07fe21a': 'zambia',
     'ce1b0d8d-0a2d-4f93-a6ed-64aca2fd0f45': 'zimbabwe',
   };
+
   state.statusMap = {
     '18692c24-4d33-4cdc-a92c-bf4138da5d6d': 'unknown', //Inconnu
     'f921ffdd-72ca-4d58-a89b-1fa2e959d110': 'asylum_seeker',
