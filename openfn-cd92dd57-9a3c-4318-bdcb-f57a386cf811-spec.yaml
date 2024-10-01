@@ -20,11 +20,8 @@ workflows:
         credential: 'mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2'
         body: |
           
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
-          // https://docs.google.com/spreadsheets/d/1ofcPq3ypPKMLSFi7_v77N_nNr7-2WqupEPPTVJboYns/edit?gid=485975775#gid=485975775
-
-          getValues('1ofcPq3ypPKMLSFi7_v77N_nNr7-2WqupEPPTVJboYns', 'LIME EMR - Iraq Metadata - Release 1(OptionSets)!A:BT')
+          getValues('1OuR7laA7Oc2QnoiT8S3Thhf-HNh7uFY8ILLEu-idXuk', 
+          'optionsets_oct1')
 
       Key-Value-Pair:
         name: Key Value Pair
