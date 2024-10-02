@@ -1,0 +1,825 @@
+{
+    "resourceType": "Bundle",
+    "id": "6cb19787-f254-47de-ab4e-9efc787cfdd1",
+    "meta": {
+        "lastUpdated": "2024-10-02T06:09:02.331+00:00"
+    },
+    "type": "searchset",
+    "total": 13,
+    "entry": [
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/2d849adc-1436-42cd-9bdb-36cfc46b94e8",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "2d849adc-1436-42cd-9bdb-36cfc46b94e8",
+                "meta": {
+                    "versionId": "1727675859000",
+                    "lastUpdated": "2024-09-30T05:57:39.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "visit",
+                            "display": "Visit"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>2d849adc-1436-42cd-9bdb-36cfc46b94e8</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Facility Visit </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/9ef373a2-3267-4171-89ce-5b5dd0da0b3c\">Katrina Dima (MSF ID: IQ146-24-000-362)</a></td></tr><tr><td>Period:</td><td>2024-09-30 05:57:00.0 - ?</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/visit-type",
+                                "code": "7b0f5697-27e3-40c4-8bae-f4049abfb4ed",
+                                "display": "Facility Visit"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/9ef373a2-3267-4171-89ce-5b5dd0da0b3c",
+                    "type": "Patient",
+                    "display": "Katrina Dima (MSF ID: IQ146-24-000-362)"
+                },
+                "period": {
+                    "start": "2024-09-30T05:57:00+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/1ac38dda-79ae-462b-b0fb-6a65d6b60d0f",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "1ac38dda-79ae-462b-b0fb-6a65d6b60d0f",
+                "meta": {
+                    "versionId": "1727678489000",
+                    "lastUpdated": "2024-09-30T06:41:29.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "visit",
+                            "display": "Visit"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>1ac38dda-79ae-462b-b0fb-6a65d6b60d0f</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Facility Visit </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/1908003e-0ac5-43c3-b0c6-a727702bb5a4\">Jordan Amani (MSF ID: IQ146-24-000-398)</a></td></tr><tr><td>Period:</td><td>2024-09-30 06:40:00.0 - 2024-09-30 06:41:29.0</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/visit-type",
+                                "code": "7b0f5697-27e3-40c4-8bae-f4049abfb4ed",
+                                "display": "Facility Visit"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/1908003e-0ac5-43c3-b0c6-a727702bb5a4",
+                    "type": "Patient",
+                    "display": "Jordan Amani (MSF ID: IQ146-24-000-398)"
+                },
+                "period": {
+                    "start": "2024-09-30T06:40:00+00:00",
+                    "end": "2024-09-30T06:41:29+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/d0367774-1227-46a6-ac20-83519333bb4d",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "d0367774-1227-46a6-ac20-83519333bb4d",
+                "meta": {
+                    "versionId": "1727768586000",
+                    "lastUpdated": "2024-10-01T07:43:06.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "visit",
+                            "display": "Visit"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>d0367774-1227-46a6-ac20-83519333bb4d</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Facility Visit </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/716e3fce-5483-4cce-99e9-cd2fae999a67\">Anna Boland (MSF ID: IQ146-24-000-399)</a></td></tr><tr><td>Period:</td><td>2024-10-01 07:43:00.0 - ?</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/visit-type",
+                                "code": "7b0f5697-27e3-40c4-8bae-f4049abfb4ed",
+                                "display": "Facility Visit"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/716e3fce-5483-4cce-99e9-cd2fae999a67",
+                    "type": "Patient",
+                    "display": "Anna Boland (MSF ID: IQ146-24-000-399)"
+                },
+                "period": {
+                    "start": "2024-10-01T07:43:00+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/2b81d1ba-cbce-4682-b27f-b03e985170a8",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "2b81d1ba-cbce-4682-b27f-b03e985170a8",
+                "meta": {
+                    "versionId": "1727777012000",
+                    "lastUpdated": "2024-10-01T10:03:32.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "visit",
+                            "display": "Visit"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>2b81d1ba-cbce-4682-b27f-b03e985170a8</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Facility Visit </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/9ad39034-431f-4de1-9217-1175451004e6\">Marcos Robertson (MSF ID: IQ146-24-000-026)</a></td></tr><tr><td>Period:</td><td>2024-10-01 10:03:00.0 - ?</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/0632a4e3-aa42-46f2-8dea-2d3aec764755\">Maternity (MAT)</a></td><td/><td/><td/></tr></tbody></table></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/visit-type",
+                                "code": "7b0f5697-27e3-40c4-8bae-f4049abfb4ed",
+                                "display": "Facility Visit"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/9ad39034-431f-4de1-9217-1175451004e6",
+                    "type": "Patient",
+                    "display": "Marcos Robertson (MSF ID: IQ146-24-000-026)"
+                },
+                "period": {
+                    "start": "2024-10-01T10:03:00+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/0632a4e3-aa42-46f2-8dea-2d3aec764755",
+                            "type": "Location",
+                            "display": "Maternity (MAT)"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/7ee35abe-85ab-44e0-bd5a-5a6a7950af2b",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "7ee35abe-85ab-44e0-bd5a-5a6a7950af2b",
+                "meta": {
+                    "versionId": "1727793369000",
+                    "lastUpdated": "2024-10-01T14:36:09.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "visit",
+                            "display": "Visit"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>7ee35abe-85ab-44e0-bd5a-5a6a7950af2b</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Facility Visit </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/377234f8-e49a-4618-96b6-d86e1664ce8c\">Prueba1 MLA Amigo Restmund (MSF ID: IQ146-24-000-400)</a></td></tr><tr><td>Period:</td><td>2024-10-01 10:53:00.0 - 2024-10-01 14:35:56.0</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/visit-type",
+                                "code": "7b0f5697-27e3-40c4-8bae-f4049abfb4ed",
+                                "display": "Facility Visit"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/377234f8-e49a-4618-96b6-d86e1664ce8c",
+                    "type": "Patient",
+                    "display": "Prueba1 MLA Amigo Restmund (MSF ID: IQ146-24-000-400)"
+                },
+                "period": {
+                    "start": "2024-10-01T10:53:00+00:00",
+                    "end": "2024-10-01T14:35:56+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/3d7235a3-73b7-4545-984f-8aa6b5c7e9b3",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "3d7235a3-73b7-4545-984f-8aa6b5c7e9b3",
+                "meta": {
+                    "versionId": "1727794357000",
+                    "lastUpdated": "2024-10-01T14:52:37.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "visit",
+                            "display": "Visit"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>3d7235a3-73b7-4545-984f-8aa6b5c7e9b3</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Facility Visit </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/377234f8-e49a-4618-96b6-d86e1664ce8c\">Prueba1 MLA Amigo Restmund (MSF ID: IQ146-24-000-400)</a></td></tr><tr><td>Period:</td><td>2024-10-01 14:52:00.0 - ?</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/visit-type",
+                                "code": "7b0f5697-27e3-40c4-8bae-f4049abfb4ed",
+                                "display": "Facility Visit"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/377234f8-e49a-4618-96b6-d86e1664ce8c",
+                    "type": "Patient",
+                    "display": "Prueba1 MLA Amigo Restmund (MSF ID: IQ146-24-000-400)"
+                },
+                "period": {
+                    "start": "2024-10-01T14:52:00+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/10dbbfe3-b91d-48f4-ab03-f6ad280f1d2d",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "10dbbfe3-b91d-48f4-ab03-f6ad280f1d2d",
+                "meta": {
+                    "versionId": "1727794780000",
+                    "lastUpdated": "2024-10-01T14:59:40.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "visit",
+                            "display": "Visit"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>10dbbfe3-b91d-48f4-ab03-f6ad280f1d2d</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Facility Visit </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/0f59008f-98ad-4e80-9b95-fe6af3686618\">Patient Print Test (MSF ID: IQ146-24-000-035)</a></td></tr><tr><td>Period:</td><td>2024-10-01 14:55:00.0 - 2024-10-01 14:59:40.0</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/visit-type",
+                                "code": "7b0f5697-27e3-40c4-8bae-f4049abfb4ed",
+                                "display": "Facility Visit"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/0f59008f-98ad-4e80-9b95-fe6af3686618",
+                    "type": "Patient",
+                    "display": "Patient Print Test (MSF ID: IQ146-24-000-035)"
+                },
+                "period": {
+                    "start": "2024-10-01T14:55:00+00:00",
+                    "end": "2024-10-01T14:59:40+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/a5347019-ddce-42da-9204-f61ac7fa7700",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "a5347019-ddce-42da-9204-f61ac7fa7700",
+                "meta": {
+                    "versionId": "1727675908000",
+                    "lastUpdated": "2024-09-30T05:58:28.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "encounter",
+                            "display": "Encounter"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>a5347019-ddce-42da-9204-f61ac7fa7700</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Consultation </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/9ef373a2-3267-4171-89ce-5b5dd0da0b3c\">Katrina Dima (MSF ID: IQ146-24-000-362)</a></td></tr><tr><td>Participants:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Type</th><th>Period</th><th>Individual</th></tr><tr><td>1</td><td/><td/><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e\">Super User (Identifier: admin)</a></td></tr></tbody></table></td></tr><tr><td>Period:</td><td>2024-09-30 05:57:47.0 - ?</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr><tr><td>Part Of:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Encounter/2d849adc-1436-42cd-9bdb-36cfc46b94e8\">Encounter/2d849adc-1436-42cd-9bdb-36cfc46b94e8</a></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/encounter-type",
+                                "code": "dd528487-82a5-4082-9c72-ed246bd49591",
+                                "display": "Consultation"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/9ef373a2-3267-4171-89ce-5b5dd0da0b3c",
+                    "type": "Patient",
+                    "display": "Katrina Dima (MSF ID: IQ146-24-000-362)"
+                },
+                "participant": [
+                    {
+                        "individual": {
+                            "reference": "Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e",
+                            "type": "Practitioner",
+                            "identifier": {
+                                "value": "admin"
+                            },
+                            "display": "Super User (Identifier: admin)"
+                        }
+                    }
+                ],
+                "period": {
+                    "start": "2024-09-30T05:57:47+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ],
+                "partOf": {
+                    "reference": "Encounter/2d849adc-1436-42cd-9bdb-36cfc46b94e8",
+                    "type": "Encounter"
+                }
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/e00d0739-9d2a-4c38-ab37-85a628b50447",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "e00d0739-9d2a-4c38-ab37-85a628b50447",
+                "meta": {
+                    "versionId": "1727678447000",
+                    "lastUpdated": "2024-09-30T06:40:47.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "encounter",
+                            "display": "Encounter"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>e00d0739-9d2a-4c38-ab37-85a628b50447</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Consultation </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/1908003e-0ac5-43c3-b0c6-a727702bb5a4\">Jordan Amani (MSF ID: IQ146-24-000-398)</a></td></tr><tr><td>Participants:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Type</th><th>Period</th><th>Individual</th></tr><tr><td>1</td><td/><td/><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e\">Super User (Identifier: admin)</a></td></tr></tbody></table></td></tr><tr><td>Period:</td><td>2024-09-30 06:40:26.0 - ?</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr><tr><td>Part Of:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Encounter/1ac38dda-79ae-462b-b0fb-6a65d6b60d0f\">Encounter/1ac38dda-79ae-462b-b0fb-6a65d6b60d0f</a></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/encounter-type",
+                                "code": "dd528487-82a5-4082-9c72-ed246bd49591",
+                                "display": "Consultation"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/1908003e-0ac5-43c3-b0c6-a727702bb5a4",
+                    "type": "Patient",
+                    "display": "Jordan Amani (MSF ID: IQ146-24-000-398)"
+                },
+                "participant": [
+                    {
+                        "individual": {
+                            "reference": "Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e",
+                            "type": "Practitioner",
+                            "identifier": {
+                                "value": "admin"
+                            },
+                            "display": "Super User (Identifier: admin)"
+                        }
+                    }
+                ],
+                "period": {
+                    "start": "2024-09-30T06:40:26+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ],
+                "partOf": {
+                    "reference": "Encounter/1ac38dda-79ae-462b-b0fb-6a65d6b60d0f",
+                    "type": "Encounter"
+                }
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/881d2285-73b9-47d3-ba76-e41efe4359bf",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "881d2285-73b9-47d3-ba76-e41efe4359bf",
+                "meta": {
+                    "versionId": "1727678482000",
+                    "lastUpdated": "2024-09-30T06:41:22.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "encounter",
+                            "display": "Encounter"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>881d2285-73b9-47d3-ba76-e41efe4359bf</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Mental Health </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/1908003e-0ac5-43c3-b0c6-a727702bb5a4\">Jordan Amani (MSF ID: IQ146-24-000-398)</a></td></tr><tr><td>Participants:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Type</th><th>Period</th><th>Individual</th></tr><tr><td>1</td><td/><td/><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e\">Super User (Identifier: admin)</a></td></tr></tbody></table></td></tr><tr><td>Period:</td><td>2024-09-30 06:40:54.0 - ?</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr><tr><td>Part Of:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Encounter/1ac38dda-79ae-462b-b0fb-6a65d6b60d0f\">Encounter/1ac38dda-79ae-462b-b0fb-6a65d6b60d0f</a></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/encounter-type",
+                                "code": "95d68645-1b72-4290-be0b-ec1fb64bc067",
+                                "display": "Mental Health"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/1908003e-0ac5-43c3-b0c6-a727702bb5a4",
+                    "type": "Patient",
+                    "display": "Jordan Amani (MSF ID: IQ146-24-000-398)"
+                },
+                "participant": [
+                    {
+                        "individual": {
+                            "reference": "Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e",
+                            "type": "Practitioner",
+                            "identifier": {
+                                "value": "admin"
+                            },
+                            "display": "Super User (Identifier: admin)"
+                        }
+                    }
+                ],
+                "period": {
+                    "start": "2024-09-30T06:40:54+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ],
+                "partOf": {
+                    "reference": "Encounter/1ac38dda-79ae-462b-b0fb-6a65d6b60d0f",
+                    "type": "Encounter"
+                }
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/f66403fa-2165-4c3d-898d-a3a609486fa2",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "f66403fa-2165-4c3d-898d-a3a609486fa2",
+                "meta": {
+                    "versionId": "1727759547000",
+                    "lastUpdated": "2024-10-01T05:12:27.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "encounter",
+                            "display": "Encounter"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>f66403fa-2165-4c3d-898d-a3a609486fa2</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Consultation </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/9ef373a2-3267-4171-89ce-5b5dd0da0b3c\">Katrina Dima (MSF ID: IQ146-24-000-362)</a></td></tr><tr><td>Participants:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Type</th><th>Period</th><th>Individual</th></tr><tr><td>1</td><td/><td/><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e\">Super User (Identifier: admin)</a></td></tr></tbody></table></td></tr><tr><td>Period:</td><td>2024-10-01 05:12:07.0 - ?</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr><tr><td>Part Of:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Encounter/2d849adc-1436-42cd-9bdb-36cfc46b94e8\">Encounter/2d849adc-1436-42cd-9bdb-36cfc46b94e8</a></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/encounter-type",
+                                "code": "dd528487-82a5-4082-9c72-ed246bd49591",
+                                "display": "Consultation"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/9ef373a2-3267-4171-89ce-5b5dd0da0b3c",
+                    "type": "Patient",
+                    "display": "Katrina Dima (MSF ID: IQ146-24-000-362)"
+                },
+                "participant": [
+                    {
+                        "individual": {
+                            "reference": "Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e",
+                            "type": "Practitioner",
+                            "identifier": {
+                                "value": "admin"
+                            },
+                            "display": "Super User (Identifier: admin)"
+                        }
+                    }
+                ],
+                "period": {
+                    "start": "2024-10-01T05:12:07+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ],
+                "partOf": {
+                    "reference": "Encounter/2d849adc-1436-42cd-9bdb-36cfc46b94e8",
+                    "type": "Encounter"
+                }
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/508201ff-ba3d-47de-adfe-c4d9bfa1e464",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "508201ff-ba3d-47de-adfe-c4d9bfa1e464",
+                "meta": {
+                    "versionId": "1727768607000",
+                    "lastUpdated": "2024-10-01T07:43:27.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "encounter",
+                            "display": "Encounter"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>508201ff-ba3d-47de-adfe-c4d9bfa1e464</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Consultation </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/716e3fce-5483-4cce-99e9-cd2fae999a67\">Anna Boland (MSF ID: IQ146-24-000-399)</a></td></tr><tr><td>Participants:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Type</th><th>Period</th><th>Individual</th></tr><tr><td>1</td><td/><td/><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e\">Super User (Identifier: admin)</a></td></tr></tbody></table></td></tr><tr><td>Period:</td><td>2024-10-01 07:43:15.0 - ?</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr><tr><td>Part Of:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Encounter/d0367774-1227-46a6-ac20-83519333bb4d\">Encounter/d0367774-1227-46a6-ac20-83519333bb4d</a></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/encounter-type",
+                                "code": "dd528487-82a5-4082-9c72-ed246bd49591",
+                                "display": "Consultation"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/716e3fce-5483-4cce-99e9-cd2fae999a67",
+                    "type": "Patient",
+                    "display": "Anna Boland (MSF ID: IQ146-24-000-399)"
+                },
+                "participant": [
+                    {
+                        "individual": {
+                            "reference": "Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e",
+                            "type": "Practitioner",
+                            "identifier": {
+                                "value": "admin"
+                            },
+                            "display": "Super User (Identifier: admin)"
+                        }
+                    }
+                ],
+                "period": {
+                    "start": "2024-10-01T07:43:15+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ],
+                "partOf": {
+                    "reference": "Encounter/d0367774-1227-46a6-ac20-83519333bb4d",
+                    "type": "Encounter"
+                }
+            }
+        },
+        {
+            "fullUrl": "http://msf-ocg-openmrs3-dev.westeurope.cloudapp.azure.com/openmrs/ws/fhir2/R4/Encounter/d94eab32-8b6b-4e2f-a16f-64ee2f4d79e6",
+            "resource": {
+                "resourceType": "Encounter",
+                "id": "d94eab32-8b6b-4e2f-a16f-64ee2f4d79e6",
+                "meta": {
+                    "versionId": "1727794773000",
+                    "lastUpdated": "2024-10-01T14:59:33.000+00:00",
+                    "tag": [
+                        {
+                            "system": "http://fhir.openmrs.org/ext/encounter-tag",
+                            "code": "encounter",
+                            "display": "Encounter"
+                        }
+                    ]
+                },
+                "text": {
+                    "status": "generated",
+                    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><table class=\"hapiPropertyTable\"><tbody><tr><td>Id:</td><td>d94eab32-8b6b-4e2f-a16f-64ee2f4d79e6</td></tr><tr><td>Status:</td><td>UNKNOWN</td></tr><tr><td>Class:</td><td> (Details: http://terminology.hl7.org/CodeSystem/v3-ActCode ) </td></tr><tr><td>Type:</td><td> Mental Health </td></tr><tr><td>Subject:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Patient/0f59008f-98ad-4e80-9b95-fe6af3686618\">Patient Print Test (MSF ID: IQ146-24-000-035)</a></td></tr><tr><td>Participants:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Type</th><th>Period</th><th>Individual</th></tr><tr><td>1</td><td/><td/><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e\">Super User (Identifier: admin)</a></td></tr></tbody></table></td></tr><tr><td>Period:</td><td>2024-10-01 14:56:06.0 - ?</td></tr><tr><td>Location:</td><td><table class=\"subPropertyTable\"><tbody><tr><th>-</th><th>Location</th><th>Status</th><th>Physical Type</th><th>Period</th></tr><tr><td>1</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c\">Mental Health (MH)</a></td><td/><td/><td/></tr></tbody></table></td></tr><tr><td>Part Of:</td><td><a href=\"http://localhost:8080/openmrs/ws/fhir2/R4/Encounter/10dbbfe3-b91d-48f4-ab03-f6ad280f1d2d\">Encounter/10dbbfe3-b91d-48f4-ab03-f6ad280f1d2d</a></td></tr></tbody></table></div>"
+                },
+                "status": "unknown",
+                "class": {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code": "AMB"
+                },
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "system": "http://fhir.openmrs.org/code-system/encounter-type",
+                                "code": "95d68645-1b72-4290-be0b-ec1fb64bc067",
+                                "display": "Mental Health"
+                            }
+                        ]
+                    }
+                ],
+                "subject": {
+                    "reference": "Patient/0f59008f-98ad-4e80-9b95-fe6af3686618",
+                    "type": "Patient",
+                    "display": "Patient Print Test (MSF ID: IQ146-24-000-035)"
+                },
+                "participant": [
+                    {
+                        "individual": {
+                            "reference": "Practitioner/361ebccc-0992-46c5-a99f-ac523bed386e",
+                            "type": "Practitioner",
+                            "identifier": {
+                                "value": "admin"
+                            },
+                            "display": "Super User (Identifier: admin)"
+                        }
+                    }
+                ],
+                "period": {
+                    "start": "2024-10-01T14:56:06+00:00"
+                },
+                "location": [
+                    {
+                        "location": {
+                            "reference": "Location/cf6fa7d4-1f19-4c85-ac50-ff824805c51c",
+                            "type": "Location",
+                            "display": "Mental Health (MH)"
+                        }
+                    }
+                ],
+                "partOf": {
+                    "reference": "Encounter/10dbbfe3-b91d-48f4-ab03-f6ad280f1d2d",
+                    "type": "Encounter"
+                }
+            }
+        }
+    ]
+}
