@@ -96,22 +96,24 @@ fn(state => {
     }
   });
 
-  console.log(
-    'dhis2 events to import:: ',
-    JSON.stringify(state.encountersMapping, null, 2)
-  );
-
   return state;
 });
 
 // Create events for each encounter
 each(
   '$.encountersMapping[*]',
-  create('events', $.data, {
-    params: {
-      dataElementIdScheme: 'UID',
+  create(
+    'events',
+    state => {
+      console.log('dhis2 event to import:: ', state.data);
+      return state.data;
     },
-  })
+    {
+      params: {
+        dataElementIdScheme: 'UID',
+      },
+    }
+  )
 );
 
 fn(state => {
