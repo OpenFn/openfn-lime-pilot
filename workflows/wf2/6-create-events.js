@@ -96,23 +96,42 @@ fn(state => {
     }
   });
 
-  console.log(
-    'dhis2 events to import:: ',
-    JSON.stringify(state.encountersMapping, null, 2)
-  );
+  return state;
+});
+
+// Create events for each encounter
+each(
+  '$.encountersMapping[*]',
+  create(
+    'events',
+    state => {
+      console.log('dhis2 event to import:: ', state.data);
+      return state.data;
+    },
+    {
+      params: {
+        dataElementIdScheme: 'UID',
+      },
+    }
+  )
+);
+
+fn(state => {
+  state.genderUpdated = state.encounters.reduce((acc, e) => {
+    const answer = e.obs.find(
+      o => o.concept.uuid === 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7'
+    );
+    if (answer) {
+      acc.push(answer);
+    }
+    return acc;
+  }, []);
 
   return state;
 });
 
-//Create events for each encounter
-each(
-  '$.encountersMapping[*]',
-  create('events', $.data, {
-    params: {
-      dataElementIdScheme: 'UID',
-    },
-  })
-);
-
 // Return only lastRunDateTime
-fn(({ lastRunDateTime }) => ({ lastRunDateTime }));
+fnIf(
+  state => state.genderUpdated.length === 0,
+  ({ lastRunDateTime }) => ({ lastRunDateTime })
+);

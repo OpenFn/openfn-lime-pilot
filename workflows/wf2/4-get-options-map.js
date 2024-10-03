@@ -69,7 +69,7 @@ const mhpssFollowup = {
   rGS6S4jyKu3: '08cd4b4a-4b0b-4391-987b-b5b3d770d30f', //Location of intervention - If Mobile Clinic, specify
   L6Jj7Tppr5q: 'e08d532b-e56c-43dc-b831-af705654d2dc', //Location of intervention - If other, specify
   vWWl7izQpqd: '82978311-bef9-46f9-9a9a-cc62254b00a6', //Type of intervention
-  G0hLyxqgcO7: '54e8c1b6-6397-4822-89a4-cf81fbc68ce9', //The patient did not come
+  // G0hLyxqgcO7: '54e8c1b6-6397-4822-89a4-cf81fbc68ce9', //The patient did not come TODO @aleksa this is causing an error when creating an event
   tloy0Bd9qDf: 'd7410cd3-29be-4f8b-93d6-eb4de005db29', //Number of appointments missed
   AZUFlZzPN6V: '278d3d1e-c02a-4db1-8ab3-8db3b82eb9b5', //Patient rescheduled
   HNZHetAtowR: 'd34d5e93-03d6-494e-8f4c-2d7221227162', //Reason for missed appointment
