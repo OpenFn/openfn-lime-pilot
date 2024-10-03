@@ -104,7 +104,7 @@ fn(state => {
   return state;
 });
 
-//Create events for each encounter
+// Create events for each encounter
 each(
   '$.encountersMapping[*]',
   create('events', $.data, {
@@ -114,5 +114,22 @@ each(
   })
 );
 
+fn(state => {
+  state.genderUpdated = state.encounters.reduce((acc, e) => {
+    const answer = e.obs.find(
+      o => o.concept.uuid === 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7'
+    );
+    if (answer) {
+      acc.push(answer);
+    }
+    return acc;
+  }, []);
+
+  return state;
+});
+
 // Return only lastRunDateTime
-fn(({ lastRunDateTime }) => ({ lastRunDateTime }));
+fnIf(
+  state => state.genderUpdated.length === 0,
+  ({ lastRunDateTime }) => ({ lastRunDateTime })
+);
