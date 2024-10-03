@@ -6,7 +6,7 @@
                 "adaptor": "openmrs",
                 "configuration": "../tmp/openmrs-creds.json",
                 "state": {
-                    "lastRunDateTime": "2024-09-30T12:00:00.000Z"
+                    "lastRunDateTime": "2024-09-30T07:00:00.000Z"
                 },
                 "expression": "1-get-patients.js",
                 "next": {
@@ -60,7 +60,16 @@
                 "id": "create-events",
                 "adaptor": "dhis2",
                 "configuration": "../tmp/dhis2-creds.json",
-                "expression": "6-create-events.js"
+                "expression": "6-create-events.js",
+                "next": {
+                    "update-teis": "state.genderUpdated.length > 0 && !state.errors"
+                }
+            },
+            {
+                "id": "update-teis",
+                "adaptor": "dhis2",
+                "configuration": "../tmp/dhis2-creds.json",
+                "expression": "7-update-teis.js"
             }
         ]
     }
