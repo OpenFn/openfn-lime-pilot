@@ -5,27 +5,43 @@ const formUuids = [
   '48577ac5-d9c0-3000-9bac-075409b38336',
   'ee6b1b06-3163-334a-8538-be69250af727',
 ];
-// Fetch patient encounters then filter by cursor date
-// OpenMRS demo instance does not support querying ALL records (q=all)
+
+// cursor('2024-09-29');
+
+fhirGet('/ws/fhir2/R4/Encounter', {
+  _count: 100,
+  _lastUpdated: `ge${$.cursor}`,
+});
+
+fn(state => {
+  state.encounterUuids = state.data.entry.map(p => p.resource.id);
+  state.patientUuids = [
+    ...new Set(
+      state.data.entry.map(p =>
+        p.resource.subject.reference.replace('Patient/', '')
+      )
+    ),
+  ];
+
+  return state;
+});
+
 each(
-  '$.patientUuids[*]',
+  $.patientUuids,
   getEncounters({ patient: $.data, v: 'full' }, state => {
     const patientUuid = state.references.at(-1);
     const filteredEncounters = formUuids.map(formUuid =>
       state.data.results.filter(
-        encounter =>
-          encounter.encounterDatetime >= state.cursor &&
-          encounter?.form?.uuid === formUuid
+        e => e.encounterDatetime >= state.cursor && e?.form?.uuid === formUuid
       )
     );
 
+    const encounters = filteredEncounters.map(e => e[0]).filter(e => e);
     state.encounters ??= [];
-    state.encounters.push(
-      filteredEncounters.map(encounters => encounters[0]).filter(e => e)
-    );
+    state.encounters.push(...encounters);
 
     console.log(
-      filteredEncounters.flat().length,
+      encounters.length,
       `# of filtered encounters found in OMRS for ${patientUuid}`
     );
 
@@ -35,17 +51,8 @@ each(
 
 // Log filtered encounters
 fn(state => {
-  const {
-    data,
-    index,
-    response,
-    encounters,
-    references,
-    patientUuids,
-    ...next
-  } = state;
-  next.encounters = encounters.flat();
-  console.log(next.encounters.length, '# of new encounters to sync to dhis2');
+  const { data, index, response, references, patientUuids, ...next } = state;
 
+  console.log(next.encounters.length, '# of new encounters to sync to dhis2');
   return next;
 });
