@@ -1,16 +1,109 @@
 name: msf-lime-iraq
 description: null
 credentials:
+  aleksa@openfn.org-AK-Sharepoint:
+    name: AK Sharepoint
+    owner: aleksa@openfn.org
   mtuchi@openfn.org-MSF-DHIS2-UAT:
     name: MSF DHIS2 UAT
     owner: mtuchi@openfn.org
   mtuchi@openfn.org-OpenMRS-Demo:
     name: OpenMRS Demo
     owner: mtuchi@openfn.org
+  "mtuchi@openfn.org-OpenMRS-Demo-(HTTP)":
+    name: 'OpenMRS Demo (HTTP)'
+    owner: mtuchi@openfn.org
   "mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2":
     name: 'googlesheets (mtuchi@openfn.org)-2'
     owner: mtuchi@openfn.org
 workflows:
+  Sharepoint-test:
+    name: Sharepoint test
+    jobs:
+      New-job:
+        name: New job
+        adaptor: '@openfn/language-msgraph@latest'
+        credential: null
+        body: |
+          
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+    triggers:
+      webhook:
+        type: webhook
+        enabled: true
+    edges:
+      webhook->New-job:
+        source_trigger: webhook
+        target_job: New-job
+        condition_type: always
+        enabled: true
+  fhir-encounters:
+    name: fhir-encounters
+    jobs:
+      Fetch-FHIR-Encounters:
+        name: Fetch FHIR Encounters
+        adaptor: '@openfn/language-http@latest'
+        credential: 'mtuchi@openfn.org-OpenMRS-Demo-(HTTP)'
+        body: |
+          cursor("2024-09-29");
+
+          get(
+            "/ws/fhir2/R4/Encounter",
+            { query: { _count: 10, _lastUpdated: `ge${$.cursor}` }, parseAs: "json" },
+            (state) => {
+              const { link, total } = state.data;
+              state.nextUrl = link
+                .find((l) => l.relation === "next")
+                ?.url.replace(/(_count=)\d+/, `$1${total}`);
+
+              state.encounters = state.data;
+              return state;
+            }
+          );
+
+          fnIf(
+            $.nextUrl,
+            get($.nextUrl, { parseAs: "json" }, (state) => {
+              delete state.encounters.link;
+              state.encounters.entry.push(...state.data.entry);
+              console.log(state.encounters.entry.length);
+              return state;
+            })
+          );
+    triggers:
+      webhook:
+        type: webhook
+        enabled: true
+    edges:
+      webhook->Fetch-FHIR-Encounters:
+        source_trigger: webhook
+        target_job: Fetch-FHIR-Encounters
+        condition_type: always
+        enabled: true
+  sharepoint-test:
+    name: sharepoint-test
+    jobs:
+      New-job:
+        name: New job
+        adaptor: '@openfn/language-msgraph@latest'
+        credential: aleksa@openfn.org-AK-Sharepoint
+        body: |
+          
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+          get('sites/root/lists')
+    triggers:
+      webhook:
+        type: webhook
+        enabled: true
+    edges:
+      webhook->New-job:
+        source_trigger: webhook
+        target_job: New-job
+        condition_type: always
+        enabled: true
   wf-3-generate-optsmap:
     name: wf-3-generate-optsmap
     jobs:

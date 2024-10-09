@@ -5,6 +5,9 @@
   "inserted_at": "2024-09-05T06:59:05Z",
   "updated_at": "2024-10-07T16:48:01Z",
   "scheduled_deletion": null,
+  "history_retention_period": null,
+  "dataclip_retention_period": null,
+  "retention_policy": "retain_all",
   "project_credentials": {
     "mtuchi@openfn.org-OpenMRS-Demo": {
       "id": "3141d874-5456-4168-9680-ce04efb1089c",
@@ -20,11 +23,18 @@
       "id": "1e8b261f-54f8-49d0-b504-d96fc8751665",
       "name": "googlesheets (mtuchi@openfn.org)-2",
       "owner": "mtuchi@openfn.org"
+    },
+    "aleksa@openfn.org-AK-Sharepoint": {
+      "id": "2eace4af-4e52-484c-82b0-ffb1717c259d",
+      "name": "AK Sharepoint",
+      "owner": "aleksa@openfn.org"
+    },
+    "mtuchi@openfn.org-OpenMRS-Demo-(HTTP)": {
+      "id": "bee87abc-7dcf-4b66-a84f-61f9677a25b0",
+      "name": "OpenMRS Demo (HTTP)",
+      "owner": "mtuchi@openfn.org"
     }
   },
-  "history_retention_period": null,
-  "dataclip_retention_period": null,
-  "retention_policy": "retain_all",
   "workflows": {
     "wf1-dhis2-omrs-migration": {
       "id": "94e04fb5-d5ae-45ad-be31-98b902f36861",
@@ -286,6 +296,99 @@
           "condition_type": "js_expression",
           "condition_label": "has-gender-updated",
           "target_job_id": "b30b4200-d2f8-4c7a-827a-bec10c64fbc3"
+        }
+      }
+    },
+    "Sharepoint-test": {
+      "id": "6de15170-f72a-423c-a94d-d59dc05063bb",
+      "name": "Sharepoint test",
+      "inserted_at": "2024-10-08T10:17:02.860680Z",
+      "lock_version": 1,
+      "triggers": {
+        "webhook": {
+          "enabled": true,
+          "id": "77e908c3-f0ec-40ba-87cf-96eb9d50d6cf",
+          "type": "webhook"
+        }
+      },
+      "jobs": {
+        "New-job": {
+          "id": "ba0b5d01-d336-4dd9-8d2a-340793a776e1",
+          "name": "New job",
+          "body": "\n// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n",
+          "adaptor": "@openfn/language-msgraph@latest",
+          "project_credential_id": null
+        }
+      },
+      "edges": {
+        "webhook->New-job": {
+          "enabled": true,
+          "id": "a1037e59-d59d-43a4-86aa-6191320faab6",
+          "source_trigger_id": "77e908c3-f0ec-40ba-87cf-96eb9d50d6cf",
+          "condition_type": "always",
+          "target_job_id": "ba0b5d01-d336-4dd9-8d2a-340793a776e1"
+        }
+      }
+    },
+    "sharepoint-test": {
+      "id": "5e9057f9-317d-41f5-9b8d-f54a3b3cdc54",
+      "name": "sharepoint-test",
+      "inserted_at": "2024-10-08T10:17:08.540326Z",
+      "lock_version": 2,
+      "triggers": {
+        "webhook": {
+          "enabled": true,
+          "id": "19fa5083-9c46-44c0-8eec-06e8e2cf393d",
+          "type": "webhook"
+        }
+      },
+      "jobs": {
+        "New-job": {
+          "id": "4fd442b9-cda7-4fe5-8453-13e2c4f932e3",
+          "name": "New job",
+          "body": "\n// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\nget('sites/root/lists')",
+          "adaptor": "@openfn/language-msgraph@latest",
+          "project_credential_id": "2eace4af-4e52-484c-82b0-ffb1717c259d"
+        }
+      },
+      "edges": {
+        "webhook->New-job": {
+          "enabled": true,
+          "id": "f0a1ad68-f060-4234-8821-0d4514b8a9c6",
+          "source_trigger_id": "19fa5083-9c46-44c0-8eec-06e8e2cf393d",
+          "condition_type": "always",
+          "target_job_id": "4fd442b9-cda7-4fe5-8453-13e2c4f932e3"
+        }
+      }
+    },
+    "fhir-encounters": {
+      "id": "81039c3a-0415-4330-8283-6488a17b9151",
+      "name": "fhir-encounters",
+      "inserted_at": "2024-10-09T11:47:39.194047Z",
+      "lock_version": 47,
+      "triggers": {
+        "webhook": {
+          "enabled": true,
+          "id": "fc5137c9-6239-4f95-802c-789a8c885e01",
+          "type": "webhook"
+        }
+      },
+      "jobs": {
+        "Fetch-FHIR-Encounters": {
+          "id": "2c3fe742-6630-4282-872a-ca07f8dc2a71",
+          "name": "Fetch FHIR Encounters",
+          "body": "cursor(\"2024-09-29\");\n\nget(\n  \"/ws/fhir2/R4/Encounter\",\n  { query: { _count: 10, _lastUpdated: `ge${$.cursor}` }, parseAs: \"json\" },\n  (state) => {\n    const { link, total } = state.data;\n    state.nextUrl = link\n      .find((l) => l.relation === \"next\")\n      ?.url.replace(/(_count=)\\d+/, `$1${total}`);\n\n    state.encounters = state.data;\n    return state;\n  }\n);\n\nfnIf(\n  $.nextUrl,\n  get($.nextUrl, { parseAs: \"json\" }, (state) => {\n    delete state.encounters.link;\n    state.encounters.entry.push(...state.data.entry);\n    console.log(state.encounters.entry.length);\n    return state;\n  })\n);",
+          "adaptor": "@openfn/language-http@latest",
+          "project_credential_id": "bee87abc-7dcf-4b66-a84f-61f9677a25b0"
+        }
+      },
+      "edges": {
+        "webhook->Fetch-FHIR-Encounters": {
+          "enabled": true,
+          "id": "773d2d84-80e2-46af-8c01-b331f99590e4",
+          "source_trigger_id": "fc5137c9-6239-4f95-802c-789a8c885e01",
+          "condition_type": "always",
+          "target_job_id": "2c3fe742-6630-4282-872a-ca07f8dc2a71"
         }
       }
     }
