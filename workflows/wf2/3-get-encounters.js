@@ -6,18 +6,35 @@ const formUuids = [
   'ee6b1b06-3163-334a-8538-be69250af727',
 ];
 
-// cursor('2024-09-29');
+get(
+  '/ws/fhir2/R4/Encounter',
+  { query: { _count: 10, _lastUpdated: `ge${$.cursor}` }, parseAs: 'json' },
+  state => {
+    const { link, total } = state.data;
+    state.nextUrl = link
+      .find(l => l.relation === 'next')
+      ?.url.replace(/(_count=)\d+/, `$1${total}`);
 
-fhirGet('/ws/fhir2/R4/Encounter', {
-  _count: 100,
-  _lastUpdated: `ge${$.cursor}`,
-});
+    state.allResponse = state.data;
+    return state;
+  }
+);
+
+fnIf(
+  $.nextUrl,
+  get($.nextUrl, { parseAs: 'json' }, state => {
+    delete state.allResponse.link;
+    state.allResponse.entry.push(...state.data.entry);
+    console.log(state.allResponse.entry.length);
+    return state;
+  })
+);
 
 fn(state => {
-  state.encounterUuids = state.data.entry.map(p => p.resource.id);
+  state.encounterUuids = state.allResponse.entry.map(p => p.resource.id);
   state.patientUuids = [
     ...new Set(
-      state.data.entry.map(p =>
+      state.allResponse.entry.map(p =>
         p.resource.subject.reference.replace('Patient/', '')
       )
     ),
@@ -28,25 +45,29 @@ fn(state => {
 
 each(
   $.patientUuids,
-  getEncounters({ patient: $.data, v: 'full' }, state => {
-    const patientUuid = state.references.at(-1);
-    const filteredEncounters = formUuids.map(formUuid =>
-      state.data.results.filter(
-        e => e.encounterDatetime >= state.cursor && e?.form?.uuid === formUuid
-      )
-    );
+  get(
+    '/ws/rest/v1/encounter/',
+    { query: { patient: $.data, v: 'full' }, parseAs: 'json' },
+    state => {
+      const patientUuid = state.references.at(-1);
+      const filteredEncounters = formUuids.map(formUuid =>
+        state.data.results.filter(
+          e => e.encounterDatetime >= state.cursor && e?.form?.uuid === formUuid
+        )
+      );
 
-    const encounters = filteredEncounters.map(e => e[0]).filter(e => e);
-    state.encounters ??= [];
-    state.encounters.push(...encounters);
+      const encounters = filteredEncounters.map(e => e[0]).filter(e => e);
+      state.encounters ??= [];
+      state.encounters.push(...encounters);
 
-    console.log(
-      encounters.length,
-      `# of filtered encounters found in OMRS for ${patientUuid}`
-    );
+      console.log(
+        encounters.length,
+        `# of filtered encounters found in OMRS for ${patientUuid}`
+      );
 
-    return state;
-  })
+      return state;
+    }
+  )
 );
 
 // Log filtered encounters
