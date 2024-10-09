@@ -251,8 +251,8 @@ workflows:
 
       Get-Encounters:
         name: Get Encounters
-        adaptor: '@openfn/language-openmrs@4.0.0'
-        credential: mtuchi@openfn.org-OpenMRS-Demo
+        adaptor: '@openfn/language-http@6.4.5'
+        credential: mtuchi@openfn.org-OpenMRS-Demo-(HTTP)
         body:
           path: workflows/wf2/3-get-encounters.js
 

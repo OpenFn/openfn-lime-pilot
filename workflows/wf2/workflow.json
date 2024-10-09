@@ -6,7 +6,7 @@
                 "adaptor": "openmrs",
                 "configuration": "../tmp/openmrs-creds.json",
                 "state": {
-                    "lastRunDateTime": "2024-09-30T07:00:00.000Z"
+                    "lastRunDateTime": "2024-09-29"
                 },
                 "expression": "1-get-patients.js",
                 "next": {
@@ -32,8 +32,8 @@
             },
             {
                 "id": "get-encounters",
-                "adaptor": "openmrs",
-                "configuration": "../tmp/openmrs-creds.json",
+                "adaptor": "http",
+                "configuration": "../tmp/openmrs-http.json",
                 "expression": "3-get-encounters.js",
                 "next": {
                     "get-options-map": "state.encounters.length > 0&& !state.errors"
