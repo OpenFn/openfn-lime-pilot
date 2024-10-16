@@ -8,7 +8,6 @@ const mhpssMap = {
   yCwuZ0htrlH: '5f6e245c-83fc-421b-8d46-061ac773ae71', //Follow up session required?
   RiiH9A53rvG: '6d3876be-0a27-466d-ad58-92edcc8c31fb', //Referral done
   OZViJk8FPVd: 'c2664992-8a5a-4a6d-9238-5df591307d55', //Has the patient had thoughts of death or suicide?
-  qgfKPlIHjcD: 'd8c84af2-bd9b-4bf3-a815-81652cb0b0bc', //Patient experienced an act of aggression or violence - What type(s) of violence?
   rSIazMFEBjD: '4dae5b12-070f-4153-b1ca-fbec906106e1', //Admission type
   KSBMR1BDGwx: '1a8bf24f-4f36-4971-aad9-ae77f3525738', //Type of consultation
   WDY6MkQWyHb: '722dd83a-c1cf-48ad-ac99-45ac131ccc96', //Consultation done by
