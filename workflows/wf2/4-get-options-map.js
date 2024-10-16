@@ -40,7 +40,9 @@ const mhpssMap = {
   m8qis4iUOTo: '790b41ce-e1e7-11e8-b02f-0242ac130002', //Past / Precipitating Events - If other, specify
   pN4iQH4AEzk: '722dd83a-c1cf-48ad-ac99-45ac131ccc96', //Consultation done by //TODO: Return BOOLEAN
   tsFOVnlc6lz: '5f3d618e-5c89-43bd-8c79-07e4e98c2f23', //PHQ9 Score
-  //qptKDiv9uPl: 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7', //Sex //TODO: Remove TEA?
+  qgfKPlIHjcD: '6fe1e8b4-26cd-42ba-b0c2-25ee14c2813c', //What type(s) of violence? - 1
+  TjNs41OJDqW: 'e40838bf-2180-4307-ac99-19c4cd9620fe', //What type(s) of violence? - 2
+  JH5B8Fns8k5: '89ff29ce-72ce-496b-9a5d-4661a651a3b8', //What type(s) of violence? - 3
   //sGEOde9q9p9: '0a0c70d2-2ba5-4cb3-941f-b4a9a4a7ec6d', //Location of intervention - If Health Facility, specify //should be?
 };
 
