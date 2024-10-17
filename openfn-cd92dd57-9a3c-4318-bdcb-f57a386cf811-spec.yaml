@@ -10,10 +10,10 @@ credentials:
   mtuchi@openfn.org-OpenMRS-Demo:
     name: OpenMRS Demo
     owner: mtuchi@openfn.org
-  "mtuchi@openfn.org-OpenMRS-Demo-(HTTP)":
+  'mtuchi@openfn.org-OpenMRS-Demo-(HTTP)':
     name: 'OpenMRS Demo (HTTP)'
     owner: mtuchi@openfn.org
-  "mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2":
+  'mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2':
     name: 'googlesheets (mtuchi@openfn.org)-2'
     owner: mtuchi@openfn.org
 workflows:
@@ -25,7 +25,7 @@ workflows:
         adaptor: '@openfn/language-msgraph@latest'
         credential: null
         body: |
-          
+
           // Check out the Job Writing Guide for help getting started:
           // https://docs.openfn.org/documentation/jobs/job-writing-guide
 
@@ -46,29 +46,21 @@ workflows:
         name: Get metadata file from Sharepoint
         adaptor: '@openfn/language-msgraph@latest'
         credential: null
-        body: |
-          
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
-
+        body:
+          path: ./workflows/wf3/1-fetch-metadata.json
       Map-metadata-file-to-option-set-Json-format:
         name: Map metadata file to option-set Json format
         adaptor: '@openfn/language-common@latest'
         credential: null
-        body: |
-          
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+        body:
+          path: ./workflows/wf3/2-map-metadata.json
 
       Save-option-set-json-to-github:
         name: Save option-set json to github
         adaptor: '@openfn/language-http@latest'
         credential: null
-        body: |
-          
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
-
+        body:
+          path: ./workflows/wf3/3-save-options.json
     triggers:
       webhook:
         type: webhook
@@ -140,7 +132,7 @@ workflows:
         adaptor: '@openfn/language-msgraph@latest'
         credential: aleksa@openfn.org-AK-Sharepoint
         body: |
-          
+
           // Check out the Job Writing Guide for help getting started:
           // https://docs.openfn.org/documentation/jobs/job-writing-guide
           get('sites/root/lists')
@@ -162,7 +154,7 @@ workflows:
         adaptor: '@openfn/language-googlesheets@latest'
         credential: 'mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2'
         body: |
-          
+
           getValues('1OuR7laA7Oc2QnoiT8S3Thhf-HNh7uFY8ILLEu-idXuk', 
           'optionsets_oct1')
 
