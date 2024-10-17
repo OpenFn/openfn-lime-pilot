@@ -1,4 +1,6 @@
 const mhpssMap = {
+  //mhpss baseline - see below formMap for programStage and form id
+  //dataElement: omrs-concept-uid
   CXS4qAJH2qD: 'encounter-date', //encounterDate
   dfdv3SkeXKe: 'a6c5188c-29f0-4d3d-8cf5-7852998df86f', //Has the patient attempted suicide or tried to kill themselves?
   hWMBCCA2yy1: 'abede172-ba87-4ebe-8054-3afadb181ea3', //Is the patient currently at risk of hurting himself/herself or attempting suicide?
@@ -8,7 +10,6 @@ const mhpssMap = {
   yCwuZ0htrlH: '5f6e245c-83fc-421b-8d46-061ac773ae71', //Follow up session required?
   RiiH9A53rvG: '6d3876be-0a27-466d-ad58-92edcc8c31fb', //Referral done
   OZViJk8FPVd: 'c2664992-8a5a-4a6d-9238-5df591307d55', //Has the patient had thoughts of death or suicide?
-  qgfKPlIHjcD: 'd8c84af2-bd9b-4bf3-a815-81652cb0b0bc', //Patient experienced an act of aggression or violence - What type(s) of violence?
   rSIazMFEBjD: '4dae5b12-070f-4153-b1ca-fbec906106e1', //Admission type
   KSBMR1BDGwx: '1a8bf24f-4f36-4971-aad9-ae77f3525738', //Type of consultation
   WDY6MkQWyHb: '722dd83a-c1cf-48ad-ac99-45ac131ccc96', //Consultation done by
@@ -40,11 +41,14 @@ const mhpssMap = {
   m8qis4iUOTo: '790b41ce-e1e7-11e8-b02f-0242ac130002', //Past / Precipitating Events - If other, specify
   pN4iQH4AEzk: '722dd83a-c1cf-48ad-ac99-45ac131ccc96', //Consultation done by //TODO: Return BOOLEAN
   tsFOVnlc6lz: '5f3d618e-5c89-43bd-8c79-07e4e98c2f23', //PHQ9 Score
-  //qptKDiv9uPl: 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7', //Sex //TODO: Remove TEA?
+  qgfKPlIHjcD: '6fe1e8b4-26cd-42ba-b0c2-25ee14c2813c', //What type(s) of violence? - 1
+  TjNs41OJDqW: 'e40838bf-2180-4307-ac99-19c4cd9620fe', //What type(s) of violence? - 2
+  JH5B8Fns8k5: '89ff29ce-72ce-496b-9a5d-4661a651a3b8', //What type(s) of violence? - 3
   //sGEOde9q9p9: '0a0c70d2-2ba5-4cb3-941f-b4a9a4a7ec6d', //Location of intervention - If Health Facility, specify //should be?
 };
 
 const mhgapMap = {
+  //mhgap baseline - see below formMap for programStage and form id
   I7phgLmRWQq: 'encounter-date', //encounterDate
   f6FhkzfZ5j3: '4dae5b12-070f-4153-b1ca-fbec906106e1', //Admission type
   R3g94vJ2yFR: '22809b19-54ca-4d88-8d26-9577637c184e', //Clinical diagnosis
@@ -58,6 +62,7 @@ const mhgapMap = {
 };
 
 const mhpssFollowup = {
+  //mhpss followup - see below formMap for programStage and form id
   yUT7HyjWurN: 'encounter-date', // encounterDate
   CcA8pc2YqWz: 'd9454e9c-6e3c-45ab-8a9a-834a9353ae11', //Session number
   d8Dok4D8Fl4: '1a8bf24f-4f36-4971-aad9-ae77f3525738', //Type of consultation
@@ -95,6 +100,7 @@ const mhpssFollowup = {
 };
 
 const mhgapFollowup = {
+  //mhgap followup - see below formMap for programStage and form id
   //yUT7HyjWurN: 'encounter-date', // encounterDate
   CcA8pc2YqWz: 'd9454e9c-6e3c-45ab-8a9a-834a9353ae11', //Session number
   G0hLyxqgcO7: '54e8c1b6-6397-4822-89a4-cf81fbc68ce9', //The patient did not come
@@ -113,6 +119,7 @@ const mhgapFollowup = {
 };
 
 const mhpssClosure = {
+  //mhpss closure - see below formMap for programStage and form id
   //yUT7HyjWurN: 'encounter-date', // encounterDate
   RoBHeg55Mle: '8a9d2ace-372f-4413-a1c4-8999f55e2de2', //Closure date
   TqjvJA0GUOA: '401b2df0-e26f-4f49-9165-6e20a1b8865a', //Main type of consultation
