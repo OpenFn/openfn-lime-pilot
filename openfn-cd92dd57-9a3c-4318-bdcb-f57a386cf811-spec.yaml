@@ -39,6 +39,56 @@ workflows:
         target_job: New-job
         condition_type: always
         enabled: true
+  fetch-metadata-and-generate-opts-json:
+    name: fetch-metadata-and-generate-opts-json
+    jobs:
+      Get-metadata-file-from-Sharepoint:
+        name: Get metadata file from Sharepoint
+        adaptor: '@openfn/language-msgraph@latest'
+        credential: null
+        body: |
+          
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+      Map-metadata-file-to-option-set-Json-format:
+        name: Map metadata file to option-set Json format
+        adaptor: '@openfn/language-common@latest'
+        credential: null
+        body: |
+          
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+      Save-option-set-json-to-github:
+        name: Save option-set json to github
+        adaptor: '@openfn/language-http@latest'
+        credential: null
+        body: |
+          
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+    triggers:
+      webhook:
+        type: webhook
+        enabled: true
+    edges:
+      webhook->Get-metadata-file-from-Sharepoint:
+        source_trigger: webhook
+        target_job: Get-metadata-file-from-Sharepoint
+        condition_type: always
+        enabled: true
+      Get-metadata-file-from-Sharepoint->Map-metadata-file-to-option-set-Json-format:
+        source_job: Get-metadata-file-from-Sharepoint
+        target_job: Map-metadata-file-to-option-set-Json-format
+        condition_type: on_job_success
+        enabled: true
+      Map-metadata-file-to-option-set-Json-format->Save-option-set-json-to-github:
+        source_job: Map-metadata-file-to-option-set-Json-format
+        target_job: Save-option-set-json-to-github
+        condition_type: on_job_success
+        enabled: true
   fhir-encounters:
     name: fhir-encounters
     jobs:

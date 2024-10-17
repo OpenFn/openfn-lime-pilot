@@ -5,9 +5,6 @@
   "inserted_at": "2024-09-05T06:59:05Z",
   "updated_at": "2024-10-07T16:48:01Z",
   "scheduled_deletion": null,
-  "history_retention_period": null,
-  "dataclip_retention_period": null,
-  "retention_policy": "retain_all",
   "project_credentials": {
     "mtuchi@openfn.org-OpenMRS-Demo": {
       "id": "3141d874-5456-4168-9680-ce04efb1089c",
@@ -35,6 +32,9 @@
       "owner": "mtuchi@openfn.org"
     }
   },
+  "history_retention_period": null,
+  "dataclip_retention_period": null,
+  "retention_policy": "retain_all",
   "workflows": {
     "wf1-dhis2-omrs-migration": {
       "id": "94e04fb5-d5ae-45ad-be31-98b902f36861",
@@ -389,6 +389,65 @@
           "source_trigger_id": "fc5137c9-6239-4f95-802c-789a8c885e01",
           "condition_type": "always",
           "target_job_id": "2c3fe742-6630-4282-872a-ca07f8dc2a71"
+        }
+      }
+    },
+    "fetch-metadata-and-generate-opts-json": {
+      "id": "57a7ef39-d396-4959-a725-85c4bef08c6a",
+      "name": "fetch-metadata-and-generate-opts-json",
+      "inserted_at": "2024-10-11T18:17:48.712376Z",
+      "lock_version": 3,
+      "triggers": {
+        "webhook": {
+          "enabled": true,
+          "id": "e86ca050-ad88-4936-8c14-6eac23922017",
+          "type": "webhook"
+        }
+      },
+      "jobs": {
+        "Get-metadata-file-from-Sharepoint": {
+          "id": "c9712182-a389-4664-8e10-f275f87fb478",
+          "name": "Get metadata file from Sharepoint",
+          "body": "\n// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n",
+          "adaptor": "@openfn/language-msgraph@latest",
+          "project_credential_id": null
+        },
+        "Map-metadata-file-to-option-set-Json-format": {
+          "id": "bbc012b5-4811-4354-888c-f10b0294901d",
+          "name": "Map metadata file to option-set Json format",
+          "body": "\n// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n",
+          "adaptor": "@openfn/language-common@latest",
+          "project_credential_id": null
+        },
+        "Save-option-set-json-to-github": {
+          "id": "56f67a06-cf99-42b5-81c5-49c058b5126c",
+          "name": "Save option-set json to github",
+          "body": "\n// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n",
+          "adaptor": "@openfn/language-http@latest",
+          "project_credential_id": null
+        }
+      },
+      "edges": {
+        "webhook->Get-metadata-file-from-Sharepoint": {
+          "enabled": true,
+          "id": "a1a8243d-dfe8-48ff-88ab-793f4176e2ce",
+          "source_trigger_id": "e86ca050-ad88-4936-8c14-6eac23922017",
+          "condition_type": "always",
+          "target_job_id": "c9712182-a389-4664-8e10-f275f87fb478"
+        },
+        "Get-metadata-file-from-Sharepoint->Map-metadata-file-to-option-set-Json-format": {
+          "enabled": true,
+          "id": "22252bb8-2e4c-422e-8aa3-667b04d67400",
+          "source_job_id": "c9712182-a389-4664-8e10-f275f87fb478",
+          "condition_type": "on_job_success",
+          "target_job_id": "bbc012b5-4811-4354-888c-f10b0294901d"
+        },
+        "Map-metadata-file-to-option-set-Json-format->Save-option-set-json-to-github": {
+          "enabled": true,
+          "id": "3342bdc4-487d-49d2-839c-3c6d7835af8f",
+          "source_job_id": "bbc012b5-4811-4354-888c-f10b0294901d",
+          "condition_type": "on_job_success",
+          "target_job_id": "56f67a06-cf99-42b5-81c5-49c058b5126c"
         }
       }
     }
