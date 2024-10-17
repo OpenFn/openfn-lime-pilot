@@ -1,4 +1,6 @@
 const mhpssMap = {
+  //mhpss baseline - see below formMap for programStage and form id
+  //dataElement: omrs-concept-uid
   CXS4qAJH2qD: 'encounter-date', //encounterDate
   dfdv3SkeXKe: 'a6c5188c-29f0-4d3d-8cf5-7852998df86f', //Has the patient attempted suicide or tried to kill themselves?
   hWMBCCA2yy1: 'abede172-ba87-4ebe-8054-3afadb181ea3', //Is the patient currently at risk of hurting himself/herself or attempting suicide?
@@ -46,6 +48,7 @@ const mhpssMap = {
 };
 
 const mhgapMap = {
+  //mhgap baseline - see below formMap for programStage and form id
   I7phgLmRWQq: 'encounter-date', //encounterDate
   f6FhkzfZ5j3: '4dae5b12-070f-4153-b1ca-fbec906106e1', //Admission type
   R3g94vJ2yFR: '22809b19-54ca-4d88-8d26-9577637c184e', //Clinical diagnosis
@@ -59,6 +62,7 @@ const mhgapMap = {
 };
 
 const mhpssFollowup = {
+  //mhpss followup - see below formMap for programStage and form id
   yUT7HyjWurN: 'encounter-date', // encounterDate
   CcA8pc2YqWz: 'd9454e9c-6e3c-45ab-8a9a-834a9353ae11', //Session number
   d8Dok4D8Fl4: '1a8bf24f-4f36-4971-aad9-ae77f3525738', //Type of consultation
@@ -96,6 +100,7 @@ const mhpssFollowup = {
 };
 
 const mhgapFollowup = {
+  //mhgap followup - see below formMap for programStage and form id
   //yUT7HyjWurN: 'encounter-date', // encounterDate
   CcA8pc2YqWz: 'd9454e9c-6e3c-45ab-8a9a-834a9353ae11', //Session number
   G0hLyxqgcO7: '54e8c1b6-6397-4822-89a4-cf81fbc68ce9', //The patient did not come
@@ -114,6 +119,7 @@ const mhgapFollowup = {
 };
 
 const mhpssClosure = {
+  //mhpss closure - see below formMap for programStage and form id
   //yUT7HyjWurN: 'encounter-date', // encounterDate
   RoBHeg55Mle: '8a9d2ace-372f-4413-a1c4-8999f55e2de2', //Closure date
   TqjvJA0GUOA: '401b2df0-e26f-4f49-9165-6e20a1b8865a', //Main type of consultation
