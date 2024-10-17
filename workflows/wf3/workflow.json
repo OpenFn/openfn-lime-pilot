@@ -1,0 +1,20 @@
+{
+    "workflow": {
+        "steps": [
+            {
+                "id": "fetch-metadata",
+                "adaptor": "http",
+                "configuration": "../tmp/msgraph-creds.json",
+                "expression": "1-fetch-metadata.js",
+                "next": {
+                    "map-metadata": "!state.errors && state.f01MphssBaselineXls.length > 0 && state.optionSetsXlsData.length > 0"
+                }
+            },
+            {
+                "id": "map-metadata",
+                "adaptor": "common",
+                "expression": "2-map-metadata.js"
+            }
+        ]
+    }
+}
