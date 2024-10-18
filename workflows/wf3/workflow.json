@@ -3,17 +3,26 @@
         "steps": [
             {
                 "id": "fetch-metadata",
-                "adaptor": "http",
+                "adaptor": "msgraph",
+                "state": {
+                    "siteId": "openfnorg.sharepoint.com,d5088184-0e2e-4387-8541-67887eda9a7d,18937383-ba7f-4f1b-aefb-00ec4bee3a28"
+                },
                 "configuration": "../tmp/msgraph-creds.json",
-                "expression": "1-fetch-metadata.js",
-                "next": {
-                    "map-metadata": "!state.errors && state.f01MphssBaselineXls.length > 0 && state.optionSetsXlsData.length > 0"
-                }
+                "expression": "1-fetch-metadata.js"
             },
             {
                 "id": "map-metadata",
                 "adaptor": "common",
-                "expression": "2-map-metadata.js"
+                "expression": "2-map-metadata.js",
+                "next": {
+                    "save-options": "!state.errors && state.f01MphssBaseline.length > 0 && Object.keys(state.optionSets).length > 0"
+                }
+            },
+            {
+                "id": "save-options",
+                "adaptor": "http",
+                "expression": "3-save-options.js",
+                "configuration": "../tmp/github-creds.json"
             }
         ]
     }
