@@ -134,10 +134,13 @@ const mhpssClosure = {
 // state.mhgapClosure = { //Waiting on form
 //   yUT7HyjWurN: 'encounter-date', // encounterDate
 // };
-
 get(
-  'https://gist.githubusercontent.com/aleksa-krolls/2f309595110239cfcc8251017cf11592/raw/43e11ddf77a17e393b4ce756fcec90e2c4339ca9/msf_wf2_optionsMap.json'
-); //ak's gist
+  'https://raw.githubusercontent.com/OpenFn/openfn-lime-pilot/refs/heads/main/metadata/metadata_mapping.json'
+);
+
+// get(
+//   'https://gist.githubusercontent.com/aleksa-krolls/2f309595110239cfcc8251017cf11592/raw/43e11ddf77a17e393b4ce756fcec90e2c4339ca9/msf_wf2_optionsMap.json'
+// ); //ak's gist
 
 fn(state => {
   const { data, response, references, ...next } = state;
