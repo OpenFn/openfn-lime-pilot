@@ -3,7 +3,7 @@
   "name": "msf-lime-iraq",
   "description": null,
   "inserted_at": "2024-09-05T06:59:05Z",
-  "updated_at": "2024-10-23T10:37:10Z",
+  "updated_at": "2024-10-23T10:45:44Z",
   "project_credentials": {
     "mtuchi@openfn.org-OpenMRS-Demo": {
       "id": "3141d874-5456-4168-9680-ce04efb1089c",
@@ -414,12 +414,12 @@
       },
       "concurrency": null,
       "inserted_at": "2024-10-11T18:16:12Z",
-      "updated_at": "2024-10-23T10:37:10Z",
+      "updated_at": "2024-10-23T10:45:44Z",
       "jobs": {
         "Get-metadata-file-from-Sharepoint": {
           "id": "c9712182-a389-4664-8e10-f275f87fb478",
           "name": "Get metadata file from Sharepoint",
-          "body": "const toCamelCase = text => {\n  return text\n    .toLowerCase()\n    .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase());\n};\n\nconst sheets = [\n  'OptionSets',\n  'F01-MHPSS Baseline',\n  'F02-MHPSS Follow-up',\n  'F03-mhGAP Baseline',\n  'F04-mhGAP Follow-up',\n  'F05-MHPSS Closure',\n];\n\ngetDrive(\n  {\n    id: $.siteId,\n    owner: 'sites',\n  },\n  'default'\n);\n\ngetFile('/msf-metadata/LIME EMR Iraq Metadata Oct 1.xlsx', {\n  metadata: true,\n});\n\nfn(state => {\n  const itemId = state.data.id;\n  const driveId = state.drives.default.id;\n  state.workbookBase = `sites/${state.siteId}/drives/${driveId}/items/${itemId}/workbook`;\n  return state;\n});\n\neach(\n  sheets,\n  get(`${$.workbookBase}/worksheets('${$.data}')/usedRange`, {}, state => {\n    const sheetName = toCamelCase(state.references.at(-1));\n    console.log('Fetched sheet: ', sheetName);\n    state[sheetName] = state.data.values;\n    return state;\n  })\n);\n\nfn(state => {\n  delete state.data;\n  delete state.response;\n  delete state.references;\n  return state;\n});\n",
+          "body": "const toCamelCase = text => {\n  return text\n    .toLowerCase()\n    .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase());\n};\n\nconst sheets = [\n  'OptionSets',\n  'F01-MHPSS Baseline',\n  'F02-MHPSS Follow-up',\n  'F03-mhGAP Baseline',\n  'F04-mhGAP Follow-up',\n  'F05-MHPSS Closure',\n];\n\nfn(state => {\n  state.siteId =\n    'openfnorg.sharepoint.com,4724a499-afbc-4ded-a371-34ae40bf5d8d,1d20a7d4-a6f1-407c-aa77-76bd47bb0f32';\n  return state;\n});\n\ngetDrive(\n  {\n    id: $.siteId,\n    owner: 'sites',\n  },\n  'default'\n);\n\ngetFile('/msf-metadata/LIME EMR Iraq Metadata Oct 1.xlsx', {\n  metadata: true,\n});\n\nfn(state => {\n  const itemId = state.data.id;\n  const driveId = state.drives.default.id;\n  state.workbookBase = `sites/${state.siteId}/drives/${driveId}/items/${itemId}/workbook`;\n  return state;\n});\n\neach(\n  sheets,\n  get(`${$.workbookBase}/worksheets('${$.data}')/usedRange`, {}, state => {\n    const sheetName = toCamelCase(state.references.at(-1));\n    console.log('Fetched sheet: ', sheetName);\n    state[sheetName] = state.data.values;\n    return state;\n  })\n);\n\nfn(state => {\n  delete state.data;\n  delete state.response;\n  delete state.references;\n  return state;\n});\n",
           "adaptor": "@openfn/language-msgraph@latest",
           "project_credential_id": null
         },
@@ -439,7 +439,7 @@
         }
       },
       "deleted_at": null,
-      "lock_version": 4,
+      "lock_version": 6,
       "triggers": {
         "webhook": {
           "enabled": true,
