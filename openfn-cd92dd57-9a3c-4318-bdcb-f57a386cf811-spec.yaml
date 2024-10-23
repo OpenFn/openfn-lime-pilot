@@ -7,6 +7,9 @@ credentials:
   mtuchi@openfn.org-MSF-DHIS2-UAT:
     name: MSF DHIS2 UAT
     owner: mtuchi@openfn.org
+  mtuchi@openfn.org-OpenFn-Sharepoint:
+    name: OpenFn Sharepoint
+    owner: mtuchi@openfn.org
   mtuchi@openfn.org-OpenMRS-Demo:
     name: OpenMRS Demo
     owner: mtuchi@openfn.org
@@ -16,29 +19,10 @@ credentials:
   "mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2":
     name: 'googlesheets (mtuchi@openfn.org)-2'
     owner: mtuchi@openfn.org
+  mtuchi@openfn.org-mtuchi-github-token:
+    name: mtuchi-github-token
+    owner: mtuchi@openfn.org
 workflows:
-  Sharepoint-test:
-    name: Sharepoint test
-    jobs:
-      New-job:
-        name: New job
-        adaptor: '@openfn/language-msgraph@latest'
-        credential: null
-        body: |
-          
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
-
-    triggers:
-      webhook:
-        type: webhook
-        enabled: true
-    edges:
-      webhook->New-job:
-        source_trigger: webhook
-        target_job: New-job
-        condition_type: always
-        enabled: true
   fetch-metadata-and-generate-opts-json:
     name: fetch-metadata-and-generate-opts-json
     jobs:
@@ -122,6 +106,7 @@ workflows:
               return state;
             })
           );
+
     triggers:
       webhook:
         type: webhook
@@ -144,6 +129,7 @@ workflows:
           // Check out the Job Writing Guide for help getting started:
           // https://docs.openfn.org/documentation/jobs/job-writing-guide
           get('sites/root/lists')
+
     triggers:
       webhook:
         type: webhook
@@ -271,6 +257,7 @@ workflows:
         condition_label: has-teis
         condition_expression: |
           state.trackedEntityInstances.length > 0
+
         enabled: true
       Get-Locations->Create-Patients:
         source_job: Get-Locations
@@ -359,6 +346,7 @@ workflows:
         condition_label: has-patient-uuids
         condition_expression: |
           state.patientUuids.length > 0 && !state.errors
+
         enabled: true
       Get-Encounters->Get-Options-Map:
         source_job: Get-Encounters
@@ -367,6 +355,12 @@ workflows:
         condition_label: has-encounters
         condition_expression: |
           state.encounters.length > 0
+
+        enabled: true
+      Get-Options-Map->Get-TEIs:
+        source_job: Get-Options-Map
+        target_job: Get-TEIs
+        condition_type: on_job_success
         enabled: true
       Get-TEIs->Create-Events:
         source_job: Get-TEIs
@@ -375,10 +369,11 @@ workflows:
         condition_label: has-teis
         condition_expression: |
           state.TEIs && !state.errors
+
         enabled: true
-      Get-Options-Map->Get-TEIs:
-        source_job: Get-Options-Map
-        target_job: Get-TEIs
+      Mappings->Upsert-TEIs:
+        source_job: Mappings
+        target_job: Upsert-TEIs
         condition_type: on_job_success
         enabled: true
       Get-Patients->Mappings:
@@ -388,11 +383,7 @@ workflows:
         condition_label: has-patients
         condition_expression: |
           state.patients.length > 0 && !state.errors
-        enabled: true
-      Mappings->Upsert-TEIs:
-        source_job: Mappings
-        target_job: Upsert-TEIs
-        condition_type: on_job_success
+
         enabled: true
       Create-Events->Update-TEIs:
         source_job: Create-Events
@@ -401,4 +392,5 @@ workflows:
         condition_label: has-gender-updated
         condition_expression: |
           state.genderUpdated.length > 0 && !state.errors
+
         enabled: true
