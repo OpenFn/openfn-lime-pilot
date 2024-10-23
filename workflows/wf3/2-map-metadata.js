@@ -1,19 +1,20 @@
 const isValidValue = value => value !== '' && value !== 'NA';
 
+const mapArrayToObject = (item, keys) => {
+  return item.reduce((acc, value, idx) => {
+    acc[keys[idx]] = value;
+    return acc;
+  }, {});
+};
 fn(state => {
-  const { f01MphssBaselineXls } = state;
-  const keys = f01MphssBaselineXls[1];
+  const { f01MhpssBaseline } = state;
+  const keys = f01MhpssBaseline[1];
 
-  const mphssBaselineXls = f01MphssBaselineXls.slice(2).map(item => {
-    const obj = item.reduce((acc, value, idx) => {
-      acc[keys[idx]] = value;
-      return acc;
-    }, {});
+  const mphssBaselineXls = f01MhpssBaseline
+    .slice(2)
+    .map(item => mapArrayToObject(item, keys));
 
-    return obj;
-  });
-
-  state.f01MphssBaseline = mphssBaselineXls
+  state.f01MhpssBaseline = mphssBaselineXls
     .filter(
       o =>
         isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE full name'])
@@ -36,17 +37,10 @@ fn(state => {
 });
 
 fn(state => {
-  const { optionSetsXlsData } = state;
-  const keys = optionSetsXlsData[1];
+  const { optionsets } = state;
+  const keys = optionsets[1];
 
-  const optsMap = optionSetsXlsData.slice(2).map(item => {
-    const obj = item.reduce((acc, value, idx) => {
-      acc[keys[idx]] = value;
-      return acc;
-    }, {});
-
-    return obj;
-  });
+  const optsMap = optionsets.slice(2).map(item => mapArrayToObject(item, keys));
 
   state.optionSets = optsMap
     .filter(
@@ -59,4 +53,4 @@ fn(state => {
   return state;
 });
 
-fn(({ optionSets, f01MphssBaseline }) => ({ optionSets, f01MphssBaseline }));
+fn(({ optionSets, f01MhpssBaseline }) => ({ optionSets, f01MhpssBaseline }));

@@ -5,17 +5,20 @@
                 "id": "fetch-metadata",
                 "adaptor": "msgraph",
                 "state": {
-                    "siteId": "openfnorg.sharepoint.com,d5088184-0e2e-4387-8541-67887eda9a7d,18937383-ba7f-4f1b-aefb-00ec4bee3a28"
+                    "siteId": "openfnorg.sharepoint.com,4724a499-afbc-4ded-a371-34ae40bf5d8d,1d20a7d4-a6f1-407c-aa77-76bd47bb0f32"
                 },
                 "configuration": "../tmp/msgraph-creds.json",
-                "expression": "1-fetch-metadata.js"
+                "expression": "1-fetch-metadata.js",
+                "next": {
+                    "map-metadata": "!state.errors"
+                }
             },
             {
                 "id": "map-metadata",
                 "adaptor": "common",
                 "expression": "2-map-metadata.js",
                 "next": {
-                    "save-options": "!state.errors && state.f01MphssBaseline.length > 0 && Object.keys(state.optionSets).length > 0"
+                    "save-options": "!state.errors"
                 }
             },
             {
