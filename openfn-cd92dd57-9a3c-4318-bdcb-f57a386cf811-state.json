@@ -3,7 +3,8 @@
   "name": "msf-lime-iraq",
   "description": null,
   "inserted_at": "2024-09-05T06:59:05Z",
-  "updated_at": "2024-10-23T10:45:44Z",
+  "updated_at": "2024-10-23T11:00:56Z",
+  "scheduled_deletion": null,
   "project_credentials": {
     "mtuchi@openfn.org-OpenMRS-Demo": {
       "id": "3141d874-5456-4168-9680-ce04efb1089c",
@@ -30,18 +31,12 @@
       "name": "OpenMRS Demo (HTTP)",
       "owner": "mtuchi@openfn.org"
     },
-    "mtuchi@openfn.org-OpenFn-Sharepoint": {
-      "id": "acb3beda-2c58-47ca-bfaa-e190734922c2",
-      "name": "OpenFn Sharepoint",
-      "owner": "mtuchi@openfn.org"
-    },
     "mtuchi@openfn.org-mtuchi-github-token": {
       "id": "6533e534-6ad8-4651-b27d-245b8cbb69d8",
       "name": "mtuchi-github-token",
       "owner": "mtuchi@openfn.org"
     }
   },
-  "scheduled_deletion": null,
   "history_retention_period": null,
   "dataclip_retention_period": null,
   "retention_policy": "retain_all",
@@ -120,7 +115,7 @@
       },
       "concurrency": null,
       "inserted_at": "2024-09-06T11:58:48Z",
-      "updated_at": "2024-10-17T21:25:31Z",
+      "updated_at": "2024-10-23T11:00:56Z",
       "jobs": {
         "Get-Patients": {
           "id": "ab326112-9cdd-4449-8611-b5abc659d4ca",
@@ -146,7 +141,7 @@
         "Get-Options-Map": {
           "id": "175ac575-ea3d-470e-8faf-61de514e222e",
           "name": "Get Options Map",
-          "body": "const mhpssMap = {\n  //mhpss baseline - see below formMap for programStage and form id\n  //dataElement: omrs-concept-uid\n  CXS4qAJH2qD: 'encounter-date', //encounterDate\n  dfdv3SkeXKe: 'a6c5188c-29f0-4d3d-8cf5-7852998df86f', //Has the patient attempted suicide or tried to kill themselves?\n  hWMBCCA2yy1: 'abede172-ba87-4ebe-8054-3afadb181ea3', //Is the patient currently at risk of hurting himself/herself or attempting suicide?\n  TWuCY5r2wx7: 'ccc4f06c-b76a-440d-9b7e-c48ba2c4a0ab', //Is the patient currently at risk of hurting others?\n  QHrIUMhjZlO: 'd516de07-979b-411c-b7e4-bd09cf7d9d91', //Does the patient regularly use alcohol / substances to become intoxicated?\n  H1fMCaOzr8F: '3e97c2d0-15c1-4cfd-884f-7a4721079217', //Has the patient experienced an act of aggression or violence?\n  yCwuZ0htrlH: '5f6e245c-83fc-421b-8d46-061ac773ae71', //Follow up session required?\n  RiiH9A53rvG: '6d3876be-0a27-466d-ad58-92edcc8c31fb', //Referral done\n  OZViJk8FPVd: 'c2664992-8a5a-4a6d-9238-5df591307d55', //Has the patient had thoughts of death or suicide?\n  rSIazMFEBjD: '4dae5b12-070f-4153-b1ca-fbec906106e1', //Admission type\n  KSBMR1BDGwx: '1a8bf24f-4f36-4971-aad9-ae77f3525738', //Type of consultation\n  WDY6MkQWyHb: '722dd83a-c1cf-48ad-ac99-45ac131ccc96', //Consultation done by\n  AuDPJg6gZE7: '82978311-bef9-46f9-9a9a-cc62254b00a6', //Location of intervention\n  KeyiEPc4pII: '82978311-bef9-46f9-9a9a-cc62254b00a6', //Type of intervention\n  qfYPXP76j8g: 'c3c86c1b-07be-4506-ab25-8f35f4389b19', //Patient referred by\n  PCGI7EnvCQS: '45b39cbf-0fb2-4682-8544-8aaf3e07a744', //Current symptoms or complaints 1\n  RnbiVrrSFdm: 'ee1b7973-e931-494e-a9cb-22b814b4d8ed', //Current symptoms or complaints 2\n  CUdI1BJ5W8G: '92a92f62-3ff6-4944-9ea9-a7af23949bad', //Current symptoms or complaints 3\n  YfcNA5bvkxT: '9a8204ca-d908-4157-9285-7c970dbb5287', //Main category of symptoms\n  vC3bg9NwJ78: '3edcfddb-7988-4ce5-97a0-d4c46b267a04', //Duration of the main symptom\n  RqsvaPH9vHt: '22809b19-54ca-4d88-8d26-9577637c184e', //Clinical diagnosis\n  qacGXlyyQOS: 'a1a75011-0fef-460a-b666-dda2d171f39b', //CGI-S score\n  S22iy8o0iLg: 'aae000c3-5242-4e3c-bd1f-7e922a6d3d34', //Patient experienced an act of aggression or violence - Time between violence event and consultation\n  v0qFX0qv1tX: 'd5e3d927-f7ce-4fdd-ac4e-6ad0b510b608', //Main past or precipitating events - 1\n  SsQqwDBGxjh: '54a9b20e-bce5-4d4a-8c9c-e0248a182586', //Main past or precipitating events - 2\n  FLIlRjAwn4G: 'e0d4e006-85b5-41cb-8a21-e013b1978b8b', //Main past or precipitating events - 3\n  JUabDHhT1wJ: 'c1a3ed2d-6d9a-453d-9d93-749164a76413', //Main category of precipitating event\n  DlqJSA5VApl: '8fb3bb7d-c935-4b57-8444-1b953470e109', //Type of referral\n  DMaLm9u4GCq: 'b87a93ff-a4a1-4601-b35d-1e42bfa7e194', //Total number of beneficiaries in family consultation\n  CLGnlnFqqnk: '0a0c70d2-2ba5-4cb3-941f-b4a9a4a7ec6d', //Location of intervention - If Health Facility, specify\n  f64XCwzJW02: '41e68dee-a2a3-4e6c-9d96-53def5caff52', //Location of intervention - If MSF Health Facility, specify\n  YeaUNruqmca: '08cd4b4a-4b0b-4391-987b-b5b3d770d30f', //Location of intervention - If Mobile Clinic, specify\n  KjgDauY9v4J: 'e08d532b-e56c-43dc-b831-af705654d2dc', //Location of intervention - If other, specify\n  pj5hIE6iyAR: 'e08d532b-e56c-43dc-b831-af705654d2dc', //Current symptoms or complaints - If other, specify\n  pj5hIE6iyAR: 'e08d532b-e56c-43dc-b831-af705654d2dc', //Current symptoms or complaints - If other, specify\n  W7cPAi8iXLZ: '819f79e7-b9af-4afd-85d4-2ab677223113', //Clinical diagnosis - If other, specify\n  MF3RML0HLbP: 'b2c5b6e0-66f0-4b9d-8576-b6f48e0a06df', //MHOS score\n  m8qis4iUOTo: '790b41ce-e1e7-11e8-b02f-0242ac130002', //Past / Precipitating Events - If other, specify\n  pN4iQH4AEzk: '722dd83a-c1cf-48ad-ac99-45ac131ccc96', //Consultation done by //TODO: Return BOOLEAN\n  tsFOVnlc6lz: '5f3d618e-5c89-43bd-8c79-07e4e98c2f23', //PHQ9 Score\n  qgfKPlIHjcD: '6fe1e8b4-26cd-42ba-b0c2-25ee14c2813c', //What type(s) of violence? - 1\n  TjNs41OJDqW: 'e40838bf-2180-4307-ac99-19c4cd9620fe', //What type(s) of violence? - 2\n  JH5B8Fns8k5: '89ff29ce-72ce-496b-9a5d-4661a651a3b8', //What type(s) of violence? - 3\n  //sGEOde9q9p9: '0a0c70d2-2ba5-4cb3-941f-b4a9a4a7ec6d', //Location of intervention - If Health Facility, specify //should be?\n};\n\nconst mhgapMap = {\n  //mhgap baseline - see below formMap for programStage and form id\n  I7phgLmRWQq: 'encounter-date', //encounterDate\n  f6FhkzfZ5j3: '4dae5b12-070f-4153-b1ca-fbec906106e1', //Admission type\n  R3g94vJ2yFR: '22809b19-54ca-4d88-8d26-9577637c184e', //Clinical diagnosis\n  Yt4NhxZU5Vo: '819f79e7-b9af-4afd-85d4-2ab677223113', //Clinical diagnosis - If other, specify\n  pHoZYTrR7N0: '2be92591-da1b-4418-ba49-43b3fc0e4ce5', //Pregnant / breastfeeding\n  hMcCdEkhhjZ: 'f6cefc80-506a-44b0-ab5f-d6f5908cf7a5', //Child / adolescent\n  VnXwFYqHNqM: '15748787-7372-4022-b5d4-81ff8d6887ca', //Older adult\n  xRuC0NQRqZk: '99a8b512-17f9-4a5d-9fd4-80c27500995b', //Patient already on psychotropic / psychiatric medication (not prescribed by MSF)?\n  DCEJHFQvPWa: '5f3d618e-5c89-43bd-8c79-07e4e98c2f23', //PHQ-9 score\n  TZGKlSVIsN8: '5f6e245c-83fc-421b-8d46-061ac773ae71', //Follow-up required\n};\n\nconst mhpssFollowup = {\n  //mhpss followup - see below formMap for programStage and form id\n  yUT7HyjWurN: 'encounter-date', // encounterDate\n  CcA8pc2YqWz: 'd9454e9c-6e3c-45ab-8a9a-834a9353ae11', //Session number\n  d8Dok4D8Fl4: '1a8bf24f-4f36-4971-aad9-ae77f3525738', //Type of consultation\n  E7MVMTTdvPi: 'b87a93ff-a4a1-4601-b35d-1e42bfa7e194', //Total number of beneficiaries in family consultation\n  aCTIvKSNndK: '722dd83a-c1cf-48ad-ac99-45ac131ccc96', //Consultation done by\n  UlSJrSD78HS: '82978311-bef9-46f9-9a9a-cc62254b00a6', //Location of intervention\n  sGEOde9q9p9: '0a0c70d2-2ba5-4cb3-941f-b4a9a4a7ec6d', //Location of intervention - If Health Facility, specify //should be?\n  LCdm2xe86ln: '41e68dee-a2a3-4e6c-9d96-53def5caff52', //Location of intervention - If MSF Health Facility, specify\n  rGS6S4jyKu3: '08cd4b4a-4b0b-4391-987b-b5b3d770d30f', //Location of intervention - If Mobile Clinic, specify\n  L6Jj7Tppr5q: 'e08d532b-e56c-43dc-b831-af705654d2dc', //Location of intervention - If other, specify\n  vWWl7izQpqd: '82978311-bef9-46f9-9a9a-cc62254b00a6', //Type of intervention\n  // G0hLyxqgcO7: '54e8c1b6-6397-4822-89a4-cf81fbc68ce9', //The patient did not come TODO @aleksa this is causing an error when creating an event\n  tloy0Bd9qDf: 'd7410cd3-29be-4f8b-93d6-eb4de005db29', //Number of appointments missed\n  AZUFlZzPN6V: '278d3d1e-c02a-4db1-8ab3-8db3b82eb9b5', //Patient rescheduled\n  HNZHetAtowR: 'd34d5e93-03d6-494e-8f4c-2d7221227162', //Reason for missed appointment\n  t4HoHWCYdvm: '790b41ce-e1e7-11e8-b02f-0242ac130002', //Reason for missed appointment - If other, specify\n  C5XtlggtVmd: 'a1a75011-0fef-460a-b666-dda2d171f39b', //CGI-S score\n  yTFUtaFJ1QU: 'f94de17e-9771-4711-aabb-c5bb0c022be2', //CGI-I score\n  F6q03Gan7Ro: '22809b19-54ca-4d88-8d26-9577637c184e', //Clinical diagnosis\n  OeA71vAyGZV: '819f79e7-b9af-4afd-85d4-2ab677223113', //Clinical diagnosis - If other, specify\n  piKsOVnFIXO: 'a6c5188c-29f0-4d3d-8cf5-7852998df86f', //Has the patient attempted suicide or tried to kill themselves?\n  llBTRwwM94C: 'abede172-ba87-4ebe-8054-3afadb181ea3', //Is the patient currently at risk of hurting himself/herself or attempting suicide?\n  j8IYwKvxK4q: 'ccc4f06c-b76a-440d-9b7e-c48ba2c4a0ab', //Is the patient currently at risk of hurting others?\n  Lw2Kkl2y6mj: 'd516de07-979b-411c-b7e4-bd09cf7d9d91', //Does the patient regularly use alcohol / substances to become intoxicated?\n  a9J7luvOwhF: '3e97c2d0-15c1-4cfd-884f-7a4721079217', //Has the patient experienced an act of aggression or violence?\n  EM4ouSS9Kxe: 'd8c84af2-bd9b-4bf3-a815-81652cb0b0bc', //Patient experienced an act of aggression or violence - What type(s) of violence?\n  KjOAmUFJJgs: 'aae000c3-5242-4e3c-bd1f-7e922a6d3d34', //Patient experienced an act of aggression or violence - Time between violence event and consultation\n  GVTXoz0VrAd: '5f6e245c-83fc-421b-8d46-061ac773ae71', //Follow up session required?\n  N6GYmCjAhfh: '6d3876be-0a27-466d-ad58-92edcc8c31fb', //Referral done\n  wvVn2LfmNDO: '8fb3bb7d-c935-4b57-8444-1b953470e109', //Type of referral\n  //Below threw errror \"DEs not added to program stage\" --> to retest\n  MF3RML0HLbP: 'b2c5b6e0-66f0-4b9d-8576-b6f48e0a06df', //MHOS score\n  tsFOVnlc6lz: '5f3d618e-5c89-43bd-8c79-07e4e98c2f23', //PHQ-9 score\n  OZViJk8FPVd: 'c2664992-8a5a-4a6d-9238-5df591307d55', //Has the patient had thoughts of death or suicide?\n};\n\nconst mhgapFollowup = {\n  //mhgap followup - see below formMap for programStage and form id\n  //yUT7HyjWurN: 'encounter-date', // encounterDate\n  CcA8pc2YqWz: 'd9454e9c-6e3c-45ab-8a9a-834a9353ae11', //Session number\n  G0hLyxqgcO7: '54e8c1b6-6397-4822-89a4-cf81fbc68ce9', //The patient did not come\n  tloy0Bd9qDf: 'd7410cd3-29be-4f8b-93d6-eb4de005db29', //Number of appointments missed\n  AZUFlZzPN6V: '278d3d1e-c02a-4db1-8ab3-8db3b82eb9b5', //Patient rescheduled\n  HNZHetAtowR: 'd34d5e93-03d6-494e-8f4c-2d7221227162', //Reason for missed appointment\n  t4HoHWCYdvm: '790b41ce-e1e7-11e8-b02f-0242ac130002', //Reason for missed appointment - If other, specify\n  MDbDqs5Mwow: '22809b19-54ca-4d88-8d26-9577637c184e', //Clinical diagnosis\n  EYIPzqO7mpZ: '819f79e7-b9af-4afd-85d4-2ab677223113', //Clinical diagnosis - If other, specify\n  faQI7NN3hyp: '5f3d618e-5c89-43bd-8c79-07e4e98c2f23', //PHQ-9 score\n  yTFUtaFJ1QU: 'a1a75011-0fef-460a-b666-dda2d171f39b', //CGI-S score\n  C5XtlggtVmd: 'f94de17e-9771-4711-aabb-c5bb0c022be2', //CGI-I score\n  AiUr0KZgS9e: 'dbf35880-d18e-4f15-ad9c-97b5b053e14a', //Adherence to treatment - Is the patient taking the medication as prescribed?\n  OBAHc3Rljln: 'dc072a1a-20d8-4512-9e57-3585a07cb074', //Adherence to treatement - Details if needed\n  WKDFgUTUHWl: '5f6e245c-83fc-421b-8d46-061ac773ae71', //Follow-up required\n};\n\nconst mhpssClosure = {\n  //mhpss closure - see below formMap for programStage and form id\n  //yUT7HyjWurN: 'encounter-date', // encounterDate\n  RoBHeg55Mle: '8a9d2ace-372f-4413-a1c4-8999f55e2de2', //Closure date\n  TqjvJA0GUOA: '401b2df0-e26f-4f49-9165-6e20a1b8865a', //Main type of consultation\n  Lht8GKTAHu8: '9e861ef1-e07c-4955-9650-2ebac3138fc3', //Type of closure\n  tvQUeCICtFB: '93eb9716-6866-4d13-9b8f-59c0a7605a11', //Patient referred to\n  pQG72ee2lkl: '90b3d09c-d296-44d2-8292-8e04377fe027', //MHOS\n  tsFOVnlc6lz: '6545b874-f44d-4d18-9ab1-7a8bb21c0a15', //PHQ-9\n  iEdamWl0wzQ: 'c64dfacd-2fb5-464d-83a9-ebb9eb8d3ab3', //CGI-I\n  c4TiPRUQ56A: '77f1a782-24af-40ba-bac1-b97d9a080f40', //CGI-S\n};\n\n// state.mhgapClosure = { //Waiting on form\n//   yUT7HyjWurN: 'encounter-date', // encounterDate\n// };\n\nget(\n  'https://gist.githubusercontent.com/aleksa-krolls/2f309595110239cfcc8251017cf11592/raw/43e11ddf77a17e393b4ce756fcec90e2c4339ca9/msf_wf2_optionsMap.json'\n); //ak's gist\n\nfn(state => {\n  const { data, response, references, ...next } = state;\n  next.optsMap = JSON.parse(data);\n  // console.log(JSON.stringify(next.optsMap, null, 2), 'Options Map');\n  return next;\n});\n\nfn(state => {\n  state.formMaps = {\n    '6a3e1e0e-dd13-3465-b8f5-ee2d42691fe5': {\n      //formName: mhpss baseline\n      programStage: 'MdTtRixaC1B',\n      dataValueMap: mhpssMap,\n    },\n    '82db23a1-4eb1-3f3c-bb65-b7ebfe95b19b': {\n      ////formName: mhgap baseline\n      programStage: 'EZJ9FsNau7Q',\n      dataValueMap: mhgapMap,\n    },\n    'be8c12f9-e6fd-369a-9bc7-46a191866f15': {\n      //formName: mhpss followup\n      programStage: 'eUCtSH80vMe',\n      dataValueMap: mhpssFollowup,\n    },\n    '48577ac5-d9c0-3000-9bac-075409b38336': {\n      //formName: mhgap followup\n      programStage: 'hjHwYnSfJnX',\n      dataValueMap: mhgapFollowup,\n    },\n    'ee6b1b06-3163-334a-8538-be69250af727': {\n      //formName: mhpss closure\n      programStage: 'xrCTheIzyDV',\n      dataValueMap: mhpssClosure,\n    },\n  };\n  return state;\n});\n",
+          "body": "// state.mhgapClosure = { //Waiting on form\n//   yUT7HyjWurN: 'encounter-date', // encounterDate\n// };\nget(\n  'https://raw.githubusercontent.com/OpenFn/openfn-lime-pilot/refs/heads/main/metadata/metadata_mapping.json',\n  { parseAs: 'json' }\n);\n\nfn(({ data, response, references, ...next }) => {\n  const {\n    optionSets,\n    f01MhpssBaseline,\n    f02MhpssFollowUp,\n    f03MhgapBaseline,\n    f04MhgapFollowUp,\n    f05MhpssClosure,\n  } = data;\n\n  next.optionSets = optionSets;\n  next.formMaps = {\n    '6a3e1e0e-dd13-3465-b8f5-ee2d42691fe5': {\n      //formName: mhpss baseline\n      programStage: 'MdTtRixaC1B',\n      dataValueMap: f01MhpssBaseline,\n    },\n    '82db23a1-4eb1-3f3c-bb65-b7ebfe95b19b': {\n      ////formName: mhgap baseline\n      programStage: 'EZJ9FsNau7Q',\n      dataValueMap: f03MhgapBaseline,\n    },\n    'be8c12f9-e6fd-369a-9bc7-46a191866f15': {\n      //formName: mhpss followup\n      programStage: 'eUCtSH80vMe',\n      dataValueMap: f02MhpssFollowUp,\n    },\n    '48577ac5-d9c0-3000-9bac-075409b38336': {\n      //formName: mhgap followup\n      programStage: 'hjHwYnSfJnX',\n      dataValueMap: f04MhgapFollowUp,\n    },\n    'ee6b1b06-3163-334a-8538-be69250af727': {\n      //formName: mhpss closure\n      programStage: 'xrCTheIzyDV',\n      dataValueMap: f05MhpssClosure,\n    },\n  };\n  return next;\n});\n",
           "adaptor": "@openfn/language-http@latest",
           "project_credential_id": null
         },
@@ -160,7 +155,7 @@
         "Create-Events": {
           "id": "932645d8-ddb8-4d00-841e-7fe7af214837",
           "name": "Create Events",
-          "body": "const processAnswer = (answer, conceptUuid, dataElement, optsMap) => {\n  // console.log('Has answer', conceptUuid, dataElement);\n  return typeof answer.value === 'object'\n    ? processObjectAnswer(answer, conceptUuid, dataElement, optsMap)\n    : processOtherAnswer(answer, conceptUuid, dataElement);\n};\n\nconst processObjectAnswer = (answer, conceptUuid, dataElement, optsMap) => {\n  if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {\n    return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';\n  }\n  return findMatchingOption(answer, optsMap);\n};\n\nconst processOtherAnswer = (answer, conceptUuid, dataElement) => {\n  if (isPhq9Score(answer.value, conceptUuid, dataElement)) {\n    return getRangePhq(answer.value);\n  }\n  return answer.value;\n};\n\nconst processNoAnswer = (data, conceptUuid, dataElement) => {\n  // console.log('No answer', conceptUuid, dataElement);\n  if (isEncounterDate(conceptUuid, dataElement)) {\n    return data.encounterDatetime.replace('+0000', '');\n  }\n  return '';\n};\n\nconst findMatchingOption = (answer, optsMap) => {\n  const matchingOption = optsMap.find(\n    o => o['value.uuid - External ID'] === answer.value.uuid\n  )?.['DHIS2 Option Code'];\n\n  return matchingOption || '';\n};\n\nconst isEncounterDate = (conceptUuid, dataElement) => {\n  return (\n    conceptUuid === 'encounter-date' &&\n    ['CXS4qAJH2qD', 'I7phgLmRWQq', 'yUT7HyjWurN'].includes(dataElement)\n  );\n};\n\nconst isDiagnosisByPsychologist = (conceptUuid, dataElement) =>\n  conceptUuid === '722dd83a-c1cf-48ad-ac99-45ac131ccc96' &&\n  dataElement === 'pN4iQH4AEzk';\n\nconst isPhq9Score = (value, conceptUuid, dataElement) =>\n  typeof value === 'number' &&\n  conceptUuid === '5f3d618e-5c89-43bd-8c79-07e4e98c2f23' &&\n  dataElement === 'tsFOVnlc6lz';\n\nconst getRangePhq = input => {\n  if (input >= 20) return '>20';\n  if (input >= 15) return '15_19';\n  if (input >= 10) return '10_14';\n  if (input >= 5) return '5_9';\n  return '0_4';\n};\n\nconst dataValuesMapping = (data, dataValueMap, optsMap) => {\n  return Object.keys(dataValueMap)\n    .map(dataElement => {\n      const conceptUuid = dataValueMap[dataElement];\n      const answer = data.obs.find(o => o.concept.uuid === conceptUuid);\n      const value = answer\n        ? processAnswer(answer, conceptUuid, dataElement, optsMap)\n        : processNoAnswer(data, conceptUuid, dataElement);\n\n      return { dataElement, value };\n    })\n    .filter(d => d);\n};\n\n// Prepare DHIS2 data model for create events\nfn(state => {\n  state.encountersMapping = state.encounters.map(data => {\n    const form = state.formMaps[data.form.uuid];\n    const eventDate = data.encounterDatetime.replace('+0000', '');\n    const { trackedEntity, enrollment } = state.TEIs[data.patient.uuid];\n\n    const event = {\n      program: 'w9MSPn5oSqp',\n      orgUnit: 'OPjuJMZFLop',\n      trackedEntityInstance: trackedEntity,\n      enrollment,\n      eventDate,\n    };\n    if (form) {\n      return {\n        ...event,\n        programStage: form.programStage,\n        dataValues: dataValuesMapping(data, form.dataValueMap, state.optsMap),\n      };\n    }\n  });\n\n  return state;\n});\n\n// Create events for each encounter\neach(\n  '$.encountersMapping[*]',\n  create(\n    'events',\n    state => {\n      console.log('dhis2 event to import:: ', state.data);\n      return state.data;\n    },\n    {\n      params: {\n        dataElementIdScheme: 'UID',\n      },\n    }\n  )\n);\n\nfn(state => {\n  const latestGenderUpdate = state.encounters.reduce((acc, e) => {\n    const answer = e.obs.find(\n      o => o.concept.uuid === 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7'\n    );\n    if (answer) {\n      const personUuid = answer.person.uuid;\n      if (\n        !acc[personUuid] ||\n        new Date(answer.obsDatetime) > new Date(acc[personUuid].obsDatetime)\n      ) {\n        acc[personUuid] = answer;\n      }\n    }\n    return acc;\n  }, {});\n\n  state.genderUpdated = Object.values(latestGenderUpdate);\n\n  return state;\n});\n\n// Return only lastRunDateTime\nfnIf(\n  state => state.genderUpdated.length === 0,\n  ({ lastRunDateTime }) => ({ lastRunDateTime })\n);\n",
+          "body": "const processAnswer = (answer, conceptUuid, dataElement, optionSets) => {\n  // console.log('Has answer', conceptUuid, dataElement);\n  return typeof answer.value === 'object'\n    ? processObjectAnswer(answer, conceptUuid, dataElement, optionSets)\n    : processOtherAnswer(answer, conceptUuid, dataElement);\n};\n\nconst processObjectAnswer = (answer, conceptUuid, dataElement, optionSets) => {\n  if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {\n    return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';\n  }\n  return findMatchingOption(answer, optionSets);\n};\n\nconst processOtherAnswer = (answer, conceptUuid, dataElement) => {\n  if (isPhq9Score(answer.value, conceptUuid, dataElement)) {\n    return getRangePhq(answer.value);\n  }\n  return answer.value;\n};\n\nconst processNoAnswer = (data, conceptUuid, dataElement) => {\n  // console.log('No answer', conceptUuid, dataElement);\n  if (isEncounterDate(conceptUuid, dataElement)) {\n    return data.encounterDatetime.replace('+0000', '');\n  }\n  return '';\n};\n\nconst findMatchingOption = (answer, optionSets) => {\n  const matchingOption = optionSets.find(\n    o => o['value.uuid - External ID'] === answer.value.uuid\n  )?.['DHIS2 Option Code'];\n\n  return matchingOption || '';\n};\n\nconst isEncounterDate = (conceptUuid, dataElement) => {\n  return (\n    conceptUuid === 'encounter-date' &&\n    ['CXS4qAJH2qD', 'I7phgLmRWQq', 'yUT7HyjWurN'].includes(dataElement)\n  );\n};\n\nconst isDiagnosisByPsychologist = (conceptUuid, dataElement) =>\n  conceptUuid === '722dd83a-c1cf-48ad-ac99-45ac131ccc96' &&\n  dataElement === 'pN4iQH4AEzk';\n\nconst isPhq9Score = (value, conceptUuid, dataElement) =>\n  typeof value === 'number' &&\n  conceptUuid === '5f3d618e-5c89-43bd-8c79-07e4e98c2f23' &&\n  dataElement === 'tsFOVnlc6lz';\n\nconst getRangePhq = input => {\n  if (input >= 20) return '>20';\n  if (input >= 15) return '15_19';\n  if (input >= 10) return '10_14';\n  if (input >= 5) return '5_9';\n  return '0_4';\n};\n\nconst dataValuesMapping = (data, dataValueMap, optionSets) => {\n  return Object.keys(dataValueMap)\n    .map(dataElement => {\n      const conceptUuid = dataValueMap[dataElement];\n      const answer = data.obs.find(o => o.concept.uuid === conceptUuid);\n      const value = answer\n        ? processAnswer(answer, conceptUuid, dataElement, optionSets)\n        : processNoAnswer(data, conceptUuid, dataElement);\n\n      return { dataElement, value };\n    })\n    .filter(d => d);\n};\n\n// Prepare DHIS2 data model for create events\nfn(state => {\n  state.encountersMapping = state.encounters.map(data => {\n    const form = state.formMaps[data.form.uuid];\n    const eventDate = data.encounterDatetime.replace('+0000', '');\n    const { trackedEntity, enrollment } = state.TEIs[data.patient.uuid];\n\n    const event = {\n      program: 'w9MSPn5oSqp',\n      orgUnit: 'OPjuJMZFLop',\n      trackedEntityInstance: trackedEntity,\n      enrollment,\n      eventDate,\n    };\n    if (form) {\n      return {\n        ...event,\n        programStage: form.programStage,\n        dataValues: dataValuesMapping(data, form.dataValueMap, state.optionSets),\n      };\n    }\n  });\n\n  return state;\n});\n\n// Create events for each encounter\neach(\n  '$.encountersMapping[*]',\n  create(\n    'events',\n    state => {\n      console.log('dhis2 event to import:: ', state.data);\n      return state.data;\n    },\n    {\n      params: {\n        dataElementIdScheme: 'UID',\n      },\n    }\n  )\n);\n\nfn(state => {\n  const latestGenderUpdate = state.encounters.reduce((acc, e) => {\n    const answer = e.obs.find(\n      o => o.concept.uuid === 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7'\n    );\n    if (answer) {\n      const personUuid = answer.person.uuid;\n      if (\n        !acc[personUuid] ||\n        new Date(answer.obsDatetime) > new Date(acc[personUuid].obsDatetime)\n      ) {\n        acc[personUuid] = answer;\n      }\n    }\n    return acc;\n  }, {});\n\n  state.genderUpdated = Object.values(latestGenderUpdate);\n\n  return state;\n});\n\n// Return only lastRunDateTime\nfnIf(\n  state => state.genderUpdated.length === 0,\n  ({ lastRunDateTime }) => ({ lastRunDateTime })\n);\n",
           "adaptor": "@openfn/language-dhis2@5.0.1",
           "project_credential_id": "8a5ead9b-5f9e-49b1-9e9a-9dc3c4ccf72d"
         },
@@ -174,13 +169,11 @@
         "Update-TEIs": {
           "id": "b30b4200-d2f8-4c7a-827a-bec10c64fbc3",
           "name": "Update TEIs",
-          "body": "fn(state => {\n  const { optsMap, genderUpdated, TEIs } = state;\n  const genderMap = optsMap\n    .filter(o => o['DHIS2 DE UID'] === 'qptKDiv9uPl')\n    .reduce((acc, obj) => {\n      acc[obj['value.display - Answers']] = obj['DHIS2 Option Code'];\n      return acc;\n    }, {});\n\n  state.teisToUpdate = genderUpdated.map(answer => {\n    const { trackedEntity } = TEIs[answer.person.uuid];\n    return {\n      trackedEntity,\n      program: 'w9MSPn5oSqp',\n      orgUnit: 'OPjuJMZFLop',\n      trackedEntityType: 'cHlzCA2MuEF',\n      attributes: [\n        {\n          attribute: 'qptKDiv9uPl', //gender\n          value: genderMap[answer.value.display],\n        },\n        {\n          attribute: 'AYbfTPYMNJH', //OpenMRS Patient UID to use to upsert TEI\n          value: answer.person.uuid,\n        },\n      ],\n    };\n  });\n  return state;\n});\n\n// Update TEIs\ncreate(\n  'tracker',\n  { trackedEntities: $.teisToUpdate },\n  { params: { async: false, importStrategy: 'UPDATE' } }\n);\n// Return only lastRunDateTime\nfn(({ lastRunDateTime }) => ({ lastRunDateTime }));\n",
+          "body": "fn(state => {\n  const { optionSets, genderUpdated, TEIs } = state;\n  const genderMap = optionSets\n    .filter(o => o['DHIS2 DE UID'] === 'qptKDiv9uPl')\n    .reduce((acc, obj) => {\n      acc[obj['value.display - Answers']] = obj['DHIS2 Option Code'];\n      return acc;\n    }, {});\n\n  state.teisToUpdate = genderUpdated.map(answer => {\n    const { trackedEntity } = TEIs[answer.person.uuid];\n    return {\n      trackedEntity,\n      program: 'w9MSPn5oSqp',\n      orgUnit: 'OPjuJMZFLop',\n      trackedEntityType: 'cHlzCA2MuEF',\n      attributes: [\n        {\n          attribute: 'qptKDiv9uPl', //gender\n          value: genderMap[answer.value.display],\n        },\n        {\n          attribute: 'AYbfTPYMNJH', //OpenMRS Patient UID to use to upsert TEI\n          value: answer.person.uuid,\n        },\n      ],\n    };\n  });\n  return state;\n});\n\n// Update TEIs\ncreate(\n  'tracker',\n  { trackedEntities: $.teisToUpdate },\n  { params: { async: false, importStrategy: 'UPDATE' } }\n);\n// Return only lastRunDateTime\nfn(({ lastRunDateTime }) => ({ lastRunDateTime }));\n",
           "adaptor": "@openfn/language-dhis2@5.0.1",
           "project_credential_id": "8a5ead9b-5f9e-49b1-9e9a-9dc3c4ccf72d"
         }
       },
-      "deleted_at": null,
-      "lock_version": 181,
       "triggers": {
         "cron": {
           "enabled": false,
@@ -188,7 +181,9 @@
           "type": "cron",
           "cron_expression": "0 0 * * *"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 182
     },
     "wf1-dhis2-omrs-migration": {
       "id": "94e04fb5-d5ae-45ad-be31-98b902f36861",
@@ -259,8 +254,6 @@
           "project_credential_id": "8a5ead9b-5f9e-49b1-9e9a-9dc3c4ccf72d"
         }
       },
-      "deleted_at": null,
-      "lock_version": 42,
       "triggers": {
         "cron": {
           "enabled": false,
@@ -268,7 +261,9 @@
           "type": "cron",
           "cron_expression": "0 0 * * *"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 42
     },
     "wf-3-generate-optsmap": {
       "id": "29376a74-d299-4066-9e78-271ca1777734",
@@ -308,15 +303,15 @@
           "project_credential_id": null
         }
       },
-      "deleted_at": null,
-      "lock_version": 35,
       "triggers": {
         "webhook": {
           "enabled": false,
           "id": "f970fb25-0dd8-4a90-80ef-aa95b11d6277",
           "type": "webhook"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 35
     },
     "sharepoint-test": {
       "id": "5e9057f9-317d-41f5-9b8d-f54a3b3cdc54",
@@ -342,15 +337,15 @@
           "project_credential_id": "2eace4af-4e52-484c-82b0-ffb1717c259d"
         }
       },
-      "deleted_at": null,
-      "lock_version": 3,
       "triggers": {
         "webhook": {
           "enabled": true,
           "id": "19fa5083-9c46-44c0-8eec-06e8e2cf393d",
           "type": "webhook"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 3
     },
     "fhir-encounters": {
       "id": "81039c3a-0415-4330-8283-6488a17b9151",
@@ -376,15 +371,15 @@
           "project_credential_id": "bee87abc-7dcf-4b66-a84f-61f9677a25b0"
         }
       },
-      "deleted_at": null,
-      "lock_version": 48,
       "triggers": {
         "webhook": {
           "enabled": true,
           "id": "fc5137c9-6239-4f95-802c-789a8c885e01",
           "type": "webhook"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 48
     },
     "fetch-metadata-and-generate-opts-json": {
       "id": "57a7ef39-d396-4959-a725-85c4bef08c6a",
@@ -414,7 +409,7 @@
       },
       "concurrency": null,
       "inserted_at": "2024-10-11T18:16:12Z",
-      "updated_at": "2024-10-23T10:45:44Z",
+      "updated_at": "2024-10-23T11:00:56Z",
       "jobs": {
         "Get-metadata-file-from-Sharepoint": {
           "id": "c9712182-a389-4664-8e10-f275f87fb478",
@@ -438,15 +433,15 @@
           "project_credential_id": null
         }
       },
-      "deleted_at": null,
-      "lock_version": 6,
       "triggers": {
         "webhook": {
           "enabled": true,
           "id": "e86ca050-ad88-4936-8c14-6eac23922017",
           "type": "webhook"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 9
     }
   },
   "requires_mfa": false
