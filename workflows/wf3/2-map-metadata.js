@@ -54,23 +54,6 @@ const safeKeyValuePairs = arr => {
   }
 };
 
-// fn(state => {
-//   const {
-//     f01MhpssBaseline,
-//     f02MhpssFollowUp,
-//     f03MhgapBaseline,
-//     f04MhgapFollowUp,
-//     f05MhpssClosure,
-//   } = state;
-
-//   state.f01MhpssBaseline = keyValuePairs(f01MhpssBaseline);
-//   state.f02MhpssFollowUp = keyValuePairs(f02MhpssFollowUp);
-//   state.f03MhgapBaseline = keyValuePairs(f03MhgapBaseline);
-//   state.f04MhgapFollowUp = keyValuePairs(f04MhgapFollowUp);
-//   state.f05MhpssClosure = keyValuePairs(f05MhpssClosure);
-//   return state;
-// });
-
 fn(
   ({
     optionSets,
