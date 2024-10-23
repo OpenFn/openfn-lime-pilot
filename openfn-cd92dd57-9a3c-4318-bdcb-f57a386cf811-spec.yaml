@@ -53,20 +53,20 @@ workflows:
         adaptor: '@openfn/language-msgraph@latest'
         credential: null
         body:
-          path: ./workflows/wf3/1-fetch-metadata.json
+          path: workflows/wf3/1-fetch-metadata.json
       Map-metadata-file-to-option-set-Json-format:
         name: Map metadata file to option-set Json format
         adaptor: '@openfn/language-common@latest'
         credential: null
         body:
-          path: ./workflows/wf3/2-map-metadata.json
+          path: workflows/wf3/2-map-metadata.json
 
       Save-option-set-json-to-github:
         name: Save option-set json to github
         adaptor: '@openfn/language-http@latest'
         credential: null
         body:
-          path: ./workflows/wf3/3-save-options.json
+          path: workflows/wf3/3-save-options.json
     triggers:
       webhook:
         type: webhook
