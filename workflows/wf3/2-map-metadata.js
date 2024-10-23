@@ -7,14 +7,12 @@ const mapArrayToObject = (item, keys) => {
   }, {});
 };
 fn(state => {
-  const { f01MhpssBaseline } = state;
-  const keys = f01MhpssBaseline[1];
+  const { optionsets } = state;
+  const keys = optionsets[1];
 
-  const mphssBaselineXls = f01MhpssBaseline
-    .slice(2)
-    .map(item => mapArrayToObject(item, keys));
+  const optsMap = optionsets.slice(2).map(item => mapArrayToObject(item, keys));
 
-  state.f01MhpssBaseline = mphssBaselineXls
+  state.optionSets = optsMap
     .filter(
       o =>
         isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE full name'])
@@ -37,12 +35,14 @@ fn(state => {
 });
 
 fn(state => {
-  const { optionsets } = state;
-  const keys = optionsets[1];
+  const { f01MhpssBaseline } = state;
+  const keys = f01MhpssBaseline[1];
 
-  const optsMap = optionsets.slice(2).map(item => mapArrayToObject(item, keys));
+  const mphssBaselineXls = f01MhpssBaseline
+    .slice(2)
+    .map(item => mapArrayToObject(item, keys));
 
-  state.optionSets = optsMap
+  state.f01MhpssBaseline = mphssBaselineXls
     .filter(
       o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])
     )
