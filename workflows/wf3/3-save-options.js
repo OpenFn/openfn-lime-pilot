@@ -8,7 +8,15 @@ get(metadataPath, {
 });
 
 fn(state => {
-  const { f01MhpssBaseline, optionSets, data } = state;
+  const {
+    optionSets,
+    f01MhpssBaseline,
+    f02MhpssFollowUp,
+    f03MhgapBaseline,
+    f04MhgapFollowUp,
+    f05MhpssClosure,
+    data,
+  } = state;
 
   state.body = {
     message: 'Update metadata content',
@@ -20,6 +28,10 @@ fn(state => {
       JSON.stringify({
         optionSets,
         f01MhpssBaseline,
+        f02MhpssFollowUp,
+        f03MhgapBaseline,
+        f04MhgapFollowUp,
+        f05MhpssClosure,
       })
     ),
     sha: data.sha,
