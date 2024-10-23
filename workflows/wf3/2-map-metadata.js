@@ -34,23 +34,65 @@ fn(state => {
   return state;
 });
 
-fn(state => {
-  const { f01MhpssBaseline } = state;
-  const keys = f01MhpssBaseline[1];
+const safeKeyValuePairs = arr => {
+  if (arr === null || arr === undefined) {
+    return arr;
+  }
+  const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));
+  try {
+    return mappedArr
+      .filter(
+        o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])
+      )
+      .reduce((acc, value) => {
+        acc[value['DHIS2 DE UID']] = value['External ID'];
+        return acc;
+      }, {});
+  } catch (error) {
+    console.error(`Error processing ${arr}:`, error);
+    return arr; // Return original value if processing fails
+  }
+};
 
-  const mphssBaselineXls = f01MhpssBaseline
-    .slice(2)
-    .map(item => mapArrayToObject(item, keys));
+// fn(state => {
+//   const {
+//     f01MhpssBaseline,
+//     f02MhpssFollowUp,
+//     f03MhgapBaseline,
+//     f04MhgapFollowUp,
+//     f05MhpssClosure,
+//   } = state;
 
-  state.f01MhpssBaseline = mphssBaselineXls
-    .filter(
-      o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])
-    )
-    .reduce((acc, value) => {
-      acc[value['DHIS2 DE UID']] = value['External ID'];
-      return acc;
-    }, {});
-  return state;
-});
+//   state.f01MhpssBaseline = keyValuePairs(f01MhpssBaseline);
+//   state.f02MhpssFollowUp = keyValuePairs(f02MhpssFollowUp);
+//   state.f03MhgapBaseline = keyValuePairs(f03MhgapBaseline);
+//   state.f04MhgapFollowUp = keyValuePairs(f04MhgapFollowUp);
+//   state.f05MhpssClosure = keyValuePairs(f05MhpssClosure);
+//   return state;
+// });
 
-fn(({ optionSets, f01MhpssBaseline }) => ({ optionSets, f01MhpssBaseline }));
+fn(
+  ({
+    optionSets,
+    f01MhpssBaseline,
+    f02MhpssFollowUp,
+    f03MhgapBaseline,
+    f04MhgapFollowUp,
+    f05MhpssClosure,
+  }) => {
+    const processedState = Object.fromEntries(
+      Object.entries({
+        f01MhpssBaseline,
+        f02MhpssFollowUp,
+        f03MhgapBaseline,
+        f04MhgapFollowUp,
+        f05MhpssClosure,
+      }).map(([key, value]) => [key, safeKeyValuePairs(value)])
+    );
+
+    return {
+      optionSets,
+      ...processedState,
+    };
+  }
+);
