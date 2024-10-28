@@ -5,6 +5,9 @@ get(metadataPath, {
   headers: {
     'user-agent': 'OpenFn',
   },
+  query: {
+    ref: 'next-staging',
+  },
 });
 
 fn(state => {
@@ -24,6 +27,7 @@ fn(state => {
       })
     ),
     sha: data.sha,
+    branch: 'next-staging',
   };
 
   return state;
