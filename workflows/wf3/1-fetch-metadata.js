@@ -27,7 +27,7 @@ getDrive(
   'default'
 );
 
-getFile('/msf-metadata/LIME EMR Iraq Metadata Oct 1.xlsx', {
+getFile('/msf-metadata/LIME EMR - Iraq Metadata - Release 1.xlsx', {
   metadata: true,
 });
 

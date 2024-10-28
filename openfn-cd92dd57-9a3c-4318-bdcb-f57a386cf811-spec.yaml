@@ -7,8 +7,8 @@ credentials:
   mtuchi@openfn.org-MSF-DHIS2-UAT:
     name: MSF DHIS2 UAT
     owner: mtuchi@openfn.org
-  mtuchi@openfn.org-OpenFn-Sharepoint:
-    name: OpenFn Sharepoint
+  mtuchi@openfn.org-OpenFnSharepoint:
+    name: OpenFnSharepoint
     owner: mtuchi@openfn.org
   mtuchi@openfn.org-OpenMRS-Demo:
     name: OpenMRS Demo
@@ -29,7 +29,7 @@ workflows:
       Get-metadata-file-from-Sharepoint:
         name: Get metadata file from Sharepoint
         adaptor: '@openfn/language-msgraph@latest'
-        credential: null
+        credential: mtuchi@openfn.org-OpenFnSharepoint
         body:
           path: workflows/wf3/1-fetch-metadata.js
 
@@ -43,7 +43,7 @@ workflows:
       Save-option-set-json-to-github:
         name: Save option-set json to github
         adaptor: '@openfn/language-http@latest'
-        credential: null
+        credential: mtuchi@openfn.org-mtuchi-github-token
         body:
           path: workflows/wf3/3-save-options.js
 
