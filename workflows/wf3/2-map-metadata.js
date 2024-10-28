@@ -6,33 +6,6 @@ const mapArrayToObject = (item, keys) => {
     return acc;
   }, {});
 };
-fn(state => {
-  const { optionsets } = state;
-  const keys = optionsets[1];
-
-  const optsMap = optionsets.slice(2).map(item => mapArrayToObject(item, keys));
-
-  state.optionSets = optsMap
-    .filter(
-      o =>
-        isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE full name'])
-    )
-    .map(o => {
-      return {
-        'value.display - Answers': o['Answers'],
-        'value.uuid - External ID': o['External ID'],
-        'DHIS2 DE full name': o['DHIS2 DE full name'],
-        'DHIS2 DE UID': o['DHIS2 DE UID'],
-        'OptionSet name': o['OptionSet name'],
-        'DHIS2 Option Set UID': o['DHIS2 Option Set name'],
-        'DHIS2 Option name': o['DHIS2 Option name'],
-        'DHIS2 Option UID': o['DHIS2 Option UID'],
-        'DHIS2 Option Code': o['DHIS2 Option code'],
-      };
-    });
-
-  return state;
-});
 
 const safeKeyValuePairs = arr => {
   if (arr === null || arr === undefined) {
@@ -54,28 +27,48 @@ const safeKeyValuePairs = arr => {
   }
 };
 
-fn(
-  ({
-    optionSets,
-    f01MhpssBaseline,
-    f02MhpssFollowUp,
-    f03MhgapBaseline,
-    f04MhgapFollowUp,
-    f05MhpssClosure,
-  }) => {
-    const processedState = Object.fromEntries(
-      Object.entries({
-        f01MhpssBaseline,
-        f02MhpssFollowUp,
-        f03MhgapBaseline,
-        f04MhgapFollowUp,
-        f05MhpssClosure,
-      }).map(([key, value]) => [key, safeKeyValuePairs(value)])
-    );
+fn(state => {
+  const { OptionSets } = state;
+  const keys = OptionSets[1];
 
-    return {
-      optionSets,
-      ...processedState,
+  state.optsMap = OptionSets.slice(2)
+    .map(item => mapArrayToObject(item, keys))
+    .filter(
+      o =>
+        isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE full name'])
+    )
+    .map(o => {
+      return {
+        'value.display - Answers': o['Answers'],
+        'value.uuid - External ID': o['External ID'],
+        'DHIS2 DE full name': o['DHIS2 DE full name'],
+        'DHIS2 DE UID': o['DHIS2 DE UID'],
+        'OptionSet name': o['OptionSet name'],
+        'DHIS2 Option Set UID': o['DHIS2 Option Set name'],
+        'DHIS2 Option name': o['DHIS2 Option name'],
+        'DHIS2 Option UID': o['DHIS2 Option UID'],
+        'DHIS2 Option Code': o['DHIS2 Option code'],
+      };
+    });
+
+  return state;
+});
+
+fn(state => {
+  const { formMetadata, optsMap } = state;
+
+  const formMaps = formMetadata.reduce((acc, form) => {
+    const formName = form['OMRS form name'];
+    acc[form['OMRS form.uuid']] = {
+      formName,
+      orgUnit: form['DHIS2 orgUnit ID'],
+      programId: form['DHIS2 program ID'],
+      programStage: form['DHIS2 programStage ID'],
+      dataValueMap: safeKeyValuePairs(state[formName]),
     };
-  }
-);
+
+    return acc;
+  }, {});
+
+  return { formMaps, formMetadata, optsMap };
+});

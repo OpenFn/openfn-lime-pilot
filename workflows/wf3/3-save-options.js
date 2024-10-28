@@ -1,5 +1,5 @@
 const metadataPath =
-  'repos/OpenFn/openfn-lime-pilot/contents/metadata/metadata_mapping.json';
+  'repos/OpenFn/openfn-lime-pilot/contents/metadata/collections.json';
 
 get(metadataPath, {
   headers: {
@@ -8,15 +8,7 @@ get(metadataPath, {
 });
 
 fn(state => {
-  const {
-    optionSets,
-    f01MhpssBaseline,
-    f02MhpssFollowUp,
-    f03MhgapBaseline,
-    f04MhgapFollowUp,
-    f05MhpssClosure,
-    data,
-  } = state;
+  const { formMaps, formMetadata, optsMap, data } = state;
 
   state.body = {
     message: 'Update metadata content',
@@ -26,12 +18,9 @@ fn(state => {
     },
     content: util.encode(
       JSON.stringify({
-        optionSets,
-        f01MhpssBaseline,
-        f02MhpssFollowUp,
-        f03MhgapBaseline,
-        f04MhgapFollowUp,
-        f05MhpssClosure,
+        optsMap,
+        formMaps,
+        formMetadata,
       })
     ),
     sha: data.sha,
