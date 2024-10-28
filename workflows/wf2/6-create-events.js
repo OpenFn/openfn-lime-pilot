@@ -1,15 +1,15 @@
-const processAnswer = (answer, conceptUuid, dataElement, optionSets) => {
+const processAnswer = (answer, conceptUuid, dataElement, optsMap) => {
   // console.log('Has answer', conceptUuid, dataElement);
   return typeof answer.value === 'object'
-    ? processObjectAnswer(answer, conceptUuid, dataElement, optionSets)
+    ? processObjectAnswer(answer, conceptUuid, dataElement, optsMap)
     : processOtherAnswer(answer, conceptUuid, dataElement);
 };
 
-const processObjectAnswer = (answer, conceptUuid, dataElement, optionSets) => {
+const processObjectAnswer = (answer, conceptUuid, dataElement, optsMap) => {
   if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {
     return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';
   }
-  return findMatchingOption(answer, optionSets);
+  return findMatchingOption(answer, optsMap);
 };
 
 const processOtherAnswer = (answer, conceptUuid, dataElement) => {
@@ -27,8 +27,8 @@ const processNoAnswer = (data, conceptUuid, dataElement) => {
   return '';
 };
 
-const findMatchingOption = (answer, optionSets) => {
-  const matchingOption = optionSets.find(
+const findMatchingOption = (answer, optsMap) => {
+  const matchingOption = optsMap.find(
     o => o['value.uuid - External ID'] === answer.value.uuid
   )?.['DHIS2 Option Code'];
 
@@ -59,13 +59,13 @@ const getRangePhq = input => {
   return '0_4';
 };
 
-const dataValuesMapping = (data, dataValueMap, optionSets) => {
+const dataValuesMapping = (data, dataValueMap, optsMap) => {
   return Object.keys(dataValueMap)
     .map(dataElement => {
       const conceptUuid = dataValueMap[dataElement];
       const answer = data.obs.find(o => o.concept.uuid === conceptUuid);
       const value = answer
-        ? processAnswer(answer, conceptUuid, dataElement, optionSets)
+        ? processAnswer(answer, conceptUuid, dataElement, optsMap)
         : processNoAnswer(data, conceptUuid, dataElement);
 
       return { dataElement, value };
@@ -91,7 +91,7 @@ fn(state => {
       return {
         ...event,
         programStage: form.programStage,
-        dataValues: dataValuesMapping(data, form.dataValueMap, state.optionSets),
+        dataValues: dataValuesMapping(data, form.dataValueMap, state.optsMap),
       };
     }
   });
@@ -100,46 +100,46 @@ fn(state => {
 });
 
 // Create events for each encounter
-each(
-  '$.encountersMapping[*]',
-  create(
-    'events',
-    state => {
-      console.log('dhis2 event to import:: ', state.data);
-      return state.data;
-    },
-    {
-      params: {
-        dataElementIdScheme: 'UID',
-      },
-    }
-  )
-);
+// each(
+//   '$.encountersMapping[*]',
+//   create(
+//     'events',
+//     state => {
+//       console.log('dhis2 event to import:: ', state.data);
+//       return state.data;
+//     },
+//     {
+//       params: {
+//         dataElementIdScheme: 'UID',
+//       },
+//     }
+//   )
+// );
 
-fn(state => {
-  const latestGenderUpdate = state.encounters.reduce((acc, e) => {
-    const answer = e.obs.find(
-      o => o.concept.uuid === 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7'
-    );
-    if (answer) {
-      const personUuid = answer.person.uuid;
-      if (
-        !acc[personUuid] ||
-        new Date(answer.obsDatetime) > new Date(acc[personUuid].obsDatetime)
-      ) {
-        acc[personUuid] = answer;
-      }
-    }
-    return acc;
-  }, {});
+// fn(state => {
+//   const latestGenderUpdate = state.encounters.reduce((acc, e) => {
+//     const answer = e.obs.find(
+//       o => o.concept.uuid === 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7'
+//     );
+//     if (answer) {
+//       const personUuid = answer.person.uuid;
+//       if (
+//         !acc[personUuid] ||
+//         new Date(answer.obsDatetime) > new Date(acc[personUuid].obsDatetime)
+//       ) {
+//         acc[personUuid] = answer;
+//       }
+//     }
+//     return acc;
+//   }, {});
 
-  state.genderUpdated = Object.values(latestGenderUpdate);
+//   state.genderUpdated = Object.values(latestGenderUpdate);
 
-  return state;
-});
+//   return state;
+// });
 
-// Return only lastRunDateTime
-fnIf(
-  state => state.genderUpdated.length === 0,
-  ({ lastRunDateTime }) => ({ lastRunDateTime })
-);
+// // Return only lastRunDateTime
+// fnIf(
+//   state => state.genderUpdated.length === 0,
+//   ({ lastRunDateTime }) => ({ lastRunDateTime })
+// );

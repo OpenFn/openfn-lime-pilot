@@ -15,6 +15,30 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
     },
   ];
 
+  const findOptsUuid = uuid =>
+    patient.person.attributes.find(a => a.attributeType.uuid === uuid)?.value
+      ?.uuid;
+
+  const findOptCode = optUuid =>
+    state.optsMap.find(o => o['value.uuid - External ID'] === optUuid)?.[
+      'DHIS2 Option Code'
+    ];
+
+  const patientMap = state.formMaps.patient.dataValueMap;
+  const statusAttrMaps = Object.keys(patientMap).map(d => {
+    const optUid = findOptsUuid(patientMap[d]);
+    if (!findOptCode(optUid)) {
+      state.notFoundOptsId ??= [];
+      state.notFoundOptsId.push(optUid);
+    }
+    console.log('optExId:', optUid);
+    console.log('value:', findOptCode(optUid));
+    return {
+      attribute: d,
+      value: findOptCode(optUid),
+    };
+  });
+
   const payload = {
     query: {
       ou: 'OPjuJMZFLop',
@@ -64,76 +88,15 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
           attribute: 'rBtrjV1Mqkz', //Place of living
           value: placeOflivingMap[patient.person?.addresses[0]?.cityVillage],
         },
-        {
-          attribute: 'Xvzc9e0JJmp', //nationality
-          value:
-            nationalityMap[
-              patient.person.attributes.find(
-                a =>
-                  a.attributeType.uuid ===
-                  '24d1fa23-9778-4a8e-9f7b-93f694fc25e2'
-              )?.value?.uuid
-            ], //input.attributeType = "24d1fa23-9778-4a8e-9f7b-93f694fc25e2"
-        },
-        {
-          attribute: 'YUIQIA2ClN6', //current status
-          value:
-            statusMap[
-              patient.person.attributes.find(
-                a =>
-                  a.attributeType.uuid ===
-                  'e0b6ed99-72c4-4847-a442-e9929eac4a0f'
-              )?.value?.uuid
-            ], //input.attributeType = "e0b6ed99-72c4-4847-a442-e9929eac4a0f"
-        },
-        // TODO: Qq6xQ2s6LO8 has an error, Aleksa to ask the client
-        {
-          attribute: 'Qq6xQ2s6LO8', //legal status
-          value:
-            statusMap[
-              patient.person.attributes.find(
-                a =>
-                  a.attributeType.uuid ===
-                  'a9b2c642-097f-43f8-b96b-4d2f50ffd9b1'
-              )?.value?.uuid
-            ], //input.attributeType = "a9b2c642-097f-43f8-b96b-4d2f50ffd9b1"
-        },
-        {
-          attribute: 'FpuGAOu6itZ', //marital status
-          value:
-            statusMap[
-              patient.person.attributes.find(
-                a =>
-                  a.attributeType.uuid ===
-                  '3884dc76-c271-4bcb-8df8-81c6fb897f53'
-              )?.value?.uuid
-            ], //input.attributeType = "3884dc76-c271-4bcb-8df8-81c6fb897f53"
-        },
-        {
-          attribute: 'v7k4OcXrWR8', //employment status
-          value:
-            statusMap[
-              patient.person.attributes.find(
-                a =>
-                  a.attributeType.uuid ===
-                  'dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e'
-              )?.value?.uuid
-            ], //input.attributeType = "dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e"
-        },
-        {
-          attribute: 'SVoT2cVLd5O', //Number of children
-          value: patient.person.attributes.find(
-            a => a.attributeType.uuid === 'e363161a-9d5c-4331-8463-238938f018ed'
-          )?.value, //input.attributeType = "e363161a-9d5c-4331-8463-238938f018ed"
-        },
+        ...statusAttrMaps,
       ],
     },
   };
 
-  console.log('mapped dhis2 payloads:: ', JSON.stringify(payload, null, 2));
+  // console.log('mapped dhis2 payloads:: ', JSON.stringify(payload, null, 2));
 
   if (isNewPatient) {
-    console.log('create enrollment');
+    // console.log('create enrollment');
     payload.data.enrollments = enrollments;
   }
 
@@ -143,7 +106,7 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 each(
-  '$.patients[*]',
+  state => state.patients.slice(0, 1),
   get(
     'tracker/trackedEntities',
     {
@@ -169,24 +132,24 @@ each(
 );
 
 // Upsert TEIs to DHIS2
-each(
-  $.patientsUpsert,
-  upsert('trackedEntityInstances', $.data.query, $.data.data)
-);
-fn(state => {
-  const {
-    data,
-    response,
-    references,
-    patients,
-    statusMap,
-    patientsUpsert,
-    nationalityMap,
-    placeOflivingMap,
-    genderOptions,
-    ...next
-  } = state;
+// each(
+//   $.patientsUpsert,
+//   upsert('trackedEntityInstances', $.data.query, $.data.data)
+// );
+// fn(state => {
+//   const {
+//     data,
+//     response,
+//     references,
+//     patients,
+//     statusMap,
+//     patientsUpsert,
+//     nationalityMap,
+//     placeOflivingMap,
+//     genderOptions,
+//     ...next
+//   } = state;
 
-  next.patientUuids = patients.map(p => p.uuid);
-  return next;
-});
+//   next.patientUuids = patients.map(p => p.uuid);
+//   return next;
+// });
