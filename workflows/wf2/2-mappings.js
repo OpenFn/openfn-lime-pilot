@@ -13,6 +13,30 @@ get(
   }
 );
 
+// Validates if a string matches UUID v4 format
+const isValidUUID = id => {
+  if (!id || typeof id !== 'string') return false;
+
+  const UUID_PATTERN =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  return UUID_PATTERN.test(id);
+};
+
+fn(state => {
+  const { formMetadata, ...rest } = state;
+  const formUuids = formMetadata
+    .filter(form => {
+      const uuid = form['OMRS form.uuid'];
+      return isValidUUID(uuid);
+    })
+    .map(form => form['OMRS form.uuid']);
+
+  return {
+    ...rest,
+    formUuids,
+  };
+});
+
 fn(state => {
   state.placeOflivingMap = {
     'Al Ayadya': 'lon42.423409_lat36.481517',
