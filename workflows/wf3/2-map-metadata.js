@@ -28,7 +28,7 @@ const safeKeyValuePairs = arr => {
 };
 
 fn(state => {
-  const { OptionSets } = state;
+  const { OptionSets, identifiers } = state;
   const keys = OptionSets[1];
 
   state.optsMap = OptionSets.slice(2)
@@ -51,11 +51,22 @@ fn(state => {
       };
     });
 
+  const [iheaders, ...irows] = identifiers;
+  state.identifiers = irows
+    .map(row =>
+      row.reduce((obj, value, index) => {
+        if (value != null && value !== '') {
+          obj[iheaders[index]] = value;
+        }
+        return obj;
+      }, {})
+    )
+    .filter(obj => Object.keys(obj).length > 0);
   return state;
 });
 
 fn(state => {
-  const { formMetadata, optsMap } = state;
+  const { formMetadata, optsMap, identifiers } = state;
 
   const formMaps = formMetadata.reduce((acc, form) => {
     const formName = form['OMRS form name'];
@@ -70,5 +81,5 @@ fn(state => {
     return acc;
   }, {});
 
-  return { formMaps, formMetadata, optsMap };
+  return { formMaps, formMetadata, optsMap, identifiers };
 });
