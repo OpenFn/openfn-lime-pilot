@@ -11,7 +11,7 @@ get(metadataPath, {
 });
 
 fn(state => {
-  const { formMaps, formMetadata, optsMap, data } = state;
+  const { formMaps, formMetadata, optsMap, data, identifiers } = state;
 
   state.body = {
     message: 'Update metadata content',
@@ -23,6 +23,7 @@ fn(state => {
       JSON.stringify({
         optsMap,
         formMaps,
+        identifiers,
         formMetadata,
       })
     ),
