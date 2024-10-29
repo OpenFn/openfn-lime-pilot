@@ -100,46 +100,46 @@ fn(state => {
 });
 
 // Create events for each encounter
-// each(
-//   '$.encountersMapping[*]',
-//   create(
-//     'events',
-//     state => {
-//       console.log('dhis2 event to import:: ', state.data);
-//       return state.data;
-//     },
-//     {
-//       params: {
-//         dataElementIdScheme: 'UID',
-//       },
-//     }
-//   )
-// );
+each(
+  '$.encountersMapping[*]',
+  create(
+    'events',
+    state => {
+      console.log('dhis2 event to import:: ', state.data);
+      return state.data;
+    },
+    {
+      params: {
+        dataElementIdScheme: 'UID',
+      },
+    }
+  )
+);
 
-// fn(state => {
-//   const latestGenderUpdate = state.encounters.reduce((acc, e) => {
-//     const answer = e.obs.find(
-//       o => o.concept.uuid === 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7'
-//     );
-//     if (answer) {
-//       const personUuid = answer.person.uuid;
-//       if (
-//         !acc[personUuid] ||
-//         new Date(answer.obsDatetime) > new Date(acc[personUuid].obsDatetime)
-//       ) {
-//         acc[personUuid] = answer;
-//       }
-//     }
-//     return acc;
-//   }, {});
+fn(state => {
+  const latestGenderUpdate = state.encounters.reduce((acc, e) => {
+    const answer = e.obs.find(
+      o => o.concept.uuid === 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7'
+    );
+    if (answer) {
+      const personUuid = answer.person.uuid;
+      if (
+        !acc[personUuid] ||
+        new Date(answer.obsDatetime) > new Date(acc[personUuid].obsDatetime)
+      ) {
+        acc[personUuid] = answer;
+      }
+    }
+    return acc;
+  }, {});
 
-//   state.genderUpdated = Object.values(latestGenderUpdate);
+  state.genderUpdated = Object.values(latestGenderUpdate);
 
-//   return state;
-// });
+  return state;
+});
 
-// // Return only lastRunDateTime
-// fnIf(
-//   state => state.genderUpdated.length === 0,
-//   ({ lastRunDateTime }) => ({ lastRunDateTime })
-// );
+// Return only lastRunDateTime
+fnIf(
+  state => state.genderUpdated.length === 0,
+  ({ lastRunDateTime }) => ({ lastRunDateTime })
+);
