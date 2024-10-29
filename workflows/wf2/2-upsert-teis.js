@@ -1,7 +1,11 @@
 const buildPatientsUpsert = (state, patient, isNewPatient) => {
   const { placeOflivingMap, genderOptions } = state;
-  const DHIS2_PATIENT_NUMBER = '8d79403a-c2cc-11de-8d13-0010c6dffd0f'; //DHIS2 ID or DHIS2 Patient Number
-  const OPENMRS_AUTO_ID = '05a29f94-c0ed-11e2-94be-8c13b969e334'; //MSF ID or OpenMRS Patient Number
+  const DHIS2_PATIENT_NUMBER = state.identifiers.find(
+    i => i.type === 'DHIS2_PATIENT_NUMBER'
+  )?.['omrs identifierType']; //DHIS2 ID or DHIS2 Patient Number
+  const OPENMRS_AUTO_ID = state.identifiers.find(
+    i => i.type === 'OPENMRS_AUTO_ID'
+  )?.['omrs identifierType']; //MSF ID or OpenMRS Patient Number
   const dateCreated = patient.auditInfo.dateCreated.substring(0, 10);
   const findIdentifierByUuid = (identifiers, targetUuid) =>
     identifiers.find(i => i.identifierType.uuid === targetUuid)?.identifier;
@@ -101,7 +105,7 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 each(
-  $.patients,
+  $ => $.patients.slice(0, 1),
   get(
     'tracker/trackedEntities',
     {
@@ -144,6 +148,7 @@ fn(state => {
     patientsUpsert,
     placeOflivingMap,
     genderOptions,
+    identifiers,
     ...next
   } = state;
 
