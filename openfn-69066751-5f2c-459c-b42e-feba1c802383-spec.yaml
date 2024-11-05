@@ -322,8 +322,14 @@ workflows:
   wf1-dhis2-omrs-migration:
     name: wf1-dhis2-omrs-migration
     jobs:
-      Get-Teis:
-        name: Get Teis
+      Fetch-Metadata:
+        name: Fetch Metadata
+        adaptor: '@openfn/language-http@latest'
+        credential: null
+        body: |
+          fn(state => state)
+      Get-Teis-and-Locations:
+        name: Get Teis and Locations
         adaptor: '@openfn/language-dhis2@latest'
         credential: null
         body: |
@@ -374,11 +380,7 @@ workflows:
             }
           );
 
-      Get-Locations:
-        name: Get Locations
-        adaptor: '@openfn/language-dhis2@latest'
-        credential: null
-        body: |
+
           get('optionGroups/kdef7pUey9f', {
             fields: 'id,displayName,options[id,displayName,code]',
           });
@@ -829,29 +831,28 @@ workflows:
         cron_expression: '0 0 * * *'
         enabled: false
     edges:
+      cron->Fetch-Metadata:
+        source_trigger: cron
+        target_job: Fetch-Metadata
+        condition_type: always
+        enabled: true
+      Fetch-Metadata->Get-Teis-and-Locations:
+        source_job: Fetch-Metadata
+        target_job: Get-Teis-and-Locations
+        condition_type: on_job_success
+        enabled: true
       Create-Patients->Update-Teis:
         source_job: Create-Patients
         target_job: Update-Teis
         condition_type: on_job_success
         enabled: true
-      cron->Get-Teis:
-        source_trigger: cron
-        target_job: Get-Teis
-        condition_type: always
-        enabled: true
-      Get-Teis->Get-Locations:
-        source_job: Get-Teis
-        target_job: Get-Locations
+      Get-Teis-and-Locations->Create-Patients:
+        source_job: Get-Teis-and-Locations
+        target_job: Create-Patients
         condition_type: js_expression
         condition_label: has-teis
         condition_expression: |
-          state.trackedEntityInstances.length > 0
-
-        enabled: true
-      Get-Locations->Create-Patients:
-        source_job: Get-Locations
-        target_job: Create-Patients
-        condition_type: on_job_success
+          state.teis.length > 0 && !state.errors
         enabled: true
   wf2-omrs-dhis2:
     name: wf2-omrs-dhis2
