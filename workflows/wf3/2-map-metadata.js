@@ -35,7 +35,10 @@ fn(state => {
     .map(item => mapArrayToObject(item, keys))
     .filter(
       o =>
-        isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE full name'])
+        (isValidValue(o['External ID']) &&
+          isValidValue(o['DHIS2 DE full name'])) ||
+        (isValidValue(o['value.display - Answers']) &&
+          isValidValue(o['DHIS2 Option code']))
     )
     .map(o => {
       return {
