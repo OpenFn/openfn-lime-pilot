@@ -1,6 +1,9 @@
 name: msf-lime-test
 description: null
 credentials:
+  aleksa@openfn.org-AK-Sharepoint:
+    name: AK Sharepoint
+    owner: aleksa@openfn.org
   mtuchi@openfn.org-MSF-DHIS2-UAT:
     name: MSF DHIS2 UAT
     owner: mtuchi@openfn.org
