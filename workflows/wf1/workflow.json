@@ -4,7 +4,7 @@
             {
                 "id": "fetch-metadata",
                 "adaptor": "http",
-                "expression": "0-fetch-metadata.js",
+                "expression": "1-fetch-metadata.js",
                 "state": {
                     "manualCursor": "2024-06-04"
                 },
@@ -16,16 +16,7 @@
                 "id": "get-teis",
                 "adaptor": "dhis2",
                 "configuration": "../tmp/dhis2-creds.json",
-                "expression": "1-get-teis.js",
-                "next": {
-                    "get-locations": "!state.errors"
-                }
-            },
-            {
-                "id": "get-locations",
-                "adaptor": "dhis2",
-                "configuration": "../tmp/dhis2-creds.json",
-                "expression": "2-get-locations.js",
+                "expression": "2-get-teis-and-locations.js",
                 "next": {
                     "create-patients": "!state.errors"
                 }
