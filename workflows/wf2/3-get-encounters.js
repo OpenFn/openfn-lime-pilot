@@ -1,7 +1,7 @@
 // Fetch patient encounters then filter by cursor date
 // OpenMRS demo instance does not support querying ALL records (q=all)
 each(
-  '$.patientUuids[*]',
+  $.patientUuids,
   getEncounters({ patient: $.data, v: 'full' }, state => {
     const patientUuid = state.references.at(-1);
     const filteredEncounters = state.formUuids.map(formUuid =>

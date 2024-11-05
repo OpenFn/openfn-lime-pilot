@@ -81,8 +81,8 @@ fn(state => {
     const { trackedEntity, enrollment } = state.TEIs[data.patient.uuid];
 
     const event = {
-      program: 'w9MSPn5oSqp',
-      orgUnit: 'OPjuJMZFLop',
+      program: state.program,
+      orgUnit: state.orgUnit,
       trackedEntityInstance: trackedEntity,
       enrollment,
       eventDate,
@@ -101,7 +101,7 @@ fn(state => {
 
 // Create events for each encounter
 each(
-  '$.encountersMapping[*]',
+  $.encountersMapping,
   create(
     'events',
     state => {

@@ -1,20 +1,14 @@
 const buildPatientsUpsert = (state, patient, isNewPatient) => {
   const { placeOflivingMap, genderOptions } = state;
-  const DHIS2_PATIENT_NUMBER = state.identifiers.find(
-    i => i.type === 'DHIS2_PATIENT_NUMBER'
-  )?.['omrs identifierType']; //DHIS2 ID or DHIS2 Patient Number
-  const OPENMRS_AUTO_ID = state.identifiers.find(
-    i => i.type === 'OPENMRS_AUTO_ID'
-  )?.['omrs identifierType']; //MSF ID or OpenMRS Patient Number
   const dateCreated = patient.auditInfo.dateCreated.substring(0, 10);
   const findIdentifierByUuid = (identifiers, targetUuid) =>
     identifiers.find(i => i.identifierType.uuid === targetUuid)?.identifier;
 
   const enrollments = [
     {
-      orgUnit: 'OPjuJMZFLop',
-      program: 'w9MSPn5oSqp',
-      programStage: 'MdTtRixaC1B',
+      orgUnit: state.orgUnit,
+      program: state.program,
+      programStage: state.patientProgramStage, //'MdTtRixaC1B',
       enrollmentDate: dateCreated,
     },
   ];
@@ -39,13 +33,13 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
 
   const payload = {
     query: {
-      ou: 'OPjuJMZFLop',
-      program: 'w9MSPn5oSqp',
+      ou: state.orgUnit,
+      program: state.program,
       filter: [`AYbfTPYMNJH:Eq:${patient.uuid}`], //upsert on omrs.patient.uid
     },
     data: {
-      program: 'w9MSPn5oSqp',
-      orgUnit: 'OPjuJMZFLop',
+      program: state.program,
+      orgUnit: state.orgUnit,
       trackedEntityType: 'cHlzCA2MuEF',
       attributes: [
         {
@@ -59,12 +53,14 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
         {
           attribute: 'P4wdYGkldeG', //DHIS2 ID ==> "Patient Number"
           value:
-            findIdentifierByUuid(patient.identifiers, DHIS2_PATIENT_NUMBER) ||
-            findIdentifierByUuid(patient.identifiers, OPENMRS_AUTO_ID), //map OMRS ID if no DHIS2 id
+            findIdentifierByUuid(
+              patient.identifiers,
+              state.dhis2PatientNumber
+            ) || findIdentifierByUuid(patient.identifiers, state.openmrsAutoId), //map OMRS ID if no DHIS2 id
         },
         {
           attribute: 'ZBoxuExmxcZ', //MSF ID ==> "OpenMRS Patient Number"
-          value: findIdentifierByUuid(patient.identifiers, OPENMRS_AUTO_ID),
+          value: findIdentifierByUuid(patient.identifiers, state.openmrsAutoId),
         },
         {
           attribute: 'AYbfTPYMNJH', //"OpenMRS Patient UID"
@@ -109,9 +105,9 @@ each(
   get(
     'tracker/trackedEntities',
     {
-      orgUnit: 'OPjuJMZFLop',
+      orgUnit: $.orgUnit,
       filter: [`AYbfTPYMNJH:Eq:${$.data?.uuid}`],
-      program: 'w9MSPn5oSqp',
+      program: $.program,
     },
     {},
     async state => {
