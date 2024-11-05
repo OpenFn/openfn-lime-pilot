@@ -34,11 +34,15 @@ fn(state => {
   return state;
 });
 
-put(metadataPath, {
-  body: $.body,
-  headers: {
-    Accept: 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28',
-    'user-agent': 'OpenFn',
+put(
+  metadataPath,
+  {
+    body: $.body,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+      'user-agent': 'OpenFn',
+    },
   },
-});
+  ({ body, data, references, response, ...state }) => state
+);
