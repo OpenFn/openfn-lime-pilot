@@ -26,7 +26,7 @@ get(
   }
 );
 
-fn(({ identifiers, optsMap, formMaps, ...state }) => {
+fn(({ identifiers, optsMap, formMaps, formMetadata, ...state }) => {
   state.genderOptions = {
     male: 'M',
     female: 'F',
@@ -58,12 +58,13 @@ fn(({ identifiers, optsMap, formMaps, ...state }) => {
 
   state.patientAttributes = formMaps.patient.dataValueMap;
 
-  state.dhis2PatientNumber = state.identifiers.find(
+  state.dhis2PatientNumber = identifiers.find(
     i => i.type === 'DHIS2_PATIENT_NUMBER'
   )?.['omrs identifierType']; //DHIS2 ID or DHIS2 Patient Number
-  state.openmrsAutoId = state.identifiers.find(
-    i => i.type === 'OPENMRS_AUTO_ID'
-  )?.['omrs identifierType']; //MSF ID or OpenMRS Patient Number
+
+  state.openmrsAutoId = identifiers.find(i => i.type === 'OPENMRS_AUTO_ID')?.[
+    'omrs identifierType'
+  ]; //MSF ID or OpenMRS Patient Number
 
   return state;
 });
