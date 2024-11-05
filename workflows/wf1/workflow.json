@@ -2,13 +2,21 @@
     "workflow": {
         "steps": [
             {
+                "id": "fetch-metadata",
+                "adaptor": "http",
+                "expression": "0-fetch-metadata.js",
+                "state": {
+                    "manualCursor": "2024-06-04"
+                },
+                "next": {
+                    "get-teis": "!state.errors"
+                }
+            },
+            {
                 "id": "get-teis",
                 "adaptor": "dhis2",
                 "configuration": "../tmp/dhis2-creds.json",
                 "expression": "1-get-teis.js",
-                "state": {
-                    "manualCursor": "2024-09-01"
-                },
                 "next": {
                     "get-locations": "!state.errors"
                 }
