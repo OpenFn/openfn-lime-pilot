@@ -105,7 +105,7 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 each(
-  $ => $.patients.slice(0, 1),
+  $.patients,
   get(
     'tracker/trackedEntities',
     {

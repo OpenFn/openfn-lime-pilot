@@ -28,11 +28,11 @@ get(
   `${$.workbookBase}/worksheets('omrs-form-metadata')/usedRange`,
   {},
   state => {
-    const [headers, ...rows] = state.data.values.slice(0);
+    const [headers, ...rows] = state.data.values;
     state.formMetadata = rows
       .map(row =>
         row.reduce((obj, value, index) => {
-          if (value != null && value !== '') {
+          if (value) {
             obj[headers[index]] = value;
           }
           return obj;
