@@ -121,10 +121,7 @@ create(
       importStrategy: 'CREATE_AND_UPDATE',
     },
   }
-).catch((error, state) => {
-  console.log(error);
-  return state;
-});
+);
 
 fn(state => {
   const latestGenderUpdate = state.encounters.reduce((acc, e) => {
