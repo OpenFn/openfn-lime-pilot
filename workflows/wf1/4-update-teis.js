@@ -12,23 +12,26 @@ fn(state => {
 
 // Update TEI on DHIS2
 each(
-  'newPatientUuid[*]',
+  $.newPatientUuid,
   upsert(
     'trackedEntityInstances',
-    state => ({
-      ou: 'OPjuJMZFLop',
-      program: 'w9MSPn5oSqp',
-      filter: [`P4wdYGkldeG:Eq:${state.data.patient_number}`],
-    }),
     {
-      orgUnit: 'OPjuJMZFLop',
-      program: 'w9MSPn5oSqp',
+      ou: $.orgUnit,
+      program: $.program,
+      filter: [`${$.dhis2PatientNumber}:Eq:${$.data.patient_number}`],
+    },
+    {
+      orgUnit: $.orgUnit,
+      program: $.program,
       trackedEntityType: 'cHlzCA2MuEF',
       attributes: [
-        { attribute: 'P4wdYGkldeG', value: `${$.data.patient_number}` }, //DHIS2 patient number to use as lookup key
+        {
+          attribute: `${$.dhis2PatientNumber}`,
+          value: `${$.data.patient_number}`,
+        }, //DHIS2 patient number to use as lookup key
         { attribute: 'AYbfTPYMNJH', value: `${$.data.patient.uuid}` }, //OMRS patient uuid
         {
-          attribute: 'ZBoxuExmxcZ',
+          attribute: `${$.openmrsAutoId}`,
           value: `${$.data.patient.identifier[0].identifier}`,
         }, //id generated in wf1-2 e.g., "IQ146-24-000-027"
       ],
