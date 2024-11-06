@@ -11,8 +11,8 @@ fn(state => {
     const { trackedEntity } = TEIs[answer.person.uuid];
     return {
       trackedEntity,
-      program: 'w9MSPn5oSqp',
-      orgUnit: 'OPjuJMZFLop',
+      program: state.program,
+      orgUnit: state.orgUnit,
       trackedEntityType: 'cHlzCA2MuEF',
       attributes: [
         {

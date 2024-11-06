@@ -15,7 +15,7 @@
             },
             {
                 "id": "mappings",
-                "adaptor": "common",
+                "adaptor": "http",
                 "expression": "2-mappings.js",
                 "next": {
                     "upsert-teis": "!state.errors"
@@ -36,15 +36,7 @@
                 "configuration": "../tmp/openmrs-creds.json",
                 "expression": "3-get-encounters.js",
                 "next": {
-                    "get-options-map": "state.encounters.length > 0&& !state.errors"
-                }
-            },
-            {
-                "id": "get-options-map",
-                "adaptor": "http",
-                "expression": "4-get-options-map.js",
-                "next": {
-                    "get-teis": "!state.errors"
+                    "get-teis": "!state.errors && state.encounters.length > 0"
                 }
             },
             {

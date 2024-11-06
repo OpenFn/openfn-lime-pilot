@@ -1,19 +1,5 @@
-const toCamelCase = text => {
-  return text
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase());
-};
-
-const sheets = [
-  'OptionSets',
-  'F01-MHPSS Baseline',
-  'F02-MHPSS Follow-up',
-  'F03-mhGAP Baseline',
-  'F04-mhGAP Follow-up',
-  'F05-MHPSS Closure',
-];
-
 fn(state => {
+  state.sheets = ['OptionSets', 'identifiers'];
   state.siteId =
     'openfnorg.sharepoint.com,4724a499-afbc-4ded-a371-34ae40bf5d8d,1d20a7d4-a6f1-407c-aa77-76bd47bb0f32';
   return state;
@@ -38,10 +24,31 @@ fn(state => {
   return state;
 });
 
+get(
+  `${$.workbookBase}/worksheets('omrs-form-metadata')/usedRange`,
+  {},
+  state => {
+    const [headers, ...rows] = state.data.values;
+    state.formMetadata = rows
+      .map(row =>
+        row.reduce((obj, value, index) => {
+          if (value) {
+            obj[headers[index]] = value;
+          }
+          return obj;
+        }, {})
+      )
+      .filter(obj => Object.keys(obj).length > 0);
+
+    state.sheets.push(...state.formMetadata.map(obj => obj['OMRS form name']));
+    return state;
+  }
+);
+
 each(
-  sheets,
+  $.sheets,
   get(`${$.workbookBase}/worksheets('${$.data}')/usedRange`, {}, state => {
-    const sheetName = toCamelCase(state.references.at(-1));
+    const sheetName = state.references.at(-1);
     console.log('Fetched sheet: ', sheetName);
     state[sheetName] = state.data.values;
     return state;

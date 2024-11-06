@@ -1,12 +1,12 @@
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 each(
-  '$.encounters[*]',
+  $.encounters,
   get(
     'tracker/trackedEntities',
     {
-      orgUnit: 'OPjuJMZFLop',
-      program: 'w9MSPn5oSqp',
+      orgUnit: $.orgUnit,
+      program: $.program,
       filter: [`AYbfTPYMNJH:Eq:${$.data.patient.uuid}`],
       fields: '*',
     },
