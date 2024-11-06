@@ -71,13 +71,12 @@ fn(state => {
     }
 
     const attributes = d.attributes
-      .filter(a => Object.keys(state.patientAttributes).includes(a.attribute))
+      .filter(a => a.attribute in state.patientAttributes)
       .map(a => {
         let value = a.value;
         if (a.displayName === 'Nationality') {
           value = nationalityMap[a.value];
-        }
-        if (a.displayName.includes(' status')) {
+        } else if (a.displayName.includes(' status')) {
           value = statusMap[a.value];
         }
         return {
