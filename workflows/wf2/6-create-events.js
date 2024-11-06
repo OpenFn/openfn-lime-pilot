@@ -1,15 +1,15 @@
-const processAnswer = (answer, conceptUuid, dataElement, optsMap) => {
+const processAnswer = (answer, conceptUuid, dataElement, optionSets) => {
   // console.log('Has answer', conceptUuid, dataElement);
   return typeof answer.value === 'object'
-    ? processObjectAnswer(answer, conceptUuid, dataElement, optsMap)
+    ? processObjectAnswer(answer, conceptUuid, dataElement, optionSets)
     : processOtherAnswer(answer, conceptUuid, dataElement);
 };
 
-const processObjectAnswer = (answer, conceptUuid, dataElement, optsMap) => {
+const processObjectAnswer = (answer, conceptUuid, dataElement, optionSets) => {
   if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {
     return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';
   }
-  return findMatchingOption(answer, optsMap);
+  return findMatchingOption(answer, optionSets);
 };
 
 const processOtherAnswer = (answer, conceptUuid, dataElement) => {
@@ -27,8 +27,8 @@ const processNoAnswer = (data, conceptUuid, dataElement) => {
   return '';
 };
 
-const findMatchingOption = (answer, optsMap) => {
-  const matchingOption = optsMap.find(
+const findMatchingOption = (answer, optionSets) => {
+  const matchingOption = optionSets.find(
     o => o['value.uuid - External ID'] === answer.value.uuid
   )?.['DHIS2 Option Code'];
 
@@ -59,13 +59,13 @@ const getRangePhq = input => {
   return '0_4';
 };
 
-const dataValuesMapping = (data, dataValueMap, optsMap) => {
+const dataValuesMapping = (data, dataValueMap, optionSets) => {
   return Object.keys(dataValueMap)
     .map(dataElement => {
       const conceptUuid = dataValueMap[dataElement];
       const answer = data.obs.find(o => o.concept.uuid === conceptUuid);
       const value = answer
-        ? processAnswer(answer, conceptUuid, dataElement, optsMap)
+        ? processAnswer(answer, conceptUuid, dataElement, optionSets)
         : processNoAnswer(data, conceptUuid, dataElement);
 
       return { dataElement, value };
@@ -81,8 +81,8 @@ fn(state => {
     const { trackedEntity, enrollment } = state.TEIs[data.patient.uuid];
 
     const event = {
-      program: state.program,
-      orgUnit: state.orgUnit,
+      program: 'w9MSPn5oSqp',
+      orgUnit: 'OPjuJMZFLop',
       trackedEntityInstance: trackedEntity,
       enrollment,
       eventDate,
@@ -91,7 +91,7 @@ fn(state => {
       return {
         ...event,
         programStage: form.programStage,
-        dataValues: dataValuesMapping(data, form.dataValueMap, state.optsMap),
+        dataValues: dataValuesMapping(data, form.dataValueMap, state.optionSets),
       };
     }
   });
@@ -101,7 +101,7 @@ fn(state => {
 
 // Create events for each encounter
 each(
-  $.encountersMapping,
+  '$.encountersMapping[*]',
   create(
     'events',
     state => {

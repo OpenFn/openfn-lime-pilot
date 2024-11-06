@@ -328,6 +328,7 @@ workflows:
         credential: null
         body: |
           fn(state => state)
+
       Get-Teis-and-Locations:
         name: Get Teis and Locations
         adaptor: '@openfn/language-dhis2@latest'
@@ -831,6 +832,15 @@ workflows:
         cron_expression: '0 0 * * *'
         enabled: false
     edges:
+      Get-Teis-and-Locations->Create-Patients:
+        source_job: Get-Teis-and-Locations
+        target_job: Create-Patients
+        condition_type: js_expression
+        condition_label: has-teis
+        condition_expression: |
+          state.teis.length > 0 && !state.errors
+
+        enabled: true
       cron->Fetch-Metadata:
         source_trigger: cron
         target_job: Fetch-Metadata
@@ -846,14 +856,6 @@ workflows:
         target_job: Update-Teis
         condition_type: on_job_success
         enabled: true
-      Get-Teis-and-Locations->Create-Patients:
-        source_job: Get-Teis-and-Locations
-        target_job: Create-Patients
-        condition_type: js_expression
-        condition_label: has-teis
-        condition_expression: |
-          state.teis.length > 0 && !state.errors
-        enabled: true
   wf2-omrs-dhis2:
     name: wf2-omrs-dhis2
     jobs:
@@ -861,50 +863,104 @@ workflows:
         name: Get Patients
         adaptor: '@openfn/language-openmrs@latest'
         credential: null
-        body: 
-          path: 'workflows/wf2/1-get-patients.js'
+        body:
+          path: workflows/wf2/1-get-patients.js
 
       Upsert-TEIs:
         name: Upsert TEIs
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: null
         body:
-          path: 'workflows/wf2/2-upsert-teis.js'
+          path: workflows/wf2/2-upsert-teis.js
 
       Get-Encounters:
         name: Get Encounters
         adaptor: '@openfn/language-openmrs@4.0.0'
         credential: null
         body:
-          path: 'workflows/wf2/3-get-encounters.js'
+          path: workflows/wf2/3-get-encounters.js
+
+      Get-Options-Map:
+        name: Get Options Map
+        adaptor: '@openfn/language-http@latest'
+        credential: null
+        body: |
+          // state.mhgapClosure = { //Waiting on form
+          //   yUT7HyjWurN: 'encounter-date', // encounterDate
+          // };
+          get(
+            'https://raw.githubusercontent.com/OpenFn/openfn-lime-pilot/refs/heads/main/metadata/metadata_mapping.json',
+            { parseAs: 'json' }
+          );
+
+          fn(({ data, response, references, ...next }) => {
+            const {
+              optionSets,
+              f01MhpssBaseline,
+              f02MhpssFollowUp,
+              f03MhgapBaseline,
+              f04MhgapFollowUp,
+              f05MhpssClosure,
+            } = data;
+
+            next.optionSets = optionSets;
+            next.formMaps = {
+              '6a3e1e0e-dd13-3465-b8f5-ee2d42691fe5': {
+                //formName: mhpss baseline
+                programStage: 'MdTtRixaC1B',
+                dataValueMap: f01MhpssBaseline,
+              },
+              '82db23a1-4eb1-3f3c-bb65-b7ebfe95b19b': {
+                ////formName: mhgap baseline
+                programStage: 'EZJ9FsNau7Q',
+                dataValueMap: f03MhgapBaseline,
+              },
+              'be8c12f9-e6fd-369a-9bc7-46a191866f15': {
+                //formName: mhpss followup
+                programStage: 'eUCtSH80vMe',
+                dataValueMap: f02MhpssFollowUp,
+              },
+              '48577ac5-d9c0-3000-9bac-075409b38336': {
+                //formName: mhgap followup
+                programStage: 'hjHwYnSfJnX',
+                dataValueMap: f04MhgapFollowUp,
+              },
+              'ee6b1b06-3163-334a-8538-be69250af727': {
+                //formName: mhpss closure
+                programStage: 'xrCTheIzyDV',
+                dataValueMap: f05MhpssClosure,
+              },
+            };
+            return next;
+          });
 
       Get-TEIs:
         name: Get TEIs
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: null
         body:
-          path: 'workflows/wf2/5-get-teis.js'
+          path: workflows/wf2/5-get-teis.js
 
       Create-Events:
         name: Create Events
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: null
         body:
-          path: 'workflows/wf2/6-create-events.js'
+          path: workflows/wf2/6-create-events.js
 
       Mappings:
         name: Mappings
         adaptor: '@openfn/language-common@latest'
         credential: null
         body:
-          path: 'workflows/wf2/2-mappings.js'
+          path: workflows/wf2/2-mappings.js
 
       Update-TEIs:
         name: Update TEIs
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: null
         body:
-          path: 'workflows/wf2/7-update-teis.js'
+          path: workflows/wf2/7-update-teis.js
 
     triggers:
       cron:
@@ -949,8 +1005,17 @@ workflows:
           state.genderUpdated.length > 0 && !state.errors
 
         enabled: true
-      Get-Encounters->Get-TEIs:
+      Get-Encounters->Get-Options-Map:
         source_job: Get-Encounters
+        target_job: Get-Options-Map
+        condition_type: js_expression
+        condition_label: has-encounters
+        condition_expression: |
+          state.encounters.length > 0
+
+        enabled: true
+      Get-Options-Map->Get-TEIs:
+        source_job: Get-Options-Map
         target_job: Get-TEIs
         condition_type: on_job_success
         enabled: true
