@@ -5,6 +5,9 @@
   "inserted_at": "2024-10-30T06:18:14Z",
   "updated_at": "2024-11-05T16:12:43Z",
   "scheduled_deletion": null,
+  "history_retention_period": null,
+  "dataclip_retention_period": null,
+  "retention_policy": "retain_all",
   "project_credentials": {
     "mtuchi@openfn.org-mtuchi-github-token": {
       "id": "55508835-a9c3-4283-813e-ae6f9c4958fd",
@@ -37,9 +40,6 @@
       "owner": "aleksa@openfn.org"
     }
   },
-  "history_retention_period": null,
-  "dataclip_retention_period": null,
-  "retention_policy": "retain_all",
   "workflows": {
     "fetch-metadata-and-generate-opts-json": {
       "id": "182c38b7-fa91-4bc3-82ed-ebd92e26be8f",
@@ -225,8 +225,8 @@
     "wf2-omrs-dhis2": {
       "id": "c886121c-0a91-45b5-ae30-7d0922b693be",
       "name": "wf2-omrs-dhis2",
-      "inserted_at": "2024-11-06T09:32:40.981046Z",
-      "lock_version": 16,
+      "inserted_at": "2024-11-06T09:42:49.575162Z",
+      "lock_version": 17,
       "triggers": {
         "cron": {
           "enabled": false,
@@ -323,7 +323,7 @@
           "enabled": true,
           "id": "63cd0a29-5d94-489e-9ba0-8a6690a555bc",
           "source_job_id": "a1176a6e-cdee-4ddc-9fe1-e49aa7b719cd",
-          "condition_expression": "state.genderUpdated.length > 0 && !state.errors\n",
+          "condition_expression": "state?.genderUpdated?.length > 0 && !state.errors\n",
           "condition_type": "js_expression",
           "condition_label": "has-gender-updated",
           "target_job_id": "abe0d282-5209-47b5-9272-4cba048a5ba8"
