@@ -106,14 +106,41 @@ fn(state => {
 each('patients[*]', state => {
   const { patientNumber, ...patient } = state.data;
 
-  console.log('Creating patient record\n', JSON.stringify(patient, null, 2));
+  return get(`/patient?q=${patientNumber}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Basic ${state.configuration.openmrs_user}:${state.configuration.openmrs_password}`, // Assuming basic auth, adjust if needed
+    },
+  })(state).then(state => {
+    const existingPatient = state.data.results[0];
 
-  return createPatient(patient)(state).then(state => {
-    state.newPatientUuid.push({
-      patient_number: patientNumber,
-      uuid: state.data.body.uuid,
-    });
-    return state;
+    if (existingPatient) {
+      console.log(`Updating patient ${existingPatient.uuid}`);
+      // Update existing patient
+      return put(`/patient/${existingPatient.uuid}`, {
+        body: patient,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Basic ${state.configuration.openmrs_user}:${state.configuration.openmrs_password}`,
+        },
+      })(state).then(state => {
+        state.newPatientUuid.push({
+          patient_number: patientNumber,
+          uuid: existingPatient.uuid,  // Use existing UUID
+        });
+        return state;
+      });
+    } else {
+      console.log(`Creating patient with patientNumber ${patientNumber}`);
+      // Create new patient
+      return createPatient(patient)(state).then(state => {
+        state.newPatientUuid.push({
+          patient_number: patientNumber,
+          uuid: state.data.body.uuid, // Use newly created UUID
+        });
+        return state;
+      });
+    }
   });
 });
 
