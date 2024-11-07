@@ -72,7 +72,7 @@ fn(state => {
   const { formMetadata, optsMap, identifiers } = state;
 
   const formMaps = formMetadata.reduce((acc, form) => {
-    const formName = form['OMRS form name'];
+    const formName = form['OMRS form sheet name'];
     acc[form['OMRS form.uuid']] = {
       formName,
       orgUnit: form['DHIS2 orgUnit ID'],
