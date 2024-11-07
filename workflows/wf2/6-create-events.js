@@ -100,20 +100,27 @@ fn(state => {
 });
 
 // Create events for each encounter
-each(
-  $.encountersMapping,
-  create(
-    'events',
-    state => {
-      console.log('dhis2 event to import:: ', state.data);
-      return state.data;
+create(
+  'tracker',
+  {
+    events: state => {
+      const events = state.encountersMapping.map(
+        ({ eventDate, trackedEntityInstance, ...e }) => ({
+          ...e,
+          occurredAt: eventDate,
+          trackedEntity: trackedEntityInstance,
+        })
+      );
+      return events;
     },
-    {
-      params: {
-        dataElementIdScheme: 'UID',
-      },
-    }
-  )
+  },
+  {
+    params: {
+      async: false,
+      dataElementIdScheme: 'UID',
+      importStrategy: 'CREATE_AND_UPDATE',
+    },
+  }
 );
 
 fn(state => {
