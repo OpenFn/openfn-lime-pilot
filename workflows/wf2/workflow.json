@@ -32,8 +32,8 @@
             },
             {
                 "id": "get-encounters",
-                "adaptor": "openmrs",
-                "configuration": "../tmp/openmrs-creds.json",
+                "adaptor": "http",
+                "configuration": "../tmp/openmrs-http.json",
                 "expression": "3-get-encounters.js",
                 "next": {
                     "get-teis": "!state.errors && state.encounters.length > 0"
