@@ -5,6 +5,9 @@
   "inserted_at": "2024-10-30T06:18:14Z",
   "updated_at": "2024-11-07T07:35:48Z",
   "scheduled_deletion": null,
+  "history_retention_period": null,
+  "dataclip_retention_period": null,
+  "retention_policy": "retain_all",
   "project_credentials": {
     "mtuchi@openfn.org-mtuchi-github-token": {
       "id": "55508835-a9c3-4283-813e-ae6f9c4958fd",
@@ -37,9 +40,6 @@
       "owner": "aleksa@openfn.org"
     }
   },
-  "history_retention_period": null,
-  "dataclip_retention_period": null,
-  "retention_policy": "retain_all",
   "workflows": {
     "fetch-metadata-and-generate-opts-json": {
       "id": "182c38b7-fa91-4bc3-82ed-ebd92e26be8f",
