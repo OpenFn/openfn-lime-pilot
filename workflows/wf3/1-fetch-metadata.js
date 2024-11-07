@@ -40,7 +40,11 @@ get(
       )
       .filter(obj => Object.keys(obj).length > 0);
 
-    state.sheets.push(...state.formMetadata.map(obj => obj['OMRS form name']));
+    state.sheets.push(
+      ...state.formMetadata
+        .filter(o => o['Active'])
+        .map(obj => obj['OMRS form sheet name'])
+    );
     return state;
   }
 );
