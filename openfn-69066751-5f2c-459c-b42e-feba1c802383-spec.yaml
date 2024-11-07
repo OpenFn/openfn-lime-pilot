@@ -13,6 +13,9 @@ credentials:
   mtuchi@openfn.org-OpenMRS-Demo:
     name: OpenMRS Demo
     owner: mtuchi@openfn.org
+  "mtuchi@openfn.org-OpenMRS-Demo-(HTTP)":
+    name: 'OpenMRS Demo (HTTP)'
+    owner: mtuchi@openfn.org
   "mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2":
     name: 'googlesheets (mtuchi@openfn.org)-2'
     owner: mtuchi@openfn.org
@@ -256,7 +259,7 @@ workflows:
         adaptor: '@openfn/language-googlesheets@latest'
         credential: null
         body: |
-
+          
           getValues('1OuR7laA7Oc2QnoiT8S3Thhf-HNh7uFY8ILLEu-idXuk', 
           'optionsets_oct1')
 
@@ -324,27 +327,28 @@ workflows:
         adaptor: '@openfn/language-http@latest'
         credential: null
         body:
-          path: 'workflows/wf1/1-fetch-metadata.js'
+          path: workflows/wf1/1-fetch-metadata.js
+
       Get-Teis-and-Locations:
         name: Get Teis and Locations
         adaptor: '@openfn/language-dhis2@latest'
         credential: null
         body:
-          path: 'workflows/wf1/2-get-teis-and-locations.js'
+          path: workflows/wf1/2-get-teis-and-locations.js
 
       Create-Patients:
         name: Create Patients
         adaptor: '@openfn/language-openmrs@latest'
         credential: null
         body:
-          path: 'workflows/wf1/3-create-patients.js'
+          path: workflows/wf1/3-create-patients.js
 
       Update-Teis:
         name: Update Teis
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: null
         body:
-          path: 'workflows/wf1/4-update-teis.js'
+          path: workflows/wf1/4-update-teis.js
 
     triggers:
       cron:
@@ -357,6 +361,15 @@ workflows:
         target_job: Fetch-Metadata
         condition_type: always
         enabled: true
+      Get-Teis-and-Locations->Create-Patients:
+        source_job: Get-Teis-and-Locations
+        target_job: Create-Patients
+        condition_type: js_expression
+        condition_label: has-teis
+        condition_expression: |
+          state.teis.length > 0 && !state.errors
+
+        enabled: true
       Fetch-Metadata->Get-Teis-and-Locations:
         source_job: Fetch-Metadata
         target_job: Get-Teis-and-Locations
@@ -366,15 +379,6 @@ workflows:
         source_job: Create-Patients
         target_job: Update-Teis
         condition_type: on_job_success
-        enabled: true
-      Get-Teis-and-Locations->Create-Patients:
-        source_job: Get-Teis-and-Locations
-        target_job: Create-Patients
-        condition_type: js_expression
-        condition_label: has-teis
-        condition_expression: |
-          state.teis.length > 0 && !state.errors
-
         enabled: true
   wf2-omrs-dhis2:
     name: wf2-omrs-dhis2
@@ -395,8 +399,8 @@ workflows:
 
       Get-Encounters:
         name: Get Encounters
-        adaptor: '@openfn/language-openmrs@4.0.0'
-        credential: mtuchi@openfn.org-OpenMRS-Demo
+        adaptor: '@openfn/language-http@latest'
+        credential: 'mtuchi@openfn.org-OpenMRS-Demo-(HTTP)'
         body:
           path: workflows/wf2/3-get-encounters.js
 
@@ -462,15 +466,6 @@ workflows:
           state.patients.length > 0 && !state.errors
 
         enabled: true
-      Create-Events->Update-TEIs:
-        source_job: Create-Events
-        target_job: Update-TEIs
-        condition_type: js_expression
-        condition_label: has-gender-updated
-        condition_expression: |
-          state?.genderUpdated?.length > 0 && !state.errors
-
-        enabled: true
       Get-TEIs->Create-Events:
         source_job: Get-TEIs
         target_job: Create-Events
@@ -478,6 +473,15 @@ workflows:
         condition_label: has-teis
         condition_expression: |
           state.TEIs && !state.errors
+
+        enabled: true
+      Create-Events->Update-TEIs:
+        source_job: Create-Events
+        target_job: Update-TEIs
+        condition_type: js_expression
+        condition_label: has-gender-updated
+        condition_expression: |
+          state?.genderUpdated?.length > 0 && !state.errors
 
         enabled: true
       Get-Encounters->Get-TEIs:
