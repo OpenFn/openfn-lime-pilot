@@ -75,26 +75,31 @@ const dataValuesMapping = (data, dataValueMap, optsMap) => {
 
 // Prepare DHIS2 data model for create events
 fn(state => {
-  state.encountersMapping = state.encounters.map(data => {
-    const form = state.formMaps[data.form.uuid];
-    const eventDate = data.encounterDatetime.replace('+0000', '');
-    const { trackedEntity, enrollment } = state.TEIs[data.patient.uuid];
+  state.encountersMapping = state.encounters
+    .map(data => {
+      const form = state.formMaps[data.form.uuid];
+      const occurredAt = data.encounterDatetime.replace('+0000', '');
+      const { trackedEntity, enrollment } = state.TEIs[data.patient.uuid] || {};
 
-    const event = {
-      program: state.program,
-      orgUnit: state.orgUnit,
-      trackedEntityInstance: trackedEntity,
-      enrollment,
-      eventDate,
-    };
-    if (form) {
-      return {
-        ...event,
-        programStage: form.programStage,
-        dataValues: dataValuesMapping(data, form.dataValueMap, state.optsMap),
+      const event = {
+        program: state.program,
+        orgUnit: state.orgUnit,
+        trackedEntity,
+        enrollment,
+        occurredAt,
       };
-    }
-  });
+      if (!form.dataValueMap) {
+        console.log(data.patient);
+      }
+      if (form && form.dataValueMap) {
+        return {
+          ...event,
+          programStage: form.programStage,
+          dataValues: dataValuesMapping(data, form.dataValueMap, state.optsMap),
+        };
+      }
+    })
+    .filter(e => e);
 
   return state;
 });
@@ -103,16 +108,7 @@ fn(state => {
 create(
   'tracker',
   {
-    events: state => {
-      const events = state.encountersMapping.map(
-        ({ eventDate, trackedEntityInstance, ...e }) => ({
-          ...e,
-          occurredAt: eventDate,
-          trackedEntity: trackedEntityInstance,
-        })
-      );
-      return events;
-    },
+    events: $.encountersMapping,
   },
   {
     params: {
