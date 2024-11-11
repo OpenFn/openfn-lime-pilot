@@ -45,7 +45,6 @@
   "history_retention_period": 90,
   "dataclip_retention_period": null,
   "retention_policy": "retain_all",
-  "requires_mfa": false,
   "workflows": {
     "wf1-dhis2-omrs-migration": {
       "id": "73fda9b2-2555-4764-b0f9-388a99583532",
@@ -352,5 +351,6 @@
         }
       }
     }
-  }
+  },
+  "requires_mfa": false
 }
