@@ -119,7 +119,8 @@ workflows:
                   'DHIS2 DE full name': o['DHIS2 DE full name'],
                   'DHIS2 DE UID': o['DHIS2 DE UID'],
                   'OptionSet name': o['OptionSet name'],
-                  'DHIS2 Option Set UID': o['DHIS2 Option Set name'],
+                  'DHIS2 Option Set name': o['DHIS2 Option Set name'],
+                  'DHIS2 Option Set UID': o['DHIS2 Option Set UID'],
                   'DHIS2 Option name': o['DHIS2 Option name'],
                   'DHIS2 Option UID': o['DHIS2 Option UID'],
                   'DHIS2 Option Code': o['DHIS2 Option code'],
@@ -438,25 +439,6 @@ workflows:
         cron_expression: '0 0 * * *'
         enabled: false
     edges:
-      cron->Get-Patients:
-        source_trigger: cron
-        target_job: Get-Patients
-        condition_type: always
-        enabled: true
-      Upsert-TEIs->Get-Encounters:
-        source_job: Upsert-TEIs
-        target_job: Get-Encounters
-        condition_type: js_expression
-        condition_label: has-patient-uuids
-        condition_expression: |
-          state.patientUuids.length > 0 && !state.errors
-
-        enabled: true
-      Mappings->Upsert-TEIs:
-        source_job: Mappings
-        target_job: Upsert-TEIs
-        condition_type: on_job_success
-        enabled: true
       Get-Patients->Mappings:
         source_job: Get-Patients
         target_job: Mappings
@@ -483,6 +465,25 @@ workflows:
         condition_expression: |
           state?.genderUpdated?.length > 0 && !state.errors
 
+        enabled: true
+      cron->Get-Patients:
+        source_trigger: cron
+        target_job: Get-Patients
+        condition_type: always
+        enabled: true
+      Upsert-TEIs->Get-Encounters:
+        source_job: Upsert-TEIs
+        target_job: Get-Encounters
+        condition_type: js_expression
+        condition_label: has-patient-uuids
+        condition_expression: |
+          state.patientUuids.length > 0 && !state.errors
+
+        enabled: true
+      Mappings->Upsert-TEIs:
+        source_job: Mappings
+        target_job: Upsert-TEIs
+        condition_type: on_job_success
         enabled: true
       Get-Encounters->Get-TEIs:
         source_job: Get-Encounters
