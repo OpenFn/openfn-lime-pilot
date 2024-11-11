@@ -30,18 +30,18 @@ each(
   )
 );
 
-const processAnswer = (answer, conceptUuid, dataElement, optsMap) => {
+const processAnswer = (answer, conceptUuid, dataElement, optsMap, answerKeyMap) => {
   // console.log('Has answer', conceptUuid, dataElement);
   return typeof answer.value === 'object'
-    ? processObjectAnswer(answer, conceptUuid, dataElement, optsMap)
+    ? processObjectAnswer(answer, conceptUuid, dataElement, optsMap, answerKeyMap)
     : processOtherAnswer(answer, conceptUuid, dataElement);
 };
 
-const processObjectAnswer = (answer, conceptUuid, dataElement, optsMap) => {
+const processObjectAnswer = (answer, conceptUuid, dataElement, optsMap, answerKeyMap) => {
   if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {
     return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';
   }
-  return findMatchingOption(answer, optsMap);
+  return findMatchingOption(answer, optsMap, answerKeyMap);
 };
 
 const processOtherAnswer = (answer, conceptUuid, dataElement) => {
@@ -59,39 +59,26 @@ const processNoAnswer = (data, conceptUuid, dataElement) => {
   return '';
 };
 
-//=== New logic to first map concept and then find answer ==//
 const findMatchingOption = (answer, optsMap, answerKeyMap) => {
-  const answerKeyUid = answerKeyMap[answer.concept.uuid];
+  const matchingOptionSet = answerKeyMap[answer.concept.uuid]; 
+  console.log('matchingOptionSet', matchingOptionSet)
 
   const matchingOption = optsMap.find(
-    (o) => o["DHIS2 answerKeyUid"] === answerKeyUid
-  )?.["DHIS2 Option Code"];
+    o => o['value.uuid - External ID'] === answer.value.uuid &&
+     o['DHIS2 Option Set UID'] === matchingOptionSet
+  )?.['DHIS2 Option Code'];
 
-  //TBD if we want this.. TODO: revisit this logic
-  if (matchingOption === "no") {
-    return "FALSE";
+  //TBD if we want to keep thse --> TODO: Revisit this logic! 
+  if (matchingOption === 'no') {
+    return 'FALSE';
   }
-  if (matchingOption === "yes") {
-    return "TRUE";
+  if (matchingOption === 'yes') {
+    return 'TRUE';
   }
-  //======//
-  return matchingOption || "";
+  //=========================================//
+  
+  return matchingOption || '';
 };
-
-//=== Original logic modified on Nov 11 =========//
-// const findMatchingOption = (answer, optsMap) => {
-//   const matchingOption = optsMap.find(
-//     o => o['value.uuid - External ID'] === answer.value.uuid
-//   )?.['DHIS2 Option Code'];
-
-//   if (matchingOption === 'no') {
-//     return 'FALSE';
-//   }
-//   if (matchingOption === 'yes') {
-//     return 'TRUE';
-//   }
-//   return matchingOption || '';
-// };
 
 const isEncounterDate = (conceptUuid, dataElement) => {
   return (
@@ -117,13 +104,13 @@ const getRangePhq = input => {
   return '0_4';
 };
 
-const dataValuesMapping = (data, dataValueMap, optsMap) => {
+const dataValuesMapping = (data, dataValueMap, optsMap, answerKeyMap) => {
   return Object.keys(dataValueMap)
     .map(dataElement => {
       const conceptUuid = dataValueMap[dataElement];
       const answer = data.obs.find(o => o.concept.uuid === conceptUuid);
       const value = answer
-        ? processAnswer(answer, conceptUuid, dataElement, optsMap)
+        ? processAnswer(answer, conceptUuid, dataElement, optsMap, answerKeyMap)
         : processNoAnswer(data, conceptUuid, dataElement);
 
       return { dataElement, value };
@@ -178,7 +165,7 @@ fn(state => {
     return {
       ...event,
       programStage: form.programStage,
-      dataValues: dataValuesMapping(data, form.dataValueMap, state.optsMap),
+      dataValues: dataValuesMapping(data, form.dataValueMap, state.optsMap, state.answerKeyMap),
     };
   };
 
@@ -188,3 +175,35 @@ fn(state => {
 
   return state;
 });
+// const findMatchingOption = (answer, optsMap, answerKeyMap) => {
+//   const answerKeyUid = answerKeyMap[answer.concept.uuid];
+
+//   const matchingOption = optsMap.find(
+//     (o) => o["DHIS2 answerKeyUid"] === answerKeyUid
+//   )?.["DHIS2 Option Code"];
+
+//   //TBD if we want this.. TODO: revisit this logic
+//   if (matchingOption === "no") {
+//     return "FALSE";
+//   }
+//   if (matchingOption === "yes") {
+//     return "TRUE";
+//   }
+//   //======//
+//   return matchingOption || "";
+// };
+
+//=== Original logic modified on Nov 11 =========//
+// const findMatchingOption = (answer, optsMap) => {
+//   const matchingOption = optsMap.find(
+//     o => o['value.uuid - External ID'] === answer.value.uuid
+//   )?.['DHIS2 Option Code'];
+
+//   if (matchingOption === 'no') {
+//     return 'FALSE';
+//   }
+//   if (matchingOption === 'yes') {
+//     return 'TRUE';
+//   }
+//   return matchingOption || '';
+// };
