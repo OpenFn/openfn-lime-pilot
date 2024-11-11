@@ -25,6 +25,7 @@ fn(state => {
         formMaps,
         identifiers,
         formMetadata,
+        answerKeyMap
       })
     ),
     sha: data.sha,
