@@ -39,9 +39,9 @@ const safeKeyValuePairs = arr => {
       )
       .reduce((acc, value) => {
         //find the OptionSetUid --> this will return empty string if not an option question
-        const optionSetUid = value['DHIS2 Option Set UID']=='NA' ? '' : value['DHIS2 Option Set UID']; 
+        const optionSetUid = value['DHIS2 Option Set UID']=='NA' ? '' : `-${value['DHIS2 Option Set UID']}`; 
         //then build an answerKeyUid = DEuid + OptionSetUid
-        const answerKeyUid = `${value['DHIS2 DE UID']}-${optionSetUid}`; 
+        const answerKeyUid = `${value['DHIS2 DE UID']}${optionSetUid}`; 
         
         //map dhis2 answerKeyUid to omrs ExternalId
         acc[answerKeyUid] = value['External ID'];
@@ -67,9 +67,9 @@ fn(state => {
           isValidValue(o['DHIS2 Option code']))
     )
     .map(o => {
-       const optionSetUid = o['DHIS2 Option Set UID']=='NA' ? '' : o['DHIS2 Option Set UID']; 
+       const optionSetUid = o['DHIS2 Option Set UID']=='NA' ? '' : `-${o['DHIS2 Option Set UID']}`; 
         //then build an answerKeyUid = DEuid + OptionSetUid
-      const answerKeyUid = `${o['DHIS2 DE UID']}-${optionSetUid}`; 
+      const answerKeyUid = `${o['DHIS2 DE UID']}${optionSetUid}`; 
 
       return {
         'value.display - Answers': o['Answers'],
