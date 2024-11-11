@@ -38,12 +38,10 @@ get(
           return obj;
         }, {})
       )
-      .filter(obj => Object.keys(obj).length > 0);
+      .filter(obj => Object.keys(obj).length > 0 && obj['Active']);
 
     state.sheets.push(
-      ...state.formMetadata
-        .filter(o => o['Active'])
-        .map(obj => obj['OMRS form sheet name'])
+      ...state.formMetadata.map(obj => obj['OMRS form sheet name'])
     );
     return state;
   }
