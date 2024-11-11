@@ -115,7 +115,10 @@ fn(state => {
       programId: form['DHIS2 program ID'],
       programStage: form['DHIS2 programStage ID'],
       dataValueMap: safeKeyValuePairs(state[formName]),
-      answerKeyMap: answerKeyPairs(state[formName]),
+      answerKey_dhis2_omrs: answerKeyPairs(state[formName]),
+      answerKey_omrs_dhis2: Object.fromEntries(
+        Object.entries(answerKeyPairs(state[formName])).map(([key, value]) => [value, key])
+      )
     };
 
     return acc;
