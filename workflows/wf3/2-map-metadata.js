@@ -41,12 +41,15 @@ const answerKeyPairs = arr => {
       )
       .reduce((acc, value) => {
         //find the OptionSetUid --> this will return empty string if not an option question
-        const optionSetUid = value['DHIS2 Option Set UID']=='NA' ? '' : `-${value['DHIS2 Option Set UID']}`; 
-        //then build an answerKeyUid = DEuid + OptionSetUid
+        const optionSetUid = value['DHIS2 Option Set UID']=='NA' ? '' : value['DHIS2 Option Set UID']; 
+        ////then build an answerKeyUid = DEuid + OptionSetUid
+        //const answerKeyUid = `${value['DHIS2 DE UID']}${optionSetUid}`; 
         const answerKeyUid = `${value['DHIS2 DE UID']}${optionSetUid}`; 
         
         //map omrs Concept Uid to dhis2 answerKeyUid
-        acc[answerKeyUid] = value['External ID'];
+        //acc[answerKeyUid] = value['External ID']; //OLD
+        acc[optionSetUid] = value['External ID']; //NEW to match on optionSetUid
+
         return acc;
       }, {});
   } catch (error) {
