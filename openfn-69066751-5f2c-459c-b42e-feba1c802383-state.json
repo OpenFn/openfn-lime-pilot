@@ -3,7 +3,7 @@
   "name": "msf-lime-test",
   "description": null,
   "inserted_at": "2024-10-30T06:18:14Z",
-  "updated_at": "2024-11-11T15:53:04Z",
+  "updated_at": "2024-11-11T15:55:24Z",
   "project_credentials": {
     "mtuchi@openfn.org-mtuchi-github-token": {
       "id": "55508835-a9c3-4283-813e-ae6f9c4958fd",
@@ -45,6 +45,7 @@
   "history_retention_period": 90,
   "dataclip_retention_period": null,
   "retention_policy": "retain_all",
+  "requires_mfa": false,
   "workflows": {
     "wf2-omrs-dhis2": {
       "id": "c886121c-0a91-45b5-ae30-7d0922b693be",
@@ -162,8 +163,6 @@
           "project_credential_id": "9716980f-1b35-4295-adde-b05bc47002da"
         }
       },
-      "deleted_at": null,
-      "lock_version": 47,
       "triggers": {
         "cron": {
           "enabled": false,
@@ -171,7 +170,9 @@
           "type": "cron",
           "cron_expression": "0 0 * * *"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 47
     },
     "wf-3-generate-optsmap": {
       "id": "c9d7d47a-5502-4f52-bc30-950746a8b473",
@@ -211,15 +212,15 @@
           "project_credential_id": null
         }
       },
-      "deleted_at": null,
-      "lock_version": 4,
       "triggers": {
         "webhook": {
           "enabled": false,
           "id": "e62241ef-84ef-4ca7-9fec-c350e849390e",
           "type": "webhook"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 4
     },
     "fetch-metadata-and-generate-opts-json": {
       "id": "182c38b7-fa91-4bc3-82ed-ebd92e26be8f",
@@ -249,7 +250,7 @@
       },
       "concurrency": null,
       "inserted_at": "2024-10-30T12:02:03Z",
-      "updated_at": "2024-11-11T15:53:04Z",
+      "updated_at": "2024-11-11T15:55:24Z",
       "jobs": {
         "Get-metadata-file-from-Sharepoint": {
           "id": "aab663a0-6bcc-42fa-9f53-146d8fa44061",
@@ -273,15 +274,15 @@
           "project_credential_id": null
         }
       },
-      "deleted_at": null,
-      "lock_version": 4,
       "triggers": {
         "webhook": {
           "enabled": true,
           "id": "654e0bc2-22ae-4033-9090-18760ab28ea2",
           "type": "webhook"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 6
     },
     "wf1-dhis2-omrs-migration": {
       "id": "73fda9b2-2555-4764-b0f9-388a99583532",
@@ -352,8 +353,6 @@
           "project_credential_id": null
         }
       },
-      "deleted_at": null,
-      "lock_version": 16,
       "triggers": {
         "cron": {
           "enabled": false,
@@ -361,8 +360,9 @@
           "type": "cron",
           "cron_expression": "0 0 * * *"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 16
     }
-  },
-  "requires_mfa": false
+  }
 }
