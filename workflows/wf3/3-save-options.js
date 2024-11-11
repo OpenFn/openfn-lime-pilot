@@ -11,7 +11,7 @@ get(metadataPath, {
 });
 
 fn(state => {
-  const { formMaps, formMetadata, optsMap, data, identifiers } = state;
+  const { formMaps, formMetadata, optsMap, data, identifiers, answerKeyMap } = state;
 
   state.body = {
     message: 'Update metadata content',
@@ -21,11 +21,11 @@ fn(state => {
     },
     content: util.encode(
       JSON.stringify({
+        answerKeyMap,
         optsMap,
         formMaps,
         identifiers,
-        formMetadata,
-        answerKeyMap
+        formMetadata
       })
     ),
     sha: data.sha,
