@@ -13,10 +13,10 @@ credentials:
   mtuchi@openfn.org-OpenMRS-Demo:
     name: OpenMRS Demo
     owner: mtuchi@openfn.org
-  "mtuchi@openfn.org-OpenMRS-Demo-(HTTP)":
+  'mtuchi@openfn.org-OpenMRS-Demo-(HTTP)':
     name: 'OpenMRS Demo (HTTP)'
     owner: mtuchi@openfn.org
-  "mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2":
+  'mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2':
     name: 'googlesheets (mtuchi@openfn.org)-2'
     owner: mtuchi@openfn.org
   mtuchi@openfn.org-mtuchi-github-token:
@@ -30,207 +30,21 @@ workflows:
         name: Get metadata file from Sharepoint
         adaptor: '@openfn/language-msgraph@latest'
         credential: null
-        body: |
-          const toCamelCase = text => {
-            return text
-              .toLowerCase()
-              .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase());
-          };
-
-          const sheets = [
-            'OptionSets',
-            'F01-MHPSS Baseline',
-            'F02-MHPSS Follow-up',
-            'F03-mhGAP Baseline',
-            'F04-mhGAP Follow-up',
-            'F05-MHPSS Closure',
-          ];
-
-          fn(state => {
-            state.siteId =
-              'openfnorg.sharepoint.com,4724a499-afbc-4ded-a371-34ae40bf5d8d,1d20a7d4-a6f1-407c-aa77-76bd47bb0f32';
-            return state;
-          });
-
-          getDrive(
-            {
-              id: $.siteId,
-              owner: 'sites',
-            },
-            'default'
-          );
-
-          getFile('/msf-metadata/LIME EMR - Iraq Metadata - Release 1.xlsx', {
-            metadata: true,
-          });
-
-          fn(state => {
-            const itemId = state.data.id;
-            const driveId = state.drives.default.id;
-            state.workbookBase = `sites/${state.siteId}/drives/${driveId}/items/${itemId}/workbook`;
-            return state;
-          });
-
-          each(
-            sheets,
-            get(`${$.workbookBase}/worksheets('${$.data}')/usedRange`, {}, state => {
-              const sheetName = toCamelCase(state.references.at(-1));
-              console.log('Fetched sheet: ', sheetName);
-              state[sheetName] = state.data.values;
-              return state;
-            })
-          );
-
-          fn(state => {
-            delete state.data;
-            delete state.response;
-            delete state.references;
-            return state;
-          });
-
+        body:
+          path: 'workflows/wf3/1-fetch-metadata.js'
       Map-metadata-file-to-option-set-Json-format:
         name: Map metadata file to option-set Json format
         adaptor: '@openfn/language-common@latest'
         credential: null
-        body: |
-          const isValidValue = value => value !== '' && value !== 'NA';
-
-          const mapArrayToObject = (item, keys) => {
-            return item.reduce((acc, value, idx) => {
-              acc[keys[idx]] = value;
-              return acc;
-            }, {});
-          };
-          fn(state => {
-            const { optionsets } = state;
-            const keys = optionsets[1];
-
-            const optsMap = optionsets.slice(2).map(item => mapArrayToObject(item, keys));
-
-            state.optionSets = optsMap
-              .filter(
-                o =>
-                  isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE full name'])
-              )
-              .map(o => {
-                return {
-                  'value.display - Answers': o['Answers'],
-                  'value.uuid - External ID': o['External ID'],
-                  'DHIS2 DE full name': o['DHIS2 DE full name'],
-                  'DHIS2 DE UID': o['DHIS2 DE UID'],
-                  'OptionSet name': o['OptionSet name'],
-                  'DHIS2 Option Set name': o['DHIS2 Option Set name'],
-                  'DHIS2 Option Set UID': o['DHIS2 Option Set UID'],
-                  'DHIS2 Option name': o['DHIS2 Option name'],
-                  'DHIS2 Option UID': o['DHIS2 Option UID'],
-                  'DHIS2 Option Code': o['DHIS2 Option code'],
-                };
-              });
-
-            return state;
-          });
-
-          const safeKeyValuePairs = arr => {
-            if (arr === null || arr === undefined) {
-              return arr;
-            }
-            const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));
-            try {
-              return mappedArr
-                .filter(
-                  o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])
-                )
-                .reduce((acc, value) => {
-                  acc[value['DHIS2 DE UID']] = value['External ID'];
-                  return acc;
-                }, {});
-            } catch (error) {
-              console.error(`Error processing ${arr}:`, error);
-              return arr; // Return original value if processing fails
-            }
-          };
-
-          fn(
-            ({
-              optionSets,
-              f01MhpssBaseline,
-              f02MhpssFollowUp,
-              f03MhgapBaseline,
-              f04MhgapFollowUp,
-              f05MhpssClosure,
-            }) => {
-              const processedState = Object.fromEntries(
-                Object.entries({
-                  f01MhpssBaseline,
-                  f02MhpssFollowUp,
-                  f03MhgapBaseline,
-                  f04MhgapFollowUp,
-                  f05MhpssClosure,
-                }).map(([key, value]) => [key, safeKeyValuePairs(value)])
-              );
-
-              return {
-                optionSets,
-                ...processedState,
-              };
-            }
-          );
+        body:
+          path: 'workflows/wf3/2-map-metadata.js'
 
       Save-option-set-json-to-github:
         name: Save option-set json to github
         adaptor: '@openfn/language-http@latest'
         credential: null
-        body: |
-          const metadataPath =
-            'repos/OpenFn/openfn-lime-pilot/contents/metadata/metadata_mapping.json';
-
-          get(metadataPath, {
-            headers: {
-              'user-agent': 'OpenFn',
-            },
-          });
-
-          fn(state => {
-            const {
-              optionSets,
-              f01MhpssBaseline,
-              f02MhpssFollowUp,
-              f03MhgapBaseline,
-              f04MhgapFollowUp,
-              f05MhpssClosure,
-              data,
-            } = state;
-
-            state.body = {
-              message: 'Update metadata content',
-              committer: {
-                name: 'Emmanuel Evance',
-                email: 'mtuchidev@gmail.com',
-              },
-              content: util.encode(
-                JSON.stringify({
-                  optionSets,
-                  f01MhpssBaseline,
-                  f02MhpssFollowUp,
-                  f03MhgapBaseline,
-                  f04MhgapFollowUp,
-                  f05MhpssClosure,
-                })
-              ),
-              sha: data.sha,
-            };
-
-            return state;
-          });
-
-          put(metadataPath, {
-            body: $.body,
-            headers: {
-              Accept: 'application/vnd.github+json',
-              'X-GitHub-Api-Version': '2022-11-28',
-              'user-agent': 'OpenFn',
-            },
-          });
+        body:
+          path: 'workflows/wf3/3-save-options.js'
 
     triggers:
       webhook:
@@ -260,7 +74,7 @@ workflows:
         adaptor: '@openfn/language-googlesheets@latest'
         credential: null
         body: |
-          
+
           getValues('1OuR7laA7Oc2QnoiT8S3Thhf-HNh7uFY8ILLEu-idXuk', 
           'optionsets_oct1')
 
@@ -439,6 +253,25 @@ workflows:
         cron_expression: '0 0 * * *'
         enabled: false
     edges:
+      cron->Get-Patients:
+        source_trigger: cron
+        target_job: Get-Patients
+        condition_type: always
+        enabled: true
+      Upsert-TEIs->Get-Encounters:
+        source_job: Upsert-TEIs
+        target_job: Get-Encounters
+        condition_type: js_expression
+        condition_label: has-patient-uuids
+        condition_expression: |
+          state.patientUuids.length > 0 && !state.errors
+
+        enabled: true
+      Mappings->Upsert-TEIs:
+        source_job: Mappings
+        target_job: Upsert-TEIs
+        condition_type: on_job_success
+        enabled: true
       Get-Patients->Mappings:
         source_job: Get-Patients
         target_job: Mappings
@@ -465,25 +298,6 @@ workflows:
         condition_expression: |
           state?.genderUpdated?.length > 0 && !state.errors
 
-        enabled: true
-      cron->Get-Patients:
-        source_trigger: cron
-        target_job: Get-Patients
-        condition_type: always
-        enabled: true
-      Upsert-TEIs->Get-Encounters:
-        source_job: Upsert-TEIs
-        target_job: Get-Encounters
-        condition_type: js_expression
-        condition_label: has-patient-uuids
-        condition_expression: |
-          state.patientUuids.length > 0 && !state.errors
-
-        enabled: true
-      Mappings->Upsert-TEIs:
-        source_job: Mappings
-        target_job: Upsert-TEIs
-        condition_type: on_job_success
         enabled: true
       Get-Encounters->Get-TEIs:
         source_job: Get-Encounters
