@@ -7,27 +7,29 @@ const mapArrayToObject = (item, keys) => {
   }, {});
 };
 
-// const safeKeyValuePairs = arr => {
-//   if (arr === null || arr === undefined) {
-//     return arr;
-//   }
-//   const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));
-//   try {
-//     return mappedArr
-//       .filter(
-//         o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])
-//       )
-//       .reduce((acc, value) => {
-//         acc[value['DHIS2 DE UID']] = value['External ID'];
-//         return acc;
-//       }, {});
-//   } catch (error) {
-//     console.error(`Error processing ${arr}:`, error);
-//     return arr; // Return original value if processing fails
-//   }
-// };
-
 const safeKeyValuePairs = arr => {
+  if (arr === null || arr === undefined) {
+    return arr;
+  }
+  const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));
+  try {
+    return mappedArr
+      .filter(
+        o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])
+      )
+      .reduce((acc, value) => {
+        acc[value['DHIS2 DE UID']] = value['External ID'];
+        return acc;
+      }, {});
+  } catch (error) {
+    console.error(`Error processing ${arr}:`, error);
+    return arr; // Return original value if processing fails
+  }
+};
+
+
+//=== NEW section to create Uid for DHIS2 answers =====//
+const answerKeyPairs = arr => {
   if (arr === null || arr === undefined) {
     return arr;
   }
@@ -52,6 +54,7 @@ const safeKeyValuePairs = arr => {
     return arr; // Return original value if processing fails
   }
 };
+//=====================//
 
 fn(state => {
   const { OptionSets, identifiers } = state;
@@ -100,6 +103,7 @@ fn(state => {
   return state;
 });
 
+
 fn(state => {
   const { formMetadata, optsMap, identifiers } = state;
 
@@ -111,6 +115,7 @@ fn(state => {
       programId: form['DHIS2 program ID'],
       programStage: form['DHIS2 programStage ID'],
       dataValueMap: safeKeyValuePairs(state[formName]),
+      answerKeyMap: answerKeyPairs(state[formName]),
     };
 
     return acc;
