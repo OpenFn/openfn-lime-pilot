@@ -1,6 +1,6 @@
 fn(state => {
-  const { optionSets, genderUpdated, TEIs } = state;
-  const genderMap = optionSets
+  const { optsMap, genderUpdated, TEIs } = state;
+  const genderMap = optsMap
     .filter(o => o['DHIS2 DE UID'] === 'qptKDiv9uPl')
     .reduce((acc, obj) => {
       acc[obj['value.display - Answers']] = obj['DHIS2 Option Code'];
