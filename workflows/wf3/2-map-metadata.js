@@ -125,9 +125,9 @@ fn(state => {
   }, {});
 
   //create master answerKeyMap to map omrs concept Uids to their unique DHIS2 optionset + dataElement combos
-  const answerKeyMap_omrs_dhis2 =Object.values(formMaps).reduce((acc, form) => {
+  const answerKeyMap =Object.values(formMaps).reduce((acc, form) => {
     return { ...acc, ...form.answerKey_omrs_dhis2 };
   }, {});
 
-  return { formMaps, formMetadata, optsMap, answerKeyMap_omrs_dhis2, identifiers };
+  return { formMaps, formMetadata, optsMap, answerKeyMap, identifiers };
 });
