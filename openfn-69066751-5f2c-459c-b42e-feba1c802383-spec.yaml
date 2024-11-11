@@ -29,7 +29,7 @@ workflows:
       Get-metadata-file-from-Sharepoint:
         name: Get metadata file from Sharepoint
         adaptor: '@openfn/language-msgraph@latest'
-        credential: null
+        credential: mtuchi@openfn.org-OpenFnSharepoint
         body:
           path: workflows/wf3/1-fetch-metadata.js
 
@@ -43,7 +43,7 @@ workflows:
       Save-option-set-json-to-github:
         name: Save option-set json to github
         adaptor: '@openfn/language-http@latest'
-        credential: null
+        credential: mtuchi@openfn.org-mtuchi-github-token
         body:
           path: workflows/wf3/3-save-options.js
 

@@ -296,8 +296,8 @@
     "fetch-metadata-and-generate-opts-json": {
       "id": "182c38b7-fa91-4bc3-82ed-ebd92e26be8f",
       "name": "fetch-metadata-and-generate-opts-json",
-      "inserted_at": "2024-11-11T16:23:55.804986Z",
-      "lock_version": 21,
+      "inserted_at": "2024-11-11T16:26:22.988146Z",
+      "lock_version": 22,
       "triggers": {
         "webhook": {
           "enabled": true,
@@ -311,7 +311,7 @@
           "name": "Get metadata file from Sharepoint",
           "body": "fn(state => {\n  state.sheets = ['OptionSets', 'identifiers'];\n  state.siteId =\n    'openfnorg.sharepoint.com,4724a499-afbc-4ded-a371-34ae40bf5d8d,1d20a7d4-a6f1-407c-aa77-76bd47bb0f32';\n  return state;\n});\n\ngetDrive(\n  {\n    id: $.siteId,\n    owner: 'sites',\n  },\n  'default'\n);\n\ngetFile('/msf-metadata/LIME EMR - Iraq Metadata - Release 1.xlsx', {\n  metadata: true,\n});\n\nfn(state => {\n  const itemId = state.data.id;\n  const driveId = state.drives.default.id;\n  state.workbookBase = `sites/${state.siteId}/drives/${driveId}/items/${itemId}/workbook`;\n  return state;\n});\n\nget(\n  `${$.workbookBase}/worksheets('omrs-form-metadata')/usedRange`,\n  {},\n  state => {\n    const [headers, ...rows] = state.data.values;\n    state.formMetadata = rows\n      .map(row =>\n        row.reduce((obj, value, index) => {\n          if (value) {\n            obj[headers[index]] = value;\n          }\n          return obj;\n        }, {})\n      )\n      .filter(obj => Object.keys(obj).length > 0 && obj['Active']);\n\n    state.sheets.push(\n      ...state.formMetadata.map(obj => obj['OMRS form sheet name'])\n    );\n    return state;\n  }\n);\n\neach(\n  $.sheets,\n  get(`${$.workbookBase}/worksheets('${$.data}')/usedRange`, {}, state => {\n    const sheetName = state.references.at(-1);\n    console.log('Fetched sheet: ', sheetName);\n    state[sheetName] = state.data.values;\n    return state;\n  })\n);\n\nfn(state => {\n  delete state.data;\n  delete state.response;\n  delete state.references;\n  return state;\n});\n",
           "adaptor": "@openfn/language-msgraph@latest",
-          "project_credential_id": null
+          "project_credential_id": "3276b5b6-25c8-4a64-b55d-cf02f82d21e3"
         },
         "Map-metadata-file-to-option-set-Json-format": {
           "id": "b5743b64-3250-4dbf-8d74-256a1c7e9623",
@@ -325,7 +325,7 @@
           "name": "Save option-set json to github",
           "body": "const metadataPath =\n  'repos/OpenFn/openfn-lime-pilot/contents/metadata/collections.json';\n\nget(metadataPath, {\n  headers: {\n    'user-agent': 'OpenFn',\n  },\n  query: {\n    ref: 'next-staging',\n  },\n});\n\nfn(state => {\n  const { formMaps, formMetadata, optsMap, data, identifiers } = state;\n\n  state.body = {\n    message: 'Update metadata content',\n    committer: {\n      name: 'Emmanuel Evance',\n      email: 'mtuchidev@gmail.com',\n    },\n    content: util.encode(\n      JSON.stringify({\n        optsMap,\n        formMaps,\n        identifiers,\n        formMetadata,\n      })\n    ),\n    sha: data.sha,\n    branch: 'next-staging',\n  };\n\n  return state;\n});\n\nput(\n  metadataPath,\n  {\n    body: $.body,\n    headers: {\n      Accept: 'application/vnd.github+json',\n      'X-GitHub-Api-Version': '2022-11-28',\n      'user-agent': 'OpenFn',\n    },\n  },\n  ({ body, data, references, response, ...state }) => state\n);\n",
           "adaptor": "@openfn/language-http@latest",
-          "project_credential_id": null
+          "project_credential_id": "55508835-a9c3-4283-813e-ae6f9c4958fd"
         }
       },
       "edges": {
