@@ -220,8 +220,8 @@ workflows:
         body:
           path: workflows/wf2/3-get-encounters.js
 
-      Get-TEIs:
-        name: Get TEIs
+      Get-TEIs-and-Map-Answers:
+        name: Get TEIs and Map Answers
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: mtuchi@openfn.org-MSF-DHIS2-UAT
         body:
@@ -254,33 +254,6 @@ workflows:
         cron_expression: '0 0 * * *'
         enabled: false
     edges:
-      Get-Patients->Mappings:
-        source_job: Get-Patients
-        target_job: Mappings
-        condition_type: js_expression
-        condition_label: has-patients
-        condition_expression: |
-          state.patients.length > 0 && !state.errors
-
-        enabled: true
-      Get-TEIs->Create-Events:
-        source_job: Get-TEIs
-        target_job: Create-Events
-        condition_type: js_expression
-        condition_label: has-teis
-        condition_expression: |
-          state.TEIs && !state.errors
-
-        enabled: true
-      Create-Events->Update-TEIs:
-        source_job: Create-Events
-        target_job: Update-TEIs
-        condition_type: js_expression
-        condition_label: has-gender-updated
-        condition_expression: |
-          state?.genderUpdated?.length > 0 && !state.errors
-
-        enabled: true
       cron->Get-Patients:
         source_trigger: cron
         target_job: Get-Patients
@@ -300,8 +273,35 @@ workflows:
         target_job: Upsert-TEIs
         condition_type: on_job_success
         enabled: true
-      Get-Encounters->Get-TEIs:
+      Get-Patients->Mappings:
+        source_job: Get-Patients
+        target_job: Mappings
+        condition_type: js_expression
+        condition_label: has-patients
+        condition_expression: |
+          state.patients.length > 0 && !state.errors
+
+        enabled: true
+      Get-TEIs-and-Map-Answers->Create-Events:
+        source_job: Get-TEIs-and-Map-Answers
+        target_job: Create-Events
+        condition_type: js_expression
+        condition_label: has-teis
+        condition_expression: |
+          state.TEIs && !state.errors
+
+        enabled: true
+      Create-Events->Update-TEIs:
+        source_job: Create-Events
+        target_job: Update-TEIs
+        condition_type: js_expression
+        condition_label: has-gender-updated
+        condition_expression: |
+          state?.genderUpdated?.length > 0 && !state.errors
+
+        enabled: true
+      Get-Encounters->Get-TEIs-and-Map-Answers:
         source_job: Get-Encounters
-        target_job: Get-TEIs
+        target_job: Get-TEIs-and-Map-Answers
         condition_type: on_job_success
         enabled: true
