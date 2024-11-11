@@ -59,19 +59,39 @@ const processNoAnswer = (data, conceptUuid, dataElement) => {
   return '';
 };
 
-const findMatchingOption = (answer, optsMap) => {
-  const matchingOption = optsMap.find(
-    o => o['value.uuid - External ID'] === answer.value.uuid
-  )?.['DHIS2 Option Code'];
+//=== New logic to first map concept and then find answer ==//
+const findMatchingOption = (answer, optsMap, answerKeyMap) => {
+  const answerKeyUid = answerKeyMap[answer.concept.uuid];
 
-  if (matchingOption === 'no') {
-    return 'FALSE';
+  const matchingOption = optsMap.find(
+    (o) => o["DHIS2 answerKeyUid"] === answerKeyUid
+  )?.["DHIS2 Option Code"];
+
+  //TBD if we want this.. TODO: revisit this logic
+  if (matchingOption === "no") {
+    return "FALSE";
   }
-  if (matchingOption === 'yes') {
-    return 'TRUE';
+  if (matchingOption === "yes") {
+    return "TRUE";
   }
-  return matchingOption || '';
+  //======//
+  return matchingOption || "";
 };
+
+//=== Original logic modified on Nov 11 =========//
+// const findMatchingOption = (answer, optsMap) => {
+//   const matchingOption = optsMap.find(
+//     o => o['value.uuid - External ID'] === answer.value.uuid
+//   )?.['DHIS2 Option Code'];
+
+//   if (matchingOption === 'no') {
+//     return 'FALSE';
+//   }
+//   if (matchingOption === 'yes') {
+//     return 'TRUE';
+//   }
+//   return matchingOption || '';
+// };
 
 const isEncounterDate = (conceptUuid, dataElement) => {
   return (
