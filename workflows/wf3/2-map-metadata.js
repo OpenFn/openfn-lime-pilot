@@ -46,7 +46,7 @@ const answerKeyPairs = arr => {
         const answerKeyUid = `${value['DHIS2 DE UID']}${optionSetUid}`; 
         
         //map omrs Concept Uid to dhis2 answerKeyUid
-        value['External ID'] = acc[answerKeyUid];
+        acc[answerKeyUid] = value['External ID'];
         return acc;
       }, {});
   } catch (error) {
