@@ -104,6 +104,12 @@ fn(state => {
   return state;
 });
 
+//For troubleshooting, we need to see the payload sent to DHIS2
+fn(state => {
+  console.log('payload to import:: ', JSON.stringify($.encountersMapping, null, 2)); 
+  return state; 
+})
+
 // Create events for each encounter
 create(
   'tracker',
