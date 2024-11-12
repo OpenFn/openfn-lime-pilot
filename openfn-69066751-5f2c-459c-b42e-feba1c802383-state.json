@@ -3,7 +3,7 @@
   "name": "msf-lime-test",
   "description": null,
   "inserted_at": "2024-10-30T06:18:14Z",
-  "updated_at": "2024-11-12T08:41:23Z",
+  "updated_at": "2024-11-12T08:51:47Z",
   "project_credentials": {
     "mtuchi@openfn.org-mtuchi-github-token": {
       "id": "55508835-a9c3-4283-813e-ae6f9c4958fd",
@@ -90,68 +90,6 @@
         "webhook": {
           "enabled": false,
           "id": "e62241ef-84ef-4ca7-9fec-c350e849390e",
-          "type": "webhook"
-        }
-      }
-    },
-    "fetch-metadata-and-generate-opts-json": {
-      "id": "182c38b7-fa91-4bc3-82ed-ebd92e26be8f",
-      "name": "fetch-metadata-and-generate-opts-json",
-      "edges": {
-        "Get-metadata-file-from-Sharepoint->Map-metadata-file-to-option-set-Json-format": {
-          "enabled": true,
-          "id": "4ec86a4d-17b0-447c-a816-42f1d95d7f25",
-          "source_job_id": "aab663a0-6bcc-42fa-9f53-146d8fa44061",
-          "condition_type": "on_job_success",
-          "target_job_id": "b5743b64-3250-4dbf-8d74-256a1c7e9623"
-        },
-        "Map-metadata-file-to-option-set-Json-format->Save-option-set-json-to-github": {
-          "enabled": true,
-          "id": "820d203a-1e9c-494d-8fba-c7c962209de7",
-          "source_job_id": "b5743b64-3250-4dbf-8d74-256a1c7e9623",
-          "condition_type": "on_job_success",
-          "target_job_id": "b224b966-35f4-43ea-90e9-1f5dfcb56416"
-        },
-        "webhook->Get-metadata-file-from-Sharepoint": {
-          "enabled": true,
-          "id": "441b595b-441a-4938-be44-be49c32f5cc4",
-          "source_trigger_id": "654e0bc2-22ae-4033-9090-18760ab28ea2",
-          "condition_type": "always",
-          "target_job_id": "aab663a0-6bcc-42fa-9f53-146d8fa44061"
-        }
-      },
-      "concurrency": null,
-      "inserted_at": "2024-10-30T12:02:03Z",
-      "updated_at": "2024-11-11T18:53:15Z",
-      "jobs": {
-        "Get-metadata-file-from-Sharepoint": {
-          "id": "aab663a0-6bcc-42fa-9f53-146d8fa44061",
-          "name": "Get metadata file from Sharepoint",
-          "body": "fn(state => {\n  state.sheets = ['OptionSets', 'identifiers'];\n  state.siteId =\n    'openfnorg.sharepoint.com,4724a499-afbc-4ded-a371-34ae40bf5d8d,1d20a7d4-a6f1-407c-aa77-76bd47bb0f32';\n  return state;\n});\n\ngetDrive(\n  {\n    id: $.siteId,\n    owner: 'sites',\n  },\n  'default'\n);\n\ngetFile('/msf-metadata/LIME EMR - Iraq Metadata - Release 1.xlsx', {\n  metadata: true,\n});\n\nfn(state => {\n  const itemId = state.data.id;\n  const driveId = state.drives.default.id;\n  state.workbookBase = `sites/${state.siteId}/drives/${driveId}/items/${itemId}/workbook`;\n  return state;\n});\n\nget(\n  `${$.workbookBase}/worksheets('omrs-form-metadata')/usedRange`,\n  {},\n  state => {\n    const [headers, ...rows] = state.data.values;\n    state.formMetadata = rows\n      .map(row =>\n        row.reduce((obj, value, index) => {\n          if (value) {\n            obj[headers[index]] = value;\n          }\n          return obj;\n        }, {})\n      )\n      .filter(obj => Object.keys(obj).length > 0 && obj['Active']);\n\n    state.sheets.push(\n      ...state.formMetadata.map(obj => obj['OMRS form sheet name'])\n    );\n    return state;\n  }\n);\n\neach(\n  $.sheets,\n  get(`${$.workbookBase}/worksheets('${$.data}')/usedRange`, {}, state => {\n    const sheetName = state.references.at(-1);\n    console.log('Fetched sheet: ', sheetName);\n    state[sheetName] = state.data.values;\n    return state;\n  })\n);\n\nfn(state => {\n  delete state.data;\n  delete state.response;\n  delete state.references;\n  return state;\n});\n",
-          "adaptor": "@openfn/language-msgraph@latest",
-          "project_credential_id": "3276b5b6-25c8-4a64-b55d-cf02f82d21e3"
-        },
-        "Map-metadata-file-to-option-set-Json-format": {
-          "id": "b5743b64-3250-4dbf-8d74-256a1c7e9623",
-          "name": "Map metadata file to option-set Json format",
-          "body": "const isValidValue = value => value !== '' && value !== 'NA';\n\nconst mapArrayToObject = (item, keys) => {\n  return item.reduce((acc, value, idx) => {\n    acc[keys[idx]] = value;\n    return acc;\n  }, {});\n};\n\nconst safeKeyValuePairs = arr => {\n  if (arr === null || arr === undefined) {\n    return arr;\n  }\n  const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));\n  try {\n    return mappedArr\n      .filter(\n        o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])\n      )\n      .reduce((acc, value) => {\n        acc[value['DHIS2 DE UID']] = value['External ID'];\n        return acc;\n      }, {});\n  } catch (error) {\n    console.error(`Error processing ${arr}:`, error);\n    return arr; // Return original value if processing fails\n  }\n};\n\n\n//=== NEW section to create Uid for DHIS2 answers =====//\nconst answerKeyPairs = arr => {\n  if (arr === null || arr === undefined) {\n    return arr;\n  }\n  const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));\n  try {\n    return mappedArr\n      .filter(\n        o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])\n      )\n      .reduce((acc, value) => {\n        //find the OptionSetUid --> this will return empty string if not an option question\n        const optionSetUid = value['DHIS2 Option Set UID']=='NA' ? '' : value['DHIS2 Option Set UID']; \n        ////then build an answerKeyUid = DEuid + OptionSetUid\n        //const answerKeyUid = `${value['DHIS2 DE UID']}${optionSetUid}`; \n        const answerKeyUid = `${value['DHIS2 DE UID']}${optionSetUid}`; \n        \n        //map omrs Concept Uid to dhis2 answerKeyUid\n        //acc[answerKeyUid] = value['External ID']; //OLD\n        acc[optionSetUid] = value['External ID']; //NEW to match on optionSetUid\n\n        return acc;\n      }, {});\n  } catch (error) {\n    console.error(`Error processing ${arr}:`, error);\n    return arr; // Return original value if processing fails\n  }\n};\n//=====================//\n\nfn(state => {\n  const { OptionSets, identifiers } = state;\n  const keys = OptionSets[1];\n\n  state.optsMap = OptionSets.slice(2)\n    .map(item => mapArrayToObject(item, keys))\n    .filter(\n      o =>\n        (isValidValue(o['External ID']) &&\n          isValidValue(o['DHIS2 DE full name'])) ||\n        (isValidValue(o['value.display - Answers']) &&\n          isValidValue(o['DHIS2 Option code']))\n    )\n    .map(o => {\n       const optionSetUid = o['DHIS2 Option Set UID']=='NA' ? '' : `-${o['DHIS2 Option Set UID']}`; \n        //then build an answerKeyUid = DEuid + OptionSetUid\n      const answerKeyUid = `${o['DHIS2 DE UID']}${optionSetUid}`; \n\n      return {\n        'value.display - Answers': o['Answers'],\n        'value.uuid - External ID': o['External ID'],\n        'DHIS2 answerKeyUid': answerKeyUid,\n        'DHIS2 DE full name': o['DHIS2 DE full name'],\n        'DHIS2 DE UID': o['DHIS2 DE UID'],\n        'OptionSet name': o['OptionSet name'],\n        'DHIS2 Option Set name': o['DHIS2 Option Set name'],\n        'DHIS2 Option Set UID': o['DHIS2 Option Set UID'],\n        'DHIS2 Option name': o['DHIS2 Option name'],\n        'DHIS2 Option UID': o['DHIS2 Option UID'],\n        'DHIS2 Option Code': o['DHIS2 Option code'],\n      };\n    });\n\n  const [iheaders, ...irows] = identifiers;\n  state.identifiers = irows\n    .map(row =>\n      row.reduce((obj, value, index) => {\n        if (value != null && value !== '') {\n          obj[iheaders[index]] = value;\n        }\n        return obj;\n      }, {})\n    )\n    .filter(obj => Object.keys(obj).length > 0);\n  return state;\n});\n\n\nfn(state => {\n  const { formMetadata, optsMap, identifiers } = state;\n\n  const formMaps = formMetadata.reduce((acc, form) => {\n    const formName = form['OMRS form sheet name'];\n    acc[form['OMRS form.uuid']] = {\n      formName,\n      orgUnit: form['DHIS2 orgUnit ID'],\n      programId: form['DHIS2 program ID'],\n      programStage: form['DHIS2 programStage ID'],\n      dataValueMap: safeKeyValuePairs(state[formName]),\n      answerKey_dhis2_omrs: answerKeyPairs(state[formName]),\n      answerKey_omrs_dhis2: Object.fromEntries(\n        Object.entries(answerKeyPairs(state[formName])).map(([key, value]) => [value, key])\n      )\n    };\n\n    return acc;\n  }, {});\n\n  //create master answerKeyMap to map omrs concept Uids to their unique DHIS2 optionset + dataElement combos\n  const answerKeyMap =Object.values(formMaps).reduce((acc, form) => {\n    return { ...acc, ...form.answerKey_omrs_dhis2 };\n  }, {});\n\n  return { formMaps, formMetadata, optsMap, answerKeyMap, identifiers };\n});\n",
-          "adaptor": "@openfn/language-common@latest",
-          "project_credential_id": null
-        },
-        "Save-option-set-json-to-github": {
-          "id": "b224b966-35f4-43ea-90e9-1f5dfcb56416",
-          "name": "Save option-set json to github",
-          "body": "const metadataPath =\n  'repos/OpenFn/openfn-lime-pilot/contents/metadata/collections.json';\n\nget(metadataPath, {\n  headers: {\n    'user-agent': 'OpenFn',\n  },\n  query: {\n    ref: 'next-staging',\n  },\n});\n\nfn(state => {\n  const { formMaps, formMetadata, optsMap, data, identifiers, answerKeyMap } = state;\n\n  state.body = {\n    message: 'Update metadata content',\n    committer: {\n      name: 'Emmanuel Evance',\n      email: 'mtuchidev@gmail.com',\n    },\n    content: util.encode(\n      JSON.stringify({\n        answerKeyMap,\n        optsMap,\n        formMaps,\n        identifiers,\n        formMetadata\n      })\n    ),\n    sha: data.sha,\n    branch: 'next-staging',\n  };\n\n  return state;\n});\n\nput(\n  metadataPath,\n  {\n    body: $.body,\n    headers: {\n      Accept: 'application/vnd.github+json',\n      'X-GitHub-Api-Version': '2022-11-28',\n      'user-agent': 'OpenFn',\n    },\n  },\n  ({ body, data, references, response, ...state }) => state\n);\n",
-          "adaptor": "@openfn/language-http@latest",
-          "project_credential_id": "55508835-a9c3-4283-813e-ae6f9c4958fd"
-        }
-      },
-      "deleted_at": null,
-      "lock_version": 56,
-      "triggers": {
-        "webhook": {
-          "enabled": true,
-          "id": "654e0bc2-22ae-4033-9090-18760ab28ea2",
           "type": "webhook"
         }
       }
@@ -360,6 +298,68 @@
           "id": "a38c8cfb-8fad-46b3-b69c-a7f6108a0d8c",
           "type": "cron",
           "cron_expression": "0 0 * * *"
+        }
+      }
+    },
+    "fetch-metadata-and-generate-opts-json": {
+      "id": "182c38b7-fa91-4bc3-82ed-ebd92e26be8f",
+      "name": "fetch-metadata-and-generate-opts-json",
+      "edges": {
+        "Get-metadata-file-from-Sharepoint->Map-metadata-file-to-option-set-Json-format": {
+          "enabled": true,
+          "id": "4ec86a4d-17b0-447c-a816-42f1d95d7f25",
+          "source_job_id": "aab663a0-6bcc-42fa-9f53-146d8fa44061",
+          "condition_type": "on_job_success",
+          "target_job_id": "b5743b64-3250-4dbf-8d74-256a1c7e9623"
+        },
+        "Map-metadata-file-to-option-set-Json-format->Save-option-set-json-to-github": {
+          "enabled": true,
+          "id": "820d203a-1e9c-494d-8fba-c7c962209de7",
+          "source_job_id": "b5743b64-3250-4dbf-8d74-256a1c7e9623",
+          "condition_type": "on_job_success",
+          "target_job_id": "b224b966-35f4-43ea-90e9-1f5dfcb56416"
+        },
+        "webhook->Get-metadata-file-from-Sharepoint": {
+          "enabled": true,
+          "id": "441b595b-441a-4938-be44-be49c32f5cc4",
+          "source_trigger_id": "654e0bc2-22ae-4033-9090-18760ab28ea2",
+          "condition_type": "always",
+          "target_job_id": "aab663a0-6bcc-42fa-9f53-146d8fa44061"
+        }
+      },
+      "concurrency": null,
+      "inserted_at": "2024-10-30T12:02:03Z",
+      "updated_at": "2024-11-12T08:51:47Z",
+      "jobs": {
+        "Get-metadata-file-from-Sharepoint": {
+          "id": "aab663a0-6bcc-42fa-9f53-146d8fa44061",
+          "name": "Get metadata file from Sharepoint",
+          "body": "fn(state => {\n  state.sheets = ['OptionSets', 'identifiers'];\n  state.siteId =\n    'openfnorg.sharepoint.com,4724a499-afbc-4ded-a371-34ae40bf5d8d,1d20a7d4-a6f1-407c-aa77-76bd47bb0f32';\n  return state;\n});\n\ngetDrive(\n  {\n    id: $.siteId,\n    owner: 'sites',\n  },\n  'default'\n);\n\ngetFile('/msf-metadata/LIME EMR - Iraq Metadata - Release 1.xlsx', {\n  metadata: true,\n});\n\nfn(state => {\n  const itemId = state.data.id;\n  const driveId = state.drives.default.id;\n  state.workbookBase = `sites/${state.siteId}/drives/${driveId}/items/${itemId}/workbook`;\n  return state;\n});\n\nget(\n  `${$.workbookBase}/worksheets('omrs-form-metadata')/usedRange`,\n  {},\n  state => {\n    const [headers, ...rows] = state.data.values;\n    state.formMetadata = rows\n      .map(row =>\n        row.reduce((obj, value, index) => {\n          if (value) {\n            obj[headers[index]] = value;\n          }\n          return obj;\n        }, {})\n      )\n      .filter(obj => Object.keys(obj).length > 0 && obj['Active']);\n\n    state.sheets.push(\n      ...state.formMetadata.map(obj => obj['OMRS form sheet name'])\n    );\n    return state;\n  }\n);\n\neach(\n  $.sheets,\n  get(`${$.workbookBase}/worksheets('${$.data}')/usedRange`, {}, state => {\n    const sheetName = state.references.at(-1);\n    console.log('Fetched sheet: ', sheetName);\n    state[sheetName] = state.data.values;\n    return state;\n  })\n);\n\nfn(state => {\n  delete state.data;\n  delete state.response;\n  delete state.references;\n  return state;\n});\n",
+          "adaptor": "@openfn/language-msgraph@latest",
+          "project_credential_id": "3276b5b6-25c8-4a64-b55d-cf02f82d21e3"
+        },
+        "Map-metadata-file-to-option-set-Json-format": {
+          "id": "b5743b64-3250-4dbf-8d74-256a1c7e9623",
+          "name": "Map metadata file to option-set Json format",
+          "body": "const isValidValue = value => value !== '' && value !== 'NA';\n\nconst mapArrayToObject = (item, keys) => {\n  return item.reduce((acc, value, idx) => {\n    acc[keys[idx]] = value;\n    return acc;\n  }, {});\n};\n\nconst safeKeyValuePairs = arr => {\n  if (arr === null || arr === undefined) {\n    return arr;\n  }\n  const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));\n  try {\n    return mappedArr\n      .filter(\n        o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])\n      )\n      .reduce((acc, value) => {\n        acc[value['DHIS2 DE UID']] = value['External ID'];\n        return acc;\n      }, {});\n  } catch (error) {\n    console.error(`Error processing ${arr}:`, error);\n    return arr; // Return original value if processing fails\n  }\n};\n\n\n//=== NEW section to create Uid for DHIS2 answers =====//\nconst answerKeyPairs = arr => {\n  if (arr === null || arr === undefined) {\n    return arr;\n  }\n  const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));\n  try {\n    return mappedArr\n      .filter(\n        o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])\n      )\n      .reduce((acc, value) => {\n        //find the OptionSetUid --> this will return empty string if not an option question\n        const optionSetUid = value['DHIS2 Option Set UID']=='NA' ? '' : value['DHIS2 Option Set UID']; \n        ////then build an answerKeyUid = DEuid + OptionSetUid\n        //const answerKeyUid = `${value['DHIS2 DE UID']}${optionSetUid}`; \n        const answerKeyUid = `${value['DHIS2 DE UID']}${optionSetUid}`; \n        \n        //map omrs Concept Uid to dhis2 answerKeyUid\n        //acc[answerKeyUid] = value['External ID']; //OLD\n        acc[optionSetUid] = value['External ID']; //NEW to match on optionSetUid\n\n        return acc;\n      }, {});\n  } catch (error) {\n    console.error(`Error processing ${arr}:`, error);\n    return arr; // Return original value if processing fails\n  }\n};\n//=====================//\n\nfn(state => {\n  const { OptionSets, identifiers } = state;\n  const keys = OptionSets[1];\n\n  state.optsMap = OptionSets.slice(2)\n    .map(item => mapArrayToObject(item, keys))\n    .filter(\n      o =>\n        (isValidValue(o['External ID']) &&\n          isValidValue(o['DHIS2 DE full name'])) ||\n        (isValidValue(o['value.display - Answers']) &&\n          isValidValue(o['DHIS2 Option code']))\n    )\n    .map(o => {\n       const optionSetUid = o['DHIS2 Option Set UID']=='NA' ? '' : `-${o['DHIS2 Option Set UID']}`; \n        //then build an answerKeyUid = DEuid + OptionSetUid\n      const answerKeyUid = `${o['DHIS2 DE UID']}${optionSetUid}`; \n\n      return {\n        'value.display - Answers': o['Answers'],\n        'value.uuid - External ID': o['External ID'],\n        'DHIS2 answerKeyUid': answerKeyUid,\n        'DHIS2 DE full name': o['DHIS2 DE full name'],\n        'DHIS2 DE UID': o['DHIS2 DE UID'],\n        'OptionSet name': o['OptionSet name'],\n        'DHIS2 Option Set name': o['DHIS2 Option Set name'],\n        'DHIS2 Option Set UID': o['DHIS2 Option Set UID'],\n        'DHIS2 Option name': o['DHIS2 Option name'],\n        'DHIS2 Option UID': o['DHIS2 Option UID'],\n        'DHIS2 Option Code': o['DHIS2 Option code'],\n      };\n    });\n\n  const [iheaders, ...irows] = identifiers;\n  state.identifiers = irows\n    .map(row =>\n      row.reduce((obj, value, index) => {\n        if (value != null && value !== '') {\n          obj[iheaders[index]] = value;\n        }\n        return obj;\n      }, {})\n    )\n    .filter(obj => Object.keys(obj).length > 0);\n  return state;\n});\n\n\nfn(state => {\n  const { formMetadata, optsMap, identifiers } = state;\n\n  const formMaps = formMetadata.reduce((acc, form) => {\n    const formName = form['OMRS form sheet name'];\n    acc[form['OMRS form.uuid']] = {\n      formName,\n      orgUnit: form['DHIS2 orgUnit ID'],\n      programId: form['DHIS2 program ID'],\n      programStage: form['DHIS2 programStage ID'],\n      dataValueMap: safeKeyValuePairs(state[formName]),\n      answerKey_dhis2_omrs: answerKeyPairs(state[formName]),\n      answerKey_omrs_dhis2: Object.fromEntries(\n        Object.entries(answerKeyPairs(state[formName])).map(([key, value]) => [value, key])\n      )\n    };\n\n    return acc;\n  }, {});\n\n  //create master answerKeyMap to map omrs concept Uids to their unique DHIS2 optionset + dataElement combos\n  const answerKeyMap =Object.values(formMaps).reduce((acc, form) => {\n    return { ...acc, ...form.answerKey_omrs_dhis2 };\n  }, {});\n\n  return { formMaps, formMetadata, optsMap, answerKeyMap, identifiers };\n});\n",
+          "adaptor": "@openfn/language-common@latest",
+          "project_credential_id": null
+        },
+        "Save-option-set-json-to-github": {
+          "id": "b224b966-35f4-43ea-90e9-1f5dfcb56416",
+          "name": "Save option-set json to github",
+          "body": "const metadataPath =\n  'repos/OpenFn/openfn-lime-pilot/contents/metadata/collections.json';\n\nget(metadataPath, {\n  headers: {\n    'user-agent': 'OpenFn',\n  },\n  query: {\n    ref: 'next-staging',\n  },\n});\n\nfn(state => {\n  const { formMaps, formMetadata, optsMap, data, identifiers, answerKeyMap } =\n    state;\n\n  state.body = {\n    message: 'Update metadata content',\n    committer: {\n      name: 'Emmanuel Evance',\n      email: 'mtuchidev@gmail.com',\n    },\n    content: util.encode(\n      JSON.stringify({\n        answerKeyMap,\n        optsMap,\n        formMaps,\n        identifiers,\n        formMetadata,\n      })\n    ),\n    sha: data.sha,\n    branch: 'collections',\n  };\n\n  return state;\n});\n\nput(\n  metadataPath,\n  {\n    body: $.body,\n    headers: {\n      Accept: 'application/vnd.github+json',\n      'X-GitHub-Api-Version': '2022-11-28',\n      'user-agent': 'OpenFn',\n    },\n  },\n  ({ body, data, references, response, ...state }) => state\n);\n",
+          "adaptor": "@openfn/language-http@latest",
+          "project_credential_id": "55508835-a9c3-4283-813e-ae6f9c4958fd"
+        }
+      },
+      "deleted_at": null,
+      "lock_version": 57,
+      "triggers": {
+        "webhook": {
+          "enabled": true,
+          "id": "654e0bc2-22ae-4033-9090-18760ab28ea2",
+          "type": "webhook"
         }
       }
     }
