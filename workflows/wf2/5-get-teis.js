@@ -8,7 +8,7 @@ each(
       orgUnit: $.orgUnit,
       program: $.program,
       filter: [`AYbfTPYMNJH:Eq:${$.data.patient.uuid}`],
-      fields: '*',
+      fields: '*,enrollments[*],enrollments[events[*]]',
     },
     {},
     async state => {
@@ -20,7 +20,7 @@ each(
         state.TEIs ??= {};
         state.TEIs[encounter.patient.uuid] = {
           trackedEntity,
-          enrollments,
+          events: enrollments[0]?.events,
           enrollment: enrollments[0]?.enrollment,
         };
       }
@@ -140,22 +140,6 @@ const dataValuesMapping = (data, dataValueMap, optsMap, answerKeyMap) => {
 
 // Prepare DHIS2 data model for create events
 fn(state => {
-  const createEvent = (data, state) => {
-    const { trackedEntity, enrollment } = state.TEIs[data.patient.uuid] || {};
-
-    if (!trackedEntity || !enrollment) {
-      return null;
-    }
-
-    return {
-      program: state.program,
-      orgUnit: state.orgUnit,
-      trackedEntity,
-      enrollment,
-      occurredAt: data.encounterDatetime.replace('+0000', ''),
-    };
-  };
-
   const handleMissingRecord = (data, state) => {
     const { uuid, display } = data.patient;
 
@@ -167,23 +151,29 @@ fn(state => {
       patient: display,
     };
 
-    state.missingRecords[uuid].encounters.push(data);
+    state.missingRecords[uuid].encounters.push(data.uuid);
   };
 
   const processEncounter = (data, state) => {
-    const event = createEvent(data, state);
-    if (!event) {
-      handleMissingRecord(data, state);
-      return null;
-    }
-
     const form = state.formMaps[data.form.uuid];
     if (!form?.dataValueMap) {
       return null;
     }
+    const { trackedEntity, enrollment, events } =
+      state.TEIs[data.patient.uuid] || {};
+
+    if (!trackedEntity || !enrollment) {
+      handleMissingRecord(data, state);
+      return null;
+    }
 
     return {
-      ...event,
+      event: events.find(e => e.programStage === form.programStage)?.event,
+      program: state.program,
+      orgUnit: state.orgUnit,
+      trackedEntity,
+      enrollment,
+      occurredAt: data.encounterDatetime.replace('+0000', ''),
       programStage: form.programStage,
       dataValues: dataValuesMapping(
         data,
