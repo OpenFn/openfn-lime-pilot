@@ -46,51 +46,6 @@
     }
   },
   "workflows": {
-    "wf-3-generate-optsmap": {
-      "id": "c9d7d47a-5502-4f52-bc30-950746a8b473",
-      "name": "wf-3-generate-optsmap",
-      "inserted_at": "2024-11-11T15:53:04.455660Z",
-      "lock_version": 4,
-      "triggers": {
-        "webhook": {
-          "enabled": false,
-          "id": "e62241ef-84ef-4ca7-9fec-c350e849390e",
-          "type": "webhook"
-        }
-      },
-      "jobs": {
-        "Fetch-OptionSets-Metadata": {
-          "id": "ed90907f-3ba3-4a08-ae52-7425e584dae6",
-          "name": "Fetch OptionSets Metadata",
-          "body": "\ngetValues('1OuR7laA7Oc2QnoiT8S3Thhf-HNh7uFY8ILLEu-idXuk', \n'optionsets_oct1')\n",
-          "adaptor": "@openfn/language-googlesheets@latest",
-          "project_credential_id": null
-        },
-        "Key-Value-Pair": {
-          "id": "6f832249-fc16-4bab-8ed2-cbaa832611f0",
-          "name": "Key Value Pair",
-          "body": "fn((state) => {\n  const [keys, ...rows] = state.data.values;\n  state.data = rows.map((item) => {\n    const obj = item.reduce((acc, value, idx) => {\n      acc[keys[idx]] = value;\n      return acc;\n    }, {});\n\n    return obj;\n  });\n\n  return state;\n});\n\nfn((state) => {\n  const isValidValue = value => value !== \"\" && value !== \"NA\";\n  const optsMap = state.data.filter(o =>\n    isValidValue(o[\"External ID\"]) && isValidValue(o[\"DHIS2 DE full name\"])\n  )\n    .map((o) => {\n      return {\n        \"value.display - Answers\": o[\"Answers\"],\n        \"value.uuid - External ID\": o[\"External ID\"],\n        \"DHIS2 DE full name\": o[\"DHIS2 DE full name\"],\n        \"DHIS2 DE UID\": o[\"DHIS2 DE UID\"],\n        \"OptionSet name\": o[\"OptionSet name\"],\n        \"DHIS2 Option Set UID\": o[\"DHIS2 Option Set name\"],\n        \"DHIS2 Option name\": o[\"DHIS2 Option name\"],\n        \"DHIS2 Option UID\": o[\"DHIS2 Option UID\"],\n        \"DHIS2 Option Code\": o[\"DHIS2 Option code\"],\n      };\n    })\n\n  return { optsMap };\n});\n",
-          "adaptor": "@openfn/language-common@latest",
-          "project_credential_id": null
-        }
-      },
-      "edges": {
-        "webhook->Fetch-OptionSets-Metadata": {
-          "enabled": true,
-          "id": "f0c1f4e9-2619-46da-b7d6-595bf8ea249a",
-          "source_trigger_id": "e62241ef-84ef-4ca7-9fec-c350e849390e",
-          "condition_type": "always",
-          "target_job_id": "ed90907f-3ba3-4a08-ae52-7425e584dae6"
-        },
-        "Fetch-OptionSets-Metadata->Key-Value-Pair": {
-          "enabled": true,
-          "id": "fa1fc60a-b2b4-48ef-b4b4-a47eb93d58f6",
-          "source_job_id": "ed90907f-3ba3-4a08-ae52-7425e584dae6",
-          "condition_type": "on_job_success",
-          "target_job_id": "6f832249-fc16-4bab-8ed2-cbaa832611f0"
-        }
-      }
-    },
     "fetch-metadata-and-generate-opts-json": {
       "id": "182c38b7-fa91-4bc3-82ed-ebd92e26be8f",
       "name": "fetch-metadata-and-generate-opts-json",
@@ -348,6 +303,51 @@
           "condition_type": "js_expression",
           "condition_label": "has-teis",
           "target_job_id": "fe6cdd41-491d-44fd-80af-0ac8891dd766"
+        }
+      }
+    },
+    "x-old-generate-optsmap": {
+      "id": "c9d7d47a-5502-4f52-bc30-950746a8b473",
+      "name": "x-old-generate-optsmap",
+      "inserted_at": "2024-11-12T17:49:20.745701Z",
+      "lock_version": 5,
+      "triggers": {
+        "webhook": {
+          "enabled": false,
+          "id": "e62241ef-84ef-4ca7-9fec-c350e849390e",
+          "type": "webhook"
+        }
+      },
+      "jobs": {
+        "Fetch-OptionSets-Metadata": {
+          "id": "ed90907f-3ba3-4a08-ae52-7425e584dae6",
+          "name": "Fetch OptionSets Metadata",
+          "body": "\ngetValues('1OuR7laA7Oc2QnoiT8S3Thhf-HNh7uFY8ILLEu-idXuk', \n'optionsets_oct1')\n",
+          "adaptor": "@openfn/language-googlesheets@latest",
+          "project_credential_id": null
+        },
+        "Key-Value-Pair": {
+          "id": "6f832249-fc16-4bab-8ed2-cbaa832611f0",
+          "name": "Key Value Pair",
+          "body": "fn((state) => {\n  const [keys, ...rows] = state.data.values;\n  state.data = rows.map((item) => {\n    const obj = item.reduce((acc, value, idx) => {\n      acc[keys[idx]] = value;\n      return acc;\n    }, {});\n\n    return obj;\n  });\n\n  return state;\n});\n\nfn((state) => {\n  const isValidValue = value => value !== \"\" && value !== \"NA\";\n  const optsMap = state.data.filter(o =>\n    isValidValue(o[\"External ID\"]) && isValidValue(o[\"DHIS2 DE full name\"])\n  )\n    .map((o) => {\n      return {\n        \"value.display - Answers\": o[\"Answers\"],\n        \"value.uuid - External ID\": o[\"External ID\"],\n        \"DHIS2 DE full name\": o[\"DHIS2 DE full name\"],\n        \"DHIS2 DE UID\": o[\"DHIS2 DE UID\"],\n        \"OptionSet name\": o[\"OptionSet name\"],\n        \"DHIS2 Option Set UID\": o[\"DHIS2 Option Set name\"],\n        \"DHIS2 Option name\": o[\"DHIS2 Option name\"],\n        \"DHIS2 Option UID\": o[\"DHIS2 Option UID\"],\n        \"DHIS2 Option Code\": o[\"DHIS2 Option code\"],\n      };\n    })\n\n  return { optsMap };\n});\n",
+          "adaptor": "@openfn/language-common@latest",
+          "project_credential_id": null
+        }
+      },
+      "edges": {
+        "webhook->Fetch-OptionSets-Metadata": {
+          "enabled": true,
+          "id": "f0c1f4e9-2619-46da-b7d6-595bf8ea249a",
+          "source_trigger_id": "e62241ef-84ef-4ca7-9fec-c350e849390e",
+          "condition_type": "always",
+          "target_job_id": "ed90907f-3ba3-4a08-ae52-7425e584dae6"
+        },
+        "Fetch-OptionSets-Metadata->Key-Value-Pair": {
+          "enabled": true,
+          "id": "fa1fc60a-b2b4-48ef-b4b4-a47eb93d58f6",
+          "source_job_id": "ed90907f-3ba3-4a08-ae52-7425e584dae6",
+          "condition_type": "on_job_success",
+          "target_job_id": "6f832249-fc16-4bab-8ed2-cbaa832611f0"
         }
       }
     }

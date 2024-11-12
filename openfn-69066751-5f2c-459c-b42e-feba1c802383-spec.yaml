@@ -67,74 +67,6 @@ workflows:
         target_job: Get-metadata-file-from-Sharepoint
         condition_type: always
         enabled: true
-  wf-3-generate-optsmap:
-    name: wf-3-generate-optsmap
-    jobs:
-      Fetch-OptionSets-Metadata:
-        name: Fetch OptionSets Metadata
-        adaptor: '@openfn/language-googlesheets@latest'
-        credential: null
-        body: |
-          
-          getValues('1OuR7laA7Oc2QnoiT8S3Thhf-HNh7uFY8ILLEu-idXuk', 
-          'optionsets_oct1')
-
-      Key-Value-Pair:
-        name: Key Value Pair
-        adaptor: '@openfn/language-common@latest'
-        credential: null
-        body: |
-          fn((state) => {
-            const [keys, ...rows] = state.data.values;
-            state.data = rows.map((item) => {
-              const obj = item.reduce((acc, value, idx) => {
-                acc[keys[idx]] = value;
-                return acc;
-              }, {});
-
-              return obj;
-            });
-
-            return state;
-          });
-
-          fn((state) => {
-            const isValidValue = value => value !== "" && value !== "NA";
-            const optsMap = state.data.filter(o =>
-              isValidValue(o["External ID"]) && isValidValue(o["DHIS2 DE full name"])
-            )
-              .map((o) => {
-                return {
-                  "value.display - Answers": o["Answers"],
-                  "value.uuid - External ID": o["External ID"],
-                  "DHIS2 DE full name": o["DHIS2 DE full name"],
-                  "DHIS2 DE UID": o["DHIS2 DE UID"],
-                  "OptionSet name": o["OptionSet name"],
-                  "DHIS2 Option Set UID": o["DHIS2 Option Set name"],
-                  "DHIS2 Option name": o["DHIS2 Option name"],
-                  "DHIS2 Option UID": o["DHIS2 Option UID"],
-                  "DHIS2 Option Code": o["DHIS2 Option code"],
-                };
-              })
-
-            return { optsMap };
-          });
-
-    triggers:
-      webhook:
-        type: webhook
-        enabled: false
-    edges:
-      webhook->Fetch-OptionSets-Metadata:
-        source_trigger: webhook
-        target_job: Fetch-OptionSets-Metadata
-        condition_type: always
-        enabled: true
-      Fetch-OptionSets-Metadata->Key-Value-Pair:
-        source_job: Fetch-OptionSets-Metadata
-        target_job: Key-Value-Pair
-        condition_type: on_job_success
-        enabled: true
   wf1-dhis2-omrs-migration:
     name: wf1-dhis2-omrs-migration
     jobs:
@@ -303,5 +235,73 @@ workflows:
       Get-Encounters->Get-TEIs-and-Map-Answers:
         source_job: Get-Encounters
         target_job: Get-TEIs-and-Map-Answers
+        condition_type: on_job_success
+        enabled: true
+  x-old-generate-optsmap:
+    name: x-old-generate-optsmap
+    jobs:
+      Fetch-OptionSets-Metadata:
+        name: Fetch OptionSets Metadata
+        adaptor: '@openfn/language-googlesheets@latest'
+        credential: null
+        body: |
+          
+          getValues('1OuR7laA7Oc2QnoiT8S3Thhf-HNh7uFY8ILLEu-idXuk', 
+          'optionsets_oct1')
+
+      Key-Value-Pair:
+        name: Key Value Pair
+        adaptor: '@openfn/language-common@latest'
+        credential: null
+        body: |
+          fn((state) => {
+            const [keys, ...rows] = state.data.values;
+            state.data = rows.map((item) => {
+              const obj = item.reduce((acc, value, idx) => {
+                acc[keys[idx]] = value;
+                return acc;
+              }, {});
+
+              return obj;
+            });
+
+            return state;
+          });
+
+          fn((state) => {
+            const isValidValue = value => value !== "" && value !== "NA";
+            const optsMap = state.data.filter(o =>
+              isValidValue(o["External ID"]) && isValidValue(o["DHIS2 DE full name"])
+            )
+              .map((o) => {
+                return {
+                  "value.display - Answers": o["Answers"],
+                  "value.uuid - External ID": o["External ID"],
+                  "DHIS2 DE full name": o["DHIS2 DE full name"],
+                  "DHIS2 DE UID": o["DHIS2 DE UID"],
+                  "OptionSet name": o["OptionSet name"],
+                  "DHIS2 Option Set UID": o["DHIS2 Option Set name"],
+                  "DHIS2 Option name": o["DHIS2 Option name"],
+                  "DHIS2 Option UID": o["DHIS2 Option UID"],
+                  "DHIS2 Option Code": o["DHIS2 Option code"],
+                };
+              })
+
+            return { optsMap };
+          });
+
+    triggers:
+      webhook:
+        type: webhook
+        enabled: false
+    edges:
+      webhook->Fetch-OptionSets-Metadata:
+        source_trigger: webhook
+        target_job: Fetch-OptionSets-Metadata
+        condition_type: always
+        enabled: true
+      Fetch-OptionSets-Metadata->Key-Value-Pair:
+        source_job: Fetch-OptionSets-Metadata
+        target_job: Key-Value-Pair
         condition_type: on_job_success
         enabled: true
