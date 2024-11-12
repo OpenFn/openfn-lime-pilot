@@ -7,25 +7,32 @@ fn(state => {
       return acc;
     }, {});
 
-  state.teisToUpdate = genderUpdated.map(answer => {
-    const { trackedEntity } = TEIs[answer.person.uuid];
-    return {
-      trackedEntity,
-      program: state.program,
-      orgUnit: state.orgUnit,
-      trackedEntityType: 'cHlzCA2MuEF',
-      attributes: [
-        {
-          attribute: 'qptKDiv9uPl', //gender
-          value: genderMap[answer.value.display],
-        },
-        {
-          attribute: 'AYbfTPYMNJH', //OpenMRS Patient UID to use to upsert TEI
-          value: answer.person.uuid,
-        },
-      ],
-    };
-  });
+  state.teisToUpdate = genderUpdated
+    .map(answer => {
+      const { trackedEntity } = TEIs[answer.person.uuid] || {};
+      if (!trackedEntity) {
+        console.log('No TEI found for person', answer.person.uuid);
+      }
+      if (trackedEntity) {
+        return {
+          trackedEntity,
+          program: state.program,
+          orgUnit: state.orgUnit,
+          trackedEntityType: 'cHlzCA2MuEF',
+          attributes: [
+            {
+              attribute: 'qptKDiv9uPl', //gender
+              value: genderMap[answer.value.display],
+            },
+            {
+              attribute: 'AYbfTPYMNJH', //OpenMRS Patient UID to use to upsert TEI
+              value: answer.person.uuid,
+            },
+          ],
+        };
+      }
+    })
+    .filter(Boolean);
   return state;
 });
 
