@@ -11,7 +11,7 @@ get(metadataPath, {
 });
 
 fn(state => {
-  const { formMaps, formMetadata, optsMap, data, identifiers, answerKeyMap } =
+  const { formMaps, formMetadata, optsMap, data, identifiers, optionSetKey } =
     state;
 
   state.body = {
@@ -22,7 +22,7 @@ fn(state => {
     },
     content: util.encode(
       JSON.stringify({
-        answerKeyMap,
+        optionSetKey,
         optsMap,
         formMaps,
         identifiers,
