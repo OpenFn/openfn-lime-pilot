@@ -34,51 +34,17 @@ const questionKeyValuePairs = arr => {
   }
   const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));
   try {
-    return mappedArr
-      .filter(
-        o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 Option Set UID'])
-      )
-      .reduce((acc, value) => {
-        acc[value['DHIS2 Option Set UID']] = value['External ID'];
-        return acc;
-      }, {});
+    return mappedArr.filter(
+          o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 Option Set UID'])
+        )
+        .map(value => ({
+          [value['DHIS2 Option Set UID']]: value['External ID']
+        }));
   } catch (error) {
     console.error(`Error processing ${arr}:`, error);
     return arr; // Return original value if processing fails
   }
 };
-
-
-// //=== NEW section to create Uid for DHIS2 answers =====//
-// const answerKeyPairs = arr => {
-//   if (arr === null || arr === undefined) {
-//     return arr;
-//   }
-//   const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));
-//   try {
-//     return mappedArr
-//       .filter(
-//         o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])
-//       )
-//       .reduce((acc, value) => {
-//         //find the OptionSetUid --> this will return empty string if not an option question
-//         const optionSetUid = value['DHIS2 Option Set UID']=='NA' ? '' : value['DHIS2 Option Set UID']; 
-//         ////then build an answerKeyUid = DEuid + OptionSetUid
-//         //const answerKeyUid = `${value['DHIS2 DE UID']}${optionSetUid}`; 
-//         const answerKeyUid = `${value['DHIS2 DE UID']}${optionSetUid}`; 
-        
-//         //map omrs Concept Uid to dhis2 answerKeyUid
-//         //acc[answerKeyUid] = value['External ID']; //OLD
-//         acc[optionSetUid] = value['External ID']; //NEW to match on optionSetUid
-
-//         return acc;
-//       }, {});
-//   } catch (error) {
-//     console.error(`Error processing ${arr}:`, error);
-//     return arr; // Return original value if processing fails
-//   }
-// };
-//=====================//
 
 fn(state => {
   const { OptionSets, identifiers } = state;
@@ -140,31 +106,31 @@ fn(state => {
       programStage: form['DHIS2 programStage ID'],
       dataValueMap: safeKeyValuePairs(state[formName]),
       optionSetMap: questionKeyValuePairs(state[formName]),
-      // optionKey_dhis2_omrs: answerKeyPairs(state[formName]),
-      // optionKey_omrs_dhis2: Object.fromEntries(
-      //   Object.entries(answerKeyPairs(state[formName])).map(([key, value]) => [value, key])
-      // )
     };
 
     return acc;
   }, {});
 
   const optionSetKey = Object.entries(formMaps).reduce((acc, [formKey, formValue]) => {
-    // Iterate over each optionSetMap entry and reverse key-value, adding form prefix
-    Object.entries(formValue.optionSetMap).forEach(([originalKey, originalValue]) => {
+  
+    // Iterate over each object in the optionSetMap array
+    formValue.optionSetMap.forEach(item => {
+      // Extract the single key-value pair from each object in the array
+      const [originalKey, originalValue] = Object.entries(item)[0];
+      // Reverse key-value, adding form prefix
       acc[`${formKey}-${originalValue}`] = originalKey;
     });
     return acc;
-  }, {})
+  }, {});
 
-  //create master optionSetKey to map omrs concept Uids to their unique DHIS2 optionset + dataElement combos
-  // const combinedOptionSetMap =Object.values(formMaps).reduce((acc, form) => {
-  //   return { ...acc, ...form.optionSetMap };
-  // }, {});
+  // const optionSetKey = Object.entries(formMaps).reduce((acc, [formKey, formValue]) => {
+  //   // Iterate over each optionSetMap entry and reverse key-value, adding form prefix
+  //   Object.entries(formValue.optionSetMap).forEach(([originalKey, originalValue]) => {
+  //     acc[`${formKey}-${originalValue}`] = originalKey;
+  //   });
+  //   return acc;
+  // }, {})
 
-  // const optionSetKey = Object.fromEntries(
-  //   Object.entries(combinedOptionSetMap).map(([key, value]) => [value, key])
-  //   ); 
 
   return { formMaps, formMetadata, optsMap, optionSetKey, identifiers };
 });

@@ -99,15 +99,15 @@ const findMatchingOption = (answer, optsMap, optionSetKey) => {
 
   console.log('matchingOption value', matchingOption)
 
-  //TBD if we want to keep thse --> TODO: Revisit this logic!
-  if (matchingOption?.toLowerCase() === 'no') {
-    console.log('FALSE option', matchingOption)
-    return 'FALSE';
-  }
-  if (matchingOption?.toLowerCase() === 'yes') {
-    console.log('TRUE option', matchingOption)
-    return 'TRUE';
-  }
+  // //TBD if we want to keep thse --> TODO: Revisit this logic!
+  // if (matchingOption?.toLowerCase() === 'no') {
+  //   console.log('FALSE option', matchingOption)
+  //   return 'FALSE';
+  // }
+  // if (matchingOption?.toLowerCase() === 'yes') {
+  //   console.log('TRUE option', matchingOption)
+  //   return 'TRUE';
+  // }
   //=========================================//
 
   return matchingOption || '';
