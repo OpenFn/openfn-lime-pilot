@@ -36,7 +36,7 @@ const processAnswer = (
   conceptUuid,
   dataElement,
   optsMap,
-  answerKeyMap
+  optionSetKey
 ) => {
   // console.log('Has answer', conceptUuid, dataElement);
   return typeof answer.value === 'object'
@@ -45,7 +45,7 @@ const processAnswer = (
         conceptUuid,
         dataElement,
         optsMap,
-        answerKeyMap
+        optionSetKey
       )
     : processOtherAnswer(answer, conceptUuid, dataElement);
 };
@@ -55,12 +55,12 @@ const processObjectAnswer = (
   conceptUuid,
   dataElement,
   optsMap,
-  answerKeyMap
+  optionSetKey
 ) => {
   if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {
     return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';
   }
-  return findMatchingOption(answer, optsMap, answerKeyMap);
+  return findMatchingOption(answer, optsMap, optionSetKey);
 };
 
 const processOtherAnswer = (answer, conceptUuid, dataElement) => {
@@ -78,18 +78,20 @@ const processNoAnswer = (data, conceptUuid, dataElement) => {
   return '';
 };
 
-const findMatchingOption = (answer, optsMap, answerKeyMap) => {
-  const matchingOptionSet = answerKeyMap[answer.concept.uuid];
+const findMatchingOption = (answer, optsMap, optionSetKey) => {
+  const matchingOptionSet = optionSetKey[answer.concept.uuid];
   console.log('conceptUid', answer.concept.uuid);
   console.log('value uid', answer.value.uuid);
   console.log('value', answer.value.display);
   console.log('matchingOptionSet', matchingOptionSet);
 
+  //const answerKey = answerMappingUid
+
   const matchingOption = optsMap.find(
     o =>
       o['value.uuid - External ID'] === answer.value.uuid &&
       o['DHIS2 Option Set UID'] === matchingOptionSet
-  )?.['DHIS2 Option Code'] || answer.value.display;
+  )?.['DHIS2 Option Code'] || answer.value.display; //TODO: revisit this logic if optionSet not found
 
   console.log('matchingOption value', matchingOption)
 
@@ -131,13 +133,13 @@ const getRangePhq = input => {
   return '0_4';
 };
 
-const dataValuesMapping = (data, dataValueMap, optsMap, answerKeyMap) => {
+const dataValuesMapping = (data, dataValueMap, optsMap, optionSetKey) => {
   return Object.keys(dataValueMap)
     .map(dataElement => {
       const conceptUuid = dataValueMap[dataElement];
       const answer = data.obs.find(o => o.concept.uuid === conceptUuid);
       const value = answer
-        ? processAnswer(answer, conceptUuid, dataElement, optsMap, answerKeyMap)
+        ? processAnswer(answer, conceptUuid, dataElement, optsMap, optionSetKey)
         : processNoAnswer(data, conceptUuid, dataElement);
 
       return { dataElement, value };
@@ -196,7 +198,7 @@ fn(state => {
         data,
         form.dataValueMap,
         state.optsMap,
-        state.answerKeyMap
+        state.optionSetKey
       ),
     };
   };
@@ -207,8 +209,8 @@ fn(state => {
 
   return state;
 });
-// const findMatchingOption = (answer, optsMap, answerKeyMap) => {
-//   const answerKeyUid = answerKeyMap[answer.concept.uuid];
+// const findMatchingOption = (answer, optsMap, optionSetKey) => {
+//   const answerKeyUid = optionSetKey[answer.concept.uuid];
 
 //   const matchingOption = optsMap.find(
 //     (o) => o["DHIS2 answerKeyUid"] === answerKeyUid
