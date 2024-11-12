@@ -20,6 +20,7 @@ each(
         state.TEIs ??= {};
         state.TEIs[encounter.patient.uuid] = {
           trackedEntity,
+          enrollments,
           enrollment: enrollments[0]?.enrollment,
         };
       }
@@ -30,14 +31,32 @@ each(
   )
 );
 
-const processAnswer = (answer, conceptUuid, dataElement, optsMap, answerKeyMap) => {
+const processAnswer = (
+  answer,
+  conceptUuid,
+  dataElement,
+  optsMap,
+  answerKeyMap
+) => {
   // console.log('Has answer', conceptUuid, dataElement);
   return typeof answer.value === 'object'
-    ? processObjectAnswer(answer, conceptUuid, dataElement, optsMap, answerKeyMap)
+    ? processObjectAnswer(
+        answer,
+        conceptUuid,
+        dataElement,
+        optsMap,
+        answerKeyMap
+      )
     : processOtherAnswer(answer, conceptUuid, dataElement);
 };
 
-const processObjectAnswer = (answer, conceptUuid, dataElement, optsMap, answerKeyMap) => {
+const processObjectAnswer = (
+  answer,
+  conceptUuid,
+  dataElement,
+  optsMap,
+  answerKeyMap
+) => {
   if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {
     return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';
   }
@@ -60,15 +79,16 @@ const processNoAnswer = (data, conceptUuid, dataElement) => {
 };
 
 const findMatchingOption = (answer, optsMap, answerKeyMap) => {
-  const matchingOptionSet = answerKeyMap[answer.concept.uuid]; 
-  console.log('matchingOptionSet', matchingOptionSet)
+  const matchingOptionSet = answerKeyMap[answer.concept.uuid];
+  console.log('matchingOptionSet', matchingOptionSet);
 
   const matchingOption = optsMap.find(
-    o => o['value.uuid - External ID'] === answer.value.uuid &&
-     o['DHIS2 Option Set UID'] === matchingOptionSet
+    o =>
+      o['value.uuid - External ID'] === answer.value.uuid &&
+      o['DHIS2 Option Set UID'] === matchingOptionSet
   )?.['DHIS2 Option Code'];
 
-  //TBD if we want to keep thse --> TODO: Revisit this logic! 
+  //TBD if we want to keep thse --> TODO: Revisit this logic!
   if (matchingOption === 'no') {
     return 'FALSE';
   }
@@ -76,7 +96,7 @@ const findMatchingOption = (answer, optsMap, answerKeyMap) => {
     return 'TRUE';
   }
   //=========================================//
-  
+
   return matchingOption || '';
 };
 
@@ -165,7 +185,12 @@ fn(state => {
     return {
       ...event,
       programStage: form.programStage,
-      dataValues: dataValuesMapping(data, form.dataValueMap, state.optsMap, state.answerKeyMap),
+      dataValues: dataValuesMapping(
+        data,
+        form.dataValueMap,
+        state.optsMap,
+        state.answerKeyMap
+      ),
     };
   };
 
