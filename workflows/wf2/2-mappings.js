@@ -50,6 +50,7 @@ fn(state => {
 });
 
 fn(state => {
+  //TODO: Update dynamically like placeOfLivingMap?
   state.genderOptions = {
     M: 'male',
     F: 'female',

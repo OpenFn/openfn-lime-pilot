@@ -58,13 +58,16 @@ const processObjectAnswer = (
   optionSetKey
 ) => {
   if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {
+    console.log('Yes done by psychologist..')
     return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';
   }
+  //return 'true'; 
   return findMatchingOption(answer, optsMap, optionSetKey);
 };
 
 const processOtherAnswer = (answer, conceptUuid, dataElement) => {
   if (isPhq9Score(answer.value, conceptUuid, dataElement)) {
+    console.log('isPhq9Score', isPhq9Score);
     return getRangePhq(answer.value);
   }
   return answer.value;
