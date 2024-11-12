@@ -96,7 +96,7 @@ fn(state => {
     .map(o => {
        const optionSetUid = o['DHIS2 Option Set UID']=='NA' ? '' : `-${o['DHIS2 Option Set UID']}`; 
         //then build an answerKeyUid = DEuid + OptionSetUid
-      const answerKeyUid = `${o['DHIS2 DE UID']}${optionSetUid}`; 
+      const answerKeyUid = `${o['External ID']}${optionSetUid}`; 
 
       return {
         'DHIS2 Option Set UID': o['DHIS2 Option Set UID'],
@@ -105,7 +105,7 @@ fn(state => {
         'DHIS2 Option Code': o['DHIS2 Option code'],
         'value.display - Answers': o['Answers'],
         'value.uuid - External ID': o['External ID'],
-        'DHIS2 answerKeyUid': answerKeyUid,
+        'answerMappingUid': answerKeyUid,
         'DHIS2 DE full name': o['DHIS2 DE full name'],
         'DHIS2 DE UID': o['DHIS2 DE UID'],
         'OptionSet name': o['OptionSet name'],
@@ -150,9 +150,13 @@ fn(state => {
   }, {});
 
   //create master optionSetKey to map omrs concept Uids to their unique DHIS2 optionset + dataElement combos
-  const optionSetKey =Object.values(formMaps).reduce((acc, form) => {
+  const combinedOptionSetMap =Object.values(formMaps).reduce((acc, form) => {
     return { ...acc, ...form.optionSetMap };
   }, {});
+
+  const optionSetKey = Object.fromEntries(
+    Object.entries(combinedOptionSetMap).map(([key, value]) => [value, key])
+    ); 
 
   return { formMaps, formMetadata, optsMap, optionSetKey, identifiers };
 });

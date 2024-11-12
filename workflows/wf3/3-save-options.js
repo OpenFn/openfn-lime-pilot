@@ -6,7 +6,7 @@ get(metadataPath, {
     'user-agent': 'OpenFn',
   },
   query: {
-    ref: 'next-staging',
+    ref: 'collections',
   },
 });
 
