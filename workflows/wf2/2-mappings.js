@@ -1,5 +1,5 @@
 get(
-  'https://raw.githubusercontent.com/OpenFn/openfn-lime-pilot/refs/heads/next-staging/metadata/collections.json',
+  'https://raw.githubusercontent.com/OpenFn/openfn-lime-pilot/refs/heads/collections/metadata/collections.json',
   { parseAs: 'json' },
   state => {
     const { cursor, lastRunDateTime, patients, data } = state;
