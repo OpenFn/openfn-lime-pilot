@@ -11,7 +11,8 @@ get(metadataPath, {
 });
 
 fn(state => {
-  const { formMaps, formMetadata, optsMap, data, identifiers, answerKeyMap } = state;
+  const { formMaps, formMetadata, optsMap, data, identifiers, answerKeyMap } =
+    state;
 
   state.body = {
     message: 'Update metadata content',
@@ -25,11 +26,11 @@ fn(state => {
         optsMap,
         formMaps,
         identifiers,
-        formMetadata
+        formMetadata,
       })
     ),
     sha: data.sha,
-    branch: 'next-staging',
+    branch: 'collections',
   };
 
   return state;
