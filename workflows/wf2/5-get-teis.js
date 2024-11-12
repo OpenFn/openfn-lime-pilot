@@ -80,19 +80,26 @@ const processNoAnswer = (data, conceptUuid, dataElement) => {
 
 const findMatchingOption = (answer, optsMap, answerKeyMap) => {
   const matchingOptionSet = answerKeyMap[answer.concept.uuid];
+  console.log('conceptUid', answer.concept.uuid);
+  console.log('value uid', answer.value.uuid);
+  console.log('value', answer.value.display);
   console.log('matchingOptionSet', matchingOptionSet);
 
   const matchingOption = optsMap.find(
     o =>
       o['value.uuid - External ID'] === answer.value.uuid &&
       o['DHIS2 Option Set UID'] === matchingOptionSet
-  )?.['DHIS2 Option Code'];
+  )?.['DHIS2 Option Code'] || answer.value.display;
+
+  console.log('matchingOption value', matchingOption)
 
   //TBD if we want to keep thse --> TODO: Revisit this logic!
-  if (matchingOption === 'no') {
+  if (matchingOption?.toLowerCase() === 'no') {
+    console.log('FALSE option', matchingOption)
     return 'FALSE';
   }
-  if (matchingOption === 'yes') {
+  if (matchingOption?.toLowerCase() === 'yes') {
+    console.log('TRUE option', matchingOption)
     return 'TRUE';
   }
   //=========================================//

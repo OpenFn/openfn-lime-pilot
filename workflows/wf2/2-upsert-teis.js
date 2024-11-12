@@ -15,7 +15,7 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
 
   const findOptsUuid = uuid =>
     patient.person.attributes.find(a => a.attributeType.uuid === uuid)?.value
-      ?.uuid;
+      ?.uuid || patient.person.attributes.find(a => a.attributeType.uuid === uuid)?.value;
 
   const findOptCode = optUuid =>
     state.optsMap.find(o => o['value.uuid - External ID'] === optUuid)?.[
@@ -27,7 +27,7 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
     const optUid = findOptsUuid(patientMap[d]);
     return {
       attribute: d,
-      value: findOptCode(optUid),
+      value: findOptCode(optUid) || optUid,
     };
   });
 
@@ -88,7 +88,7 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
   };
 
   // TODO: AK do we need this log👇🏾?
-  // console.log('mapped dhis2 payloads:: ', JSON.stringify(payload, null, 2));
+  console.log('mapped dhis2 payloads:: ', JSON.stringify(payload, null, 2));
 
   if (isNewPatient) {
     console.log('create enrollment');
