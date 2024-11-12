@@ -141,28 +141,28 @@ workflows:
       Fetch-Metadata:
         name: Fetch Metadata
         adaptor: '@openfn/language-http@latest'
-        credential: null
+        credential: mtuchi@openfn.org-OpenFnSharepoint
         body:
           path: workflows/wf1/1-fetch-metadata.js
 
       Get-Teis-and-Locations:
         name: Get Teis and Locations
         adaptor: '@openfn/language-dhis2@latest'
-        credential: null
+        credential: mtuchi@openfn.org-MSF-DHIS2-UAT
         body:
           path: workflows/wf1/2-get-teis-and-locations.js
 
       Create-Patients:
         name: Create Patients
         adaptor: '@openfn/language-openmrs@latest'
-        credential: null
+        credential: mtuchi@openfn.org-OpenMRS-Demo
         body:
           path: workflows/wf1/3-create-patients.js
 
       Update-Teis:
         name: Update Teis
         adaptor: '@openfn/language-dhis2@5.0.1'
-        credential: null
+        credential: mtuchi@openfn.org-MSF-DHIS2-UAT
         body:
           path: workflows/wf1/4-update-teis.js
 
@@ -177,15 +177,6 @@ workflows:
         target_job: Fetch-Metadata
         condition_type: always
         enabled: true
-      Get-Teis-and-Locations->Create-Patients:
-        source_job: Get-Teis-and-Locations
-        target_job: Create-Patients
-        condition_type: js_expression
-        condition_label: has-teis
-        condition_expression: |
-          state.teis.length > 0 && !state.errors
-
-        enabled: true
       Fetch-Metadata->Get-Teis-and-Locations:
         source_job: Fetch-Metadata
         target_job: Get-Teis-and-Locations
@@ -195,6 +186,15 @@ workflows:
         source_job: Create-Patients
         target_job: Update-Teis
         condition_type: on_job_success
+        enabled: true
+      Get-Teis-and-Locations->Create-Patients:
+        source_job: Get-Teis-and-Locations
+        target_job: Create-Patients
+        condition_type: js_expression
+        condition_label: has-teis
+        condition_expression: |
+          state.teis.length > 0 && !state.errors
+
         enabled: true
   wf2-omrs-dhis2:
     name: wf2-omrs-dhis2
@@ -254,25 +254,6 @@ workflows:
         cron_expression: '0 0 * * *'
         enabled: false
     edges:
-      cron->Get-Patients:
-        source_trigger: cron
-        target_job: Get-Patients
-        condition_type: always
-        enabled: true
-      Upsert-TEIs->Get-Encounters:
-        source_job: Upsert-TEIs
-        target_job: Get-Encounters
-        condition_type: js_expression
-        condition_label: has-patient-uuids
-        condition_expression: |
-          state.patientUuids.length > 0 && !state.errors
-
-        enabled: true
-      Mappings->Upsert-TEIs:
-        source_job: Mappings
-        target_job: Upsert-TEIs
-        condition_type: on_job_success
-        enabled: true
       Get-Patients->Mappings:
         source_job: Get-Patients
         target_job: Mappings
@@ -299,6 +280,25 @@ workflows:
         condition_expression: |
           state?.genderUpdated?.length > 0 && !state.errors
 
+        enabled: true
+      cron->Get-Patients:
+        source_trigger: cron
+        target_job: Get-Patients
+        condition_type: always
+        enabled: true
+      Upsert-TEIs->Get-Encounters:
+        source_job: Upsert-TEIs
+        target_job: Get-Encounters
+        condition_type: js_expression
+        condition_label: has-patient-uuids
+        condition_expression: |
+          state.patientUuids.length > 0 && !state.errors
+
+        enabled: true
+      Mappings->Upsert-TEIs:
+        source_job: Mappings
+        target_job: Upsert-TEIs
+        condition_type: on_job_success
         enabled: true
       Get-Encounters->Get-TEIs-and-Map-Answers:
         source_job: Get-Encounters
