@@ -149,14 +149,22 @@ fn(state => {
     return acc;
   }, {});
 
-  //create master optionSetKey to map omrs concept Uids to their unique DHIS2 optionset + dataElement combos
-  const combinedOptionSetMap =Object.values(formMaps).reduce((acc, form) => {
-    return { ...acc, ...form.optionSetMap };
-  }, {});
+  const optionSetKey = Object.entries(formMaps).reduce((acc, [formKey, formValue]) => {
+    // Iterate over each optionSetMap entry and reverse key-value, adding form prefix
+    Object.entries(formValue.optionSetMap).forEach(([originalKey, originalValue]) => {
+      acc[`${formKey}-${originalValue}`] = originalKey;
+    });
+    return acc;
+  }, {})
 
-  const optionSetKey = Object.fromEntries(
-    Object.entries(combinedOptionSetMap).map(([key, value]) => [value, key])
-    ); 
+  //create master optionSetKey to map omrs concept Uids to their unique DHIS2 optionset + dataElement combos
+  // const combinedOptionSetMap =Object.values(formMaps).reduce((acc, form) => {
+  //   return { ...acc, ...form.optionSetMap };
+  // }, {});
+
+  // const optionSetKey = Object.fromEntries(
+  //   Object.entries(combinedOptionSetMap).map(([key, value]) => [value, key])
+  //   ); 
 
   return { formMaps, formMetadata, optsMap, optionSetKey, identifiers };
 });

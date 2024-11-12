@@ -79,7 +79,11 @@ const processNoAnswer = (data, conceptUuid, dataElement) => {
 };
 
 const findMatchingOption = (answer, optsMap, optionSetKey) => {
-  const matchingOptionSet = optionSetKey[answer.concept.uuid];
+  const optionKey = `${answer.formUuid}-${answer.concept.uuid}`; 
+
+  //const matchingOptionSet = optionSetKey[answer.concept.uuid];
+  const matchingOptionSet = optionSetKey[optionKey];
+  console.log('optionKey', optionKey);
   console.log('conceptUid', answer.concept.uuid);
   console.log('value uid', answer.value.uuid);
   console.log('value', answer.value.display);
@@ -137,7 +141,11 @@ const dataValuesMapping = (data, dataValueMap, optsMap, optionSetKey) => {
   return Object.keys(dataValueMap)
     .map(dataElement => {
       const conceptUuid = dataValueMap[dataElement];
-      const answer = data.obs.find(o => o.concept.uuid === conceptUuid);
+      const obsAnswer = data.obs.find(o => o.concept.uuid === conceptUuid);
+      const answer = {
+        ...obsAnswer,
+        formUuid: data.form.uuid
+      };
       const value = answer
         ? processAnswer(answer, conceptUuid, dataElement, optsMap, optionSetKey)
         : processNoAnswer(data, conceptUuid, dataElement);
