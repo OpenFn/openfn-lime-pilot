@@ -50,18 +50,10 @@ fn(state => {
 });
 
 fn(state => {
-  //TODO: Update dynamically like placeOfLivingMap?
-  state.genderOptions = {
-    M: 'male',
-    F: 'female',
-    U: 'unknown',
-    O: 'prefer_not_to_answer',
-  };
-
-  state.placeOflivingMap = state.optsMap
-    .filter(o => o['OptionSet name'] === 'Place of Living')
+  state.genderOptions = state.optsMap
+    .filter(o => o['OptionSet name'] === 'Sex - Patient')
     .reduce((acc, value) => {
-      acc[value['value.display - Answers']] = value['DHIS2 Option Code'];
+      acc[value['value.uuid - External ID']] = value['DHIS2 Option Code'];
       return acc;
     }, {});
 
