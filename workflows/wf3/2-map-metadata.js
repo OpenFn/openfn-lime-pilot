@@ -34,17 +34,39 @@ const questionKeyValuePairs = arr => {
   }
   const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));
   try {
-    return mappedArr.filter(
-          o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 Option Set UID'])
-        )
-        .map(value => ({
-          [value['DHIS2 Option Set UID']]: value['External ID']
-        }));
+    return mappedArr
+      .filter(
+        o =>
+          isValidValue(o['External ID']) &&
+          isValidValue(o['DHIS2 Option Set UID'])
+      )
+      .map(value => ({
+        [value['DHIS2 Option Set UID']]: value['External ID'],
+      }));
   } catch (error) {
     console.error(`Error processing ${arr}:`, error);
     return arr; // Return original value if processing fails
   }
 };
+
+fn(state => {
+  state.placeOflivingMap = state['Places of living']
+    .slice(2)
+    .map(item => mapArrayToObject(item, state['Places of living'][1]))
+    .filter(
+      o =>
+        (isValidValue(o['External ID']) &&
+          isValidValue(o['DHIS2 DE full name'])) ||
+        (isValidValue(o['value.display - Answers']) &&
+          isValidValue(o['DHIS2 Option code']))
+    )
+    .reduce((acc, value) => {
+      acc[value['Answers']] = value['DHIS2 Option code'];
+      return acc;
+    }, {});
+
+  return state;
+});
 
 fn(state => {
   const { OptionSets, identifiers } = state;
@@ -60,9 +82,12 @@ fn(state => {
           isValidValue(o['DHIS2 Option code']))
     )
     .map(o => {
-       const optionSetUid = o['DHIS2 Option Set UID']=='NA' ? '' : `-${o['DHIS2 Option Set UID']}`; 
-        //then build an answerKeyUid = DEuid + OptionSetUid
-      const answerKeyUid = `${o['External ID']}${optionSetUid}`; 
+      const optionSetUid =
+        o['DHIS2 Option Set UID'] == 'NA'
+          ? ''
+          : `-${o['DHIS2 Option Set UID']}`;
+      //then build an answerKeyUid = DEuid + OptionSetUid
+      const answerKeyUid = `${o['External ID']}${optionSetUid}`;
 
       return {
         'DHIS2 Option Set UID': o['DHIS2 Option Set UID'],
@@ -71,7 +96,7 @@ fn(state => {
         'DHIS2 Option Code': o['DHIS2 Option code'],
         'value.display - Answers': o['Answers'],
         'value.uuid - External ID': o['External ID'],
-        'answerMappingUid': answerKeyUid,
+        answerMappingUid: answerKeyUid,
         'DHIS2 DE full name': o['DHIS2 DE full name'],
         'DHIS2 DE UID': o['DHIS2 DE UID'],
         'OptionSet name': o['OptionSet name'],
@@ -93,9 +118,8 @@ fn(state => {
   return state;
 });
 
-
 fn(state => {
-  const { formMetadata, optsMap, identifiers } = state;
+  const { formMetadata, optsMap, identifiers, placeOflivingMap } = state;
 
   const formMaps = formMetadata.reduce((acc, form) => {
     const formName = form['OMRS form sheet name'];
@@ -111,17 +135,19 @@ fn(state => {
     return acc;
   }, {});
 
-  const optionSetKey = Object.entries(formMaps).reduce((acc, [formKey, formValue]) => {
-  
-    // Iterate over each object in the optionSetMap array
-    formValue.optionSetMap.forEach(item => {
-      // Extract the single key-value pair from each object in the array
-      const [originalKey, originalValue] = Object.entries(item)[0];
-      // Reverse key-value, adding form prefix
-      acc[`${formKey}-${originalValue}`] = originalKey;
-    });
-    return acc;
-  }, {});
+  const optionSetKey = Object.entries(formMaps).reduce(
+    (acc, [formKey, formValue]) => {
+      // Iterate over each object in the optionSetMap array
+      formValue.optionSetMap.forEach(item => {
+        // Extract the single key-value pair from each object in the array
+        const [originalKey, originalValue] = Object.entries(item)[0];
+        // Reverse key-value, adding form prefix
+        acc[`${formKey}-${originalValue}`] = originalKey;
+      });
+      return acc;
+    },
+    {}
+  );
 
   // const optionSetKey = Object.entries(formMaps).reduce((acc, [formKey, formValue]) => {
   //   // Iterate over each optionSetMap entry and reverse key-value, adding form prefix
@@ -131,6 +157,12 @@ fn(state => {
   //   return acc;
   // }, {})
 
-
-  return { formMaps, formMetadata, optsMap, optionSetKey, identifiers };
+  return {
+    formMaps,
+    formMetadata,
+    optsMap,
+    optionSetKey,
+    identifiers,
+    placeOflivingMap,
+  };
 });

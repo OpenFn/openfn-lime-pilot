@@ -1,5 +1,5 @@
 fn(state => {
-  state.sheets = ['OptionSets', 'identifiers'];
+  state.sheets = ['OptionSets', 'identifiers', 'Places of living'];
   state.siteId =
     'openfnorg.sharepoint.com,4724a499-afbc-4ded-a371-34ae40bf5d8d,1d20a7d4-a6f1-407c-aa77-76bd47bb0f32';
   return state;
