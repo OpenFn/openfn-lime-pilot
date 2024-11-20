@@ -89,7 +89,7 @@ const findMatchingOption = (answer, optsMap, optionSetKey) => {
   console.log('optionKey', optionKey);
   console.log('conceptUid', answer.concept.uuid);
   console.log('value uid', answer.value.uuid);
-  console.log('value', answer.value.display);
+  console.log('value display', answer.value.display);
   console.log('matchingOptionSet', matchingOptionSet);
 
   //const answerKey = answerMappingUid
@@ -129,8 +129,10 @@ const isDiagnosisByPsychologist = (conceptUuid, dataElement) =>
 
 const isPhq9Score = (value, conceptUuid, dataElement) =>
   typeof value === 'number' &&
-  conceptUuid === '5f3d618e-5c89-43bd-8c79-07e4e98c2f23' &&
-  dataElement === 'tsFOVnlc6lz';
+  conceptUuid === '5f3d618e-5c89-43bd-8c79-07e4e98c2f23'
+  // && dataElement === 'tsFOVnlc6lz'; //and faQI7NN3hyp
+
+  
 
 const getRangePhq = input => {
   if (input >= 20) return '>20';
