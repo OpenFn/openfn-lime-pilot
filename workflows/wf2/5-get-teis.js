@@ -61,6 +61,11 @@ const processObjectAnswer = (
     console.log('Yes done by psychologist..')
     return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';
   }
+
+  if (isTrueOnlyQuestion(conceptUuid, dataElement)) {
+    console.log('True only question detected..', dataElement)
+    return answer.value.uuid === '681cf0bc-5213-492a-8470-0a0b3cc324dd' ? 'true' : undefined;
+  }
   //return 'true'; 
   return findMatchingOption(answer, optsMap, optionSetKey);
 };
@@ -123,16 +128,19 @@ const isEncounterDate = (conceptUuid, dataElement) => {
   );
 };
 
+const isTrueOnlyQuestion = (conceptUuid, dataElement) =>
+  conceptUuid === '54e8c1b6-6397-4822-89a4-cf81fbc68ce9' &&
+  dataElement === 'G0hLyxqgcO7';
+
 const isDiagnosisByPsychologist = (conceptUuid, dataElement) =>
   conceptUuid === '722dd83a-c1cf-48ad-ac99-45ac131ccc96' &&
   dataElement === 'pN4iQH4AEzk';
 
 const isPhq9Score = (value, conceptUuid, dataElement) =>
   typeof value === 'number' &&
-  conceptUuid === '5f3d618e-5c89-43bd-8c79-07e4e98c2f23'
-  // && dataElement === 'tsFOVnlc6lz'; //and faQI7NN3hyp
+  (conceptUuid === '5f3d618e-5c89-43bd-8c79-07e4e98c2f23' ||
+  conceptUuid === '6545b874-f44d-4d18-9ab1-7a8bb21c0a15')
 
-  
 
 const getRangePhq = input => {
   if (input >= 20) return '>20';
