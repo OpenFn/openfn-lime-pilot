@@ -43,6 +43,11 @@
       "id": "dbf83c2e-f97d-4bc0-888a-7842b965ca21",
       "name": "OpenMRS Demo (HTTP)",
       "owner": "mtuchi@openfn.org"
+    },
+    "aleksa@openfn.org-OpenMRS-Demo-Azure": {
+      "id": "f4ecf387-8ee1-4d81-afc2-52acbc3f7e08",
+      "name": "OpenMRS Demo Azure",
+      "owner": "aleksa@openfn.org"
     }
   },
   "workflows": {
@@ -230,8 +235,8 @@
     "wf2-omrs-dhis2": {
       "id": "c886121c-0a91-45b5-ae30-7d0922b693be",
       "name": "wf2-omrs-dhis2",
-      "inserted_at": "2024-11-29T06:27:06.387991Z",
-      "lock_version": 124,
+      "inserted_at": "2024-11-29T07:13:07.789949Z",
+      "lock_version": 125,
       "triggers": {
         "cron": {
           "enabled": false,
@@ -246,7 +251,7 @@
           "name": "Get Patients",
           "body": "//Here we define the date cursor\n//$.cursor at beggining of the project 2023-05-20T06:01:24.000+0000\ncursor($.lastRunDateTime || $.manualCursor || '2023-05-20T06:01:24.000+0000');\n// Update the lastRunDateTime for the next run\ncursor('today', {\n  key: 'lastRunDateTime',\n  format: c => dateFns.format(new Date(c), \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\"),\n});\n\nsearchPatient({ q: 'IQ', v: 'full', limit: '100' });\n//searchPatient({ q: 'Katrina', v: 'full', limit: '100' });\n//Query all patients (q=all) not supported on demo OpenMRS; needs to be configured\n//...so we query all Patients with name \"Patient\" instead\n\nfn(state => {\n  const { cursor, data, lastRunDateTime } = state;\n  console.log('Filtering patients since:', cursor);\n\n  const patients = data.results.filter(({ auditInfo }) => {\n    const lastModified = auditInfo?.dateChanged || auditInfo?.dateCreated;\n    return lastModified > cursor;\n  });\n  console.log('# of patients to sync to dhis2 ::', patients.length);\n  console.log(\n    'uuids of patients to sync to dhis2 ::',\n    patients.map(p => p.uuid)\n  );\n\n  return { cursor, lastRunDateTime, patients };\n});\n",
           "adaptor": "@openfn/language-openmrs@latest",
-          "project_credential_id": "45634fcb-d146-4a0f-930c-77300393a3c2"
+          "project_credential_id": "f4ecf387-8ee1-4d81-afc2-52acbc3f7e08"
         },
         "Upsert-TEIs": {
           "id": "5f3d2b64-435a-4df5-9d99-9fc37728d0b8",
