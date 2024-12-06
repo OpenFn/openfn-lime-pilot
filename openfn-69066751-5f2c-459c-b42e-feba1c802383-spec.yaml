@@ -1,6 +1,12 @@
 name: msf-lime-test
 description: null
 credentials:
+  aissatou@openfn.org-MSF-OMRS-Demo-Nov-2024:
+    name: MSF OMRS Demo Nov 2024
+    owner: aissatou@openfn.org
+  "aissatou@openfn.org-MSF-OMRS-Demo-Nov-2024-(raw)":
+    name: 'MSF OMRS Demo Nov 2024 (raw)'
+    owner: aissatou@openfn.org
   aleksa@openfn.org-AK-Sharepoint:
     name: AK Sharepoint
     owner: aleksa@openfn.org
@@ -90,7 +96,7 @@ workflows:
       Create-Patients:
         name: Create Patients
         adaptor: '@openfn/language-openmrs@latest'
-        credential: mtuchi@openfn.org-OpenMRS-Demo
+        credential: aissatou@openfn.org-MSF-OMRS-Demo-Nov-2024
         body:
           path: workflows/wf1/3-create-patients.js
 
@@ -137,7 +143,7 @@ workflows:
       Get-Patients:
         name: Get Patients
         adaptor: '@openfn/language-openmrs@latest'
-        credential: aleksa@openfn.org-OpenMRS-Demo-Azure
+        credential: aissatou@openfn.org-MSF-OMRS-Demo-Nov-2024
         body:
           path: workflows/wf2/1-get-patients.js
 
@@ -151,7 +157,7 @@ workflows:
       Get-Encounters:
         name: Get Encounters
         adaptor: '@openfn/language-http@latest'
-        credential: 'mtuchi@openfn.org-OpenMRS-Demo-(HTTP)'
+        credential: 'aissatou@openfn.org-MSF-OMRS-Demo-Nov-2024-(raw)'
         body:
           path: workflows/wf2/3-get-encounters.js
 
