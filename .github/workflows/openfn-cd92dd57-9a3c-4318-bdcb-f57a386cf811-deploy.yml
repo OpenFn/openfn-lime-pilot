@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - staging
+      - main
 
 concurrency:
   group: openfn-deployment
