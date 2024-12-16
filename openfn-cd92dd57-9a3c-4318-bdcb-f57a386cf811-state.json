@@ -1,12 +1,1 @@
-{
-  "id": "cd92dd57-9a3c-4318-bdcb-f57a386cf811",
-  "name": "msf-lime-iraq-main",
-  "description": null,
-  "inserted_at": "2024-09-05T06:59:05Z",
-  "updated_at": "2024-12-16T10:49:46Z",
-  "scheduled_deletion": null,
-  "history_retention_period": 365,
-  "dataclip_retention_period": null,
-  "retention_policy": "retain_all",
-  "requires_mfa": false
-}
+{}
