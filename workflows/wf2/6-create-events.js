@@ -1,4 +1,4 @@
-// Create events for each encounter
+// Create or update events for each encounter
 create(
   'tracker',
   {
@@ -41,7 +41,6 @@ fn(state => {
   return state;
 });
 
-// Return only lastRunDateTime
 fnIf(
   state => state.genderUpdated.length === 0,
   ({ lastRunDateTime }) => ({ lastRunDateTime })

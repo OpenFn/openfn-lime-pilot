@@ -38,7 +38,6 @@ const processAnswer = (
   optsMap,
   optionSetKey
 ) => {
-  // console.log('Has answer', conceptUuid, dataElement);
   return typeof answer.value === 'object'
     ? processObjectAnswer(
         answer,
@@ -58,15 +57,17 @@ const processObjectAnswer = (
   optionSetKey
 ) => {
   if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {
-    console.log('Yes done by psychologist..')
+    console.log('Yes done by psychologist..');
     return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';
   }
 
   if (isTrueOnlyQuestion(conceptUuid, dataElement)) {
-    console.log('True only question detected..', dataElement)
-    return answer.value.uuid === '681cf0bc-5213-492a-8470-0a0b3cc324dd' ? 'true' : undefined;
+    console.log('True only question detected..', dataElement);
+    return answer.value.uuid === '681cf0bc-5213-492a-8470-0a0b3cc324dd'
+      ? 'true'
+      : undefined;
   }
-  //return 'true'; 
+
   return findMatchingOption(answer, optsMap, optionSetKey);
 };
 
@@ -79,7 +80,6 @@ const processOtherAnswer = (answer, conceptUuid, dataElement) => {
 };
 
 const processNoAnswer = (data, conceptUuid, dataElement) => {
-  // console.log('No answer', conceptUuid, dataElement);
   if (isEncounterDate(conceptUuid, dataElement)) {
     return data.encounterDatetime.replace('+0000', '');
   }
@@ -87,9 +87,8 @@ const processNoAnswer = (data, conceptUuid, dataElement) => {
 };
 
 const findMatchingOption = (answer, optsMap, optionSetKey) => {
-  const optionKey = `${answer.formUuid}-${answer.concept.uuid}`; 
+  const optionKey = `${answer.formUuid}-${answer.concept.uuid}`;
 
-  //const matchingOptionSet = optionSetKey[answer.concept.uuid];
   const matchingOptionSet = optionSetKey[optionKey];
   console.log('optionKey', optionKey);
   console.log('conceptUid', answer.concept.uuid);
@@ -97,26 +96,21 @@ const findMatchingOption = (answer, optsMap, optionSetKey) => {
   console.log('value display', answer.value.display);
   console.log('matchingOptionSet', matchingOptionSet);
 
-  //const answerKey = answerMappingUid
+  const matchingOption =
+    optsMap.find(
+      o =>
+        o['value.uuid - External ID'] === answer.value.uuid &&
+        o['DHIS2 Option Set UID'] === matchingOptionSet
+    )?.['DHIS2 Option Code'] || answer.value.display; //TODO: revisit this logic if optionSet not found
 
-  const matchingOption = optsMap.find(
-    o =>
-      o['value.uuid - External ID'] === answer.value.uuid &&
-      o['DHIS2 Option Set UID'] === matchingOptionSet
-  )?.['DHIS2 Option Code'] || answer.value.display; //TODO: revisit this logic if optionSet not found
+  console.log('matchingOption value', matchingOption);
 
-  console.log('matchingOption value', matchingOption)
-
-  // to convert ALL caps to lowercase per DHIS2 api
   if (matchingOption === 'FALSE') {
-    console.log('false option', matchingOption)
     return 'false';
   }
   if (matchingOption === 'TRUE') {
-    console.log('true option', matchingOption)
     return 'true';
   }
-  ////=========================================//
 
   return matchingOption || '';
 };
@@ -139,8 +133,7 @@ const isDiagnosisByPsychologist = (conceptUuid, dataElement) =>
 const isPhq9Score = (value, conceptUuid, dataElement) =>
   typeof value === 'number' &&
   (conceptUuid === '5f3d618e-5c89-43bd-8c79-07e4e98c2f23' ||
-  conceptUuid === '6545b874-f44d-4d18-9ab1-7a8bb21c0a15')
-
+    conceptUuid === '6545b874-f44d-4d18-9ab1-7a8bb21c0a15');
 
 const getRangePhq = input => {
   if (input >= 20) return '>20';
@@ -157,7 +150,7 @@ const dataValuesMapping = (data, dataValueMap, optsMap, optionSetKey) => {
       const obsAnswer = data.obs.find(o => o.concept.uuid === conceptUuid);
       const answer = {
         ...obsAnswer,
-        formUuid: data.form.uuid
+        formUuid: data.form.uuid,
       };
       const value = answer
         ? processAnswer(answer, conceptUuid, dataElement, optsMap, optionSetKey)
@@ -220,35 +213,3 @@ fn(state => {
 
   return state;
 });
-// const findMatchingOption = (answer, optsMap, optionSetKey) => {
-//   const answerKeyUid = optionSetKey[answer.concept.uuid];
-
-//   const matchingOption = optsMap.find(
-//     (o) => o["DHIS2 answerKeyUid"] === answerKeyUid
-//   )?.["DHIS2 Option Code"];
-
-//   //TBD if we want this.. TODO: revisit this logic
-//   if (matchingOption === "no") {
-//     return "FALSE";
-//   }
-//   if (matchingOption === "yes") {
-//     return "TRUE";
-//   }
-//   //======//
-//   return matchingOption || "";
-// };
-
-//=== Original logic modified on Nov 11 =========//
-// const findMatchingOption = (answer, optsMap) => {
-//   const matchingOption = optsMap.find(
-//     o => o['value.uuid - External ID'] === answer.value.uuid
-//   )?.['DHIS2 Option Code'];
-
-//   if (matchingOption === 'no') {
-//     return 'FALSE';
-//   }
-//   if (matchingOption === 'yes') {
-//     return 'TRUE';
-//   }
-//   return matchingOption || '';
-// };

@@ -1,4 +1,3 @@
-// { manualCursor:'2023-06-20T17:00:00.00' }
 cursor($.manualCursor || $.lastRunDateTime).then(state => {
   console.log('Date cursor to filter TEI extract ::', state.cursor);
   return state;
