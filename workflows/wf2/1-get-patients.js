@@ -9,7 +9,7 @@ searchPatient({ q: 'IQ', v: 'full', limit: '100' });
 
 fn(state => {
   const { cursor, data, lastRunDateTime } = state;
-  console.log('Filtering patients since:', cursor);
+  console.log('Filtering patients since cursor:', cursor);
 
   const patients = data.results.filter(({ auditInfo }) => {
     const lastModified = auditInfo?.dateChanged || auditInfo?.dateCreated;
