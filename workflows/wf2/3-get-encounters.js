@@ -1,27 +1,51 @@
-// Fetch encounters from the date of cursor
+const formUuids = [
+  '82db23a1-4eb1-3f3c-bb65-b7ebfe95b19b',
+  '6a3e1e0e-dd13-3465-b8f5-ee2d42691fe5',
+  'be8c12f9-e6fd-369a-9bc7-46a191866f15',
+  '48577ac5-d9c0-3000-9bac-075409b38336',
+  'ee6b1b06-3163-334a-8538-be69250af727',
+];
+// Fetch patient encounters then filter by cursor date
 // OpenMRS demo instance does not support querying ALL records (q=all)
-// getEncounters({ q: 'Patient', v: 'full', limit: 100 });
-getEncounters({
-  q: 'Aisha',
-  v: 'full',
-  limit: 1,
-  encounterType: '95d68645-1b72-4290-be0b-ec1fb64bc067',
-});
+each(
+  '$.patientUuids[*]',
+  getEncounters({ patient: $.data, v: 'full' }, state => {
+    const patientUuid = state.references.at(-1);
+    const filteredEncounters = formUuids.map(formUuid =>
+      state.data.results.filter(
+        encounter =>
+          encounter.encounterDatetime >= state.cursor &&
+          encounter?.form?.uuid === formUuid
+      )
+    );
 
-// Update cursor and return encounters
+    state.encounters ??= [];
+    state.encounters.push(
+      filteredEncounters.map(encounters => encounters[0]).filter(e => e)
+    );
+
+    console.log(
+      filteredEncounters.flat().length,
+      `# of filtered encounters found in OMRS for ${patientUuid}`
+    );
+
+    return state;
+  })
+);
+
+// Log filtered encounters
 fn(state => {
-  const { cursor, data } = state;
-  console.log('cursor datetime::', cursor);
+  const {
+    data,
+    index,
+    response,
+    encounters,
+    references,
+    patientUuids,
+    ...next
+  } = state;
+  next.encounters = encounters.flat();
+  console.log(next.encounters.length, '# of new encounters to sync to dhis2');
 
-  console.log('Filtering encounters to only get recent records...');
-  // console.log(
-  //   'Encounters returned before we filter for most recent ::',
-  //   JSON.stringify(data, null, 2)
-  // );
-  const encounters = data.results.filter(
-    encounter => encounter.encounterDatetime >= cursor
-  );
-  console.log('# of new encounters to sync to dhis2 ::', encounters.length);
-
-  return { ...state, data: {}, references: [], encounters };
+  return next;
 });
