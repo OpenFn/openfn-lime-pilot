@@ -1,4 +1,4 @@
-name: msf-lime-test
+name: msf-lime-iraq-main
 description: null
 credentials:
   aleksa@openfn.org-AK-Sharepoint:
@@ -12,12 +12,6 @@ credentials:
     owner: mtuchi@openfn.org
   mtuchi@openfn.org-OpenMRS-Demo:
     name: OpenMRS Demo
-    owner: mtuchi@openfn.org
-  'mtuchi@openfn.org-OpenMRS-Demo-(HTTP)':
-    name: 'OpenMRS Demo (HTTP)'
-    owner: mtuchi@openfn.org
-  'mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2':
-    name: 'googlesheets (mtuchi@openfn.org)-2'
     owner: mtuchi@openfn.org
   mtuchi@openfn.org-mtuchi-github-token:
     name: mtuchi-github-token
@@ -65,141 +59,6 @@ workflows:
       Map-metadata-file-to-option-set-Json-format->Save-option-set-json-to-github:
         source_job: Map-metadata-file-to-option-set-Json-format
         target_job: Save-option-set-json-to-github
-        condition_type: on_job_success
-        enabled: true
-  fhir-encounters:
-    name: fhir-encounters
-    jobs:
-      Fetch-FHIR-Encounters:
-        name: Fetch FHIR Encounters
-        adaptor: '@openfn/language-http@latest'
-        credential: 'mtuchi@openfn.org-OpenMRS-Demo-(HTTP)'
-        body: |
-          cursor("2024-09-29");
-
-          get(
-            "/ws/fhir2/R4/Encounter",
-            { query: { _count: 10, _lastUpdated: `ge${$.cursor}` }, parseAs: "json" },
-            (state) => {
-              const { link, total } = state.data;
-              state.nextUrl = link
-                .find((l) => l.relation === "next")
-                ?.url.replace(/(_count=)\d+/, `$1${total}`);
-
-              state.encounters = state.data;
-              return state;
-            }
-          );
-
-          fnIf(
-            $.nextUrl,
-            get($.nextUrl, { parseAs: "json" }, (state) => {
-              delete state.encounters.link;
-              state.encounters.entry.push(...state.data.entry);
-              console.log(state.encounters.entry.length);
-              return state;
-            })
-          );
-
-    triggers:
-      webhook:
-        type: webhook
-        enabled: true
-    edges:
-      webhook->Fetch-FHIR-Encounters:
-        source_trigger: webhook
-        target_job: Fetch-FHIR-Encounters
-        condition_type: always
-        enabled: true
-  sharepoint-test:
-    name: sharepoint-test
-    jobs:
-      New-job:
-        name: New job
-        adaptor: '@openfn/language-msgraph@latest'
-        credential: aleksa@openfn.org-AK-Sharepoint
-        body: |
-
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
-          get('sites/root/lists')
-
-    triggers:
-      webhook:
-        type: webhook
-        enabled: true
-    edges:
-      webhook->New-job:
-        source_trigger: webhook
-        target_job: New-job
-        condition_type: always
-        enabled: true
-  wf-3-generate-optsmap:
-    name: wf-3-generate-optsmap
-    jobs:
-      Fetch-OptionSets-Metadata:
-        name: Fetch OptionSets Metadata
-        adaptor: '@openfn/language-googlesheets@latest'
-        credential: 'mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2'
-        body: |
-
-          getValues('1OuR7laA7Oc2QnoiT8S3Thhf-HNh7uFY8ILLEu-idXuk', 
-          'optionsets_oct1')
-
-      Key-Value-Pair:
-        name: Key Value Pair
-        adaptor: '@openfn/language-common@latest'
-        credential: null
-        body: |
-          fn((state) => {
-            const [keys, ...rows] = state.data.values;
-            state.data = rows.map((item) => {
-              const obj = item.reduce((acc, value, idx) => {
-                acc[keys[idx]] = value;
-                return acc;
-              }, {});
-
-              return obj;
-            });
-
-            return state;
-          });
-
-          fn((state) => {
-            const isValidValue = value => value !== "" && value !== "NA";
-            const optsMap = state.data.filter(o =>
-              isValidValue(o["External ID"]) && isValidValue(o["DHIS2 DE full name"])
-            )
-              .map((o) => {
-                return {
-                  "value.display - Answers": o["Answers"],
-                  "value.uuid - External ID": o["External ID"],
-                  "DHIS2 DE full name": o["DHIS2 DE full name"],
-                  "DHIS2 DE UID": o["DHIS2 DE UID"],
-                  "OptionSet name": o["OptionSet name"],
-                  "DHIS2 Option Set UID": o["DHIS2 Option Set name"],
-                  "DHIS2 Option name": o["DHIS2 Option name"],
-                  "DHIS2 Option UID": o["DHIS2 Option UID"],
-                  "DHIS2 Option Code": o["DHIS2 Option code"],
-                };
-              })
-
-            return { optsMap };
-          });
-
-    triggers:
-      webhook:
-        type: webhook
-        enabled: false
-    edges:
-      webhook->Fetch-OptionSets-Metadata:
-        source_trigger: webhook
-        target_job: Fetch-OptionSets-Metadata
-        condition_type: always
-        enabled: true
-      Fetch-OptionSets-Metadata->Key-Value-Pair:
-        source_job: Fetch-OptionSets-Metadata
-        target_job: Key-Value-Pair
         condition_type: on_job_success
         enabled: true
   wf1-dhis2-omrs-migration:
@@ -308,8 +167,8 @@ workflows:
         body:
           path: workflows/wf2/2-mappings.js
 
-      Update-TEIs:
-        name: Update TEIs
+      Update-TEIs-with-Sex:
+        name: Update TEIs with Sex
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: mtuchi@openfn.org-MSF-DHIS2-UAT
         body:
@@ -343,6 +202,11 @@ workflows:
           state.encounters.length > 0
         enabled: true
 
+      Get-Options-Map->Get-TEIs:
+        source_job: Get-Options-Map
+        target_job: Get-TEIs
+        condition_type: on_job_success
+        enabled: true
       Get-TEIs->Create-Events:
         source_job: Get-TEIs
         target_job: Create-Events
@@ -366,9 +230,9 @@ workflows:
           state.patients.length > 0 && !state.errors
 
         enabled: true
-      Create-Events->Update-TEIs:
+      Create-Events->Update-TEIs-with-Sex:
         source_job: Create-Events
-        target_job: Update-TEIs
+        target_job: Update-TEIs-with-Sex
         condition_type: js_expression
         condition_label: has-gender-updated
         condition_expression: |
