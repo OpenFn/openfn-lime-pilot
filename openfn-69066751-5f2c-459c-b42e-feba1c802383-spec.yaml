@@ -25,9 +25,6 @@ credentials:
   "mtuchi@openfn.org-OpenMRS-Demo-(HTTP)":
     name: 'OpenMRS Demo (HTTP)'
     owner: mtuchi@openfn.org
-  "mtuchi@openfn.org-googlesheets-(mtuchi@openfn.org)-2":
-    name: 'googlesheets (mtuchi@openfn.org)-2'
-    owner: mtuchi@openfn.org
   mtuchi@openfn.org-mtuchi-github-token:
     name: mtuchi-github-token
     owner: mtuchi@openfn.org
@@ -82,7 +79,7 @@ workflows:
       Fetch-Metadata:
         name: Fetch Metadata
         adaptor: '@openfn/language-http@latest'
-        credential: mtuchi@openfn.org-OpenFnSharepoint
+        credential: null
         body:
           path: workflows/wf1/1-fetch-metadata.js
 
