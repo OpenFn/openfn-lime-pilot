@@ -1,60 +1,41 @@
 {
-  "id": "69066751-5f2c-459c-b42e-feba1c802383",
-  "name": "msf-lime-test",
+  "id": "cd92dd57-9a3c-4318-bdcb-f57a386cf811",
+  "name": "msf-lime-iraq-main",
   "description": null,
   "inserted_at": "2024-09-05T06:59:05Z",
-  "updated_at": "2024-10-23T11:00:56Z",
-  "project_credentials": null,
+  "updated_at": "2024-12-16T10:49:46Z",
   "scheduled_deletion": null,
-  "history_retention_period": null,
+  "history_retention_period": 365,
   "dataclip_retention_period": null,
   "retention_policy": "retain_all",
-  "workflows": {
-    "wf-3-generate-optsmap": {
-      "id": "29376a74-d299-4066-9e78-271ca1777734",
-      "name": "wf-3-generate-optsmap",
-      "inserted_at": "2024-10-01T10:40:51.613510Z",
-      "lock_version": 35,
-      "triggers": {
-        "webhook": {
-          "enabled": false,
-          "id": "f970fb25-0dd8-4a90-80ef-aa95b11d6277",
-          "type": "webhook"
-        }
-      },
-      "jobs": {
-        "Fetch-OptionSets-Metadata": {
-          "id": "ad22c664-8138-4536-8e57-7c5d90139c62",
-          "name": "Fetch OptionSets Metadata",
-          "body": "\ngetValues('1OuR7laA7Oc2QnoiT8S3Thhf-HNh7uFY8ILLEu-idXuk', \n'optionsets_oct1')\n",
-          "adaptor": "@openfn/language-googlesheets@latest",
-          "project_credential_id": "1e8b261f-54f8-49d0-b504-d96fc8751665"
-        },
-        "Key-Value-Pair": {
-          "id": "ba19bc93-8f07-480f-80df-ee3f0b0d27e0",
-          "name": "Key Value Pair",
-          "body": "fn((state) => {\n  const [keys, ...rows] = state.data.values;\n  state.data = rows.map((item) => {\n    const obj = item.reduce((acc, value, idx) => {\n      acc[keys[idx]] = value;\n      return acc;\n    }, {});\n\n    return obj;\n  });\n\n  return state;\n});\n\nfn((state) => {\n  const isValidValue = value => value !== \"\" && value !== \"NA\";\n  const optsMap = state.data.filter(o =>\n    isValidValue(o[\"External ID\"]) && isValidValue(o[\"DHIS2 DE full name\"])\n  )\n    .map((o) => {\n      return {\n        \"value.display - Answers\": o[\"Answers\"],\n        \"value.uuid - External ID\": o[\"External ID\"],\n        \"DHIS2 DE full name\": o[\"DHIS2 DE full name\"],\n        \"DHIS2 DE UID\": o[\"DHIS2 DE UID\"],\n        \"OptionSet name\": o[\"OptionSet name\"],\n        \"DHIS2 Option Set UID\": o[\"DHIS2 Option Set name\"],\n        \"DHIS2 Option name\": o[\"DHIS2 Option name\"],\n        \"DHIS2 Option UID\": o[\"DHIS2 Option UID\"],\n        \"DHIS2 Option Code\": o[\"DHIS2 Option code\"],\n      };\n    })\n\n  return { optsMap };\n});\n",
-          "adaptor": "@openfn/language-common@latest",
-          "project_credential_id": null
-        }
-      },
-      "edges": {
-        "webhook->Fetch-OptionSets-Metadata": {
-          "enabled": true,
-          "id": "0bbc2e2f-b56f-463e-85f6-fefb2c15bfe3",
-          "source_trigger_id": "f970fb25-0dd8-4a90-80ef-aa95b11d6277",
-          "condition_type": "always",
-          "target_job_id": "ad22c664-8138-4536-8e57-7c5d90139c62"
-        },
-        "Fetch-OptionSets-Metadata->Key-Value-Pair": {
-          "enabled": true,
-          "id": "1a95d2d5-7d2f-4608-80cc-ec0df2a0ffd7",
-          "source_job_id": "ad22c664-8138-4536-8e57-7c5d90139c62",
-          "condition_type": "on_job_success",
-          "target_job_id": "ba19bc93-8f07-480f-80df-ee3f0b0d27e0"
-        }
-      }
+  "project_credentials": {
+    "mtuchi@openfn.org-OpenMRS-Demo": {
+      "id": "3141d874-5456-4168-9680-ce04efb1089c",
+      "name": "OpenMRS Demo",
+      "owner": "mtuchi@openfn.org"
     },
+    "mtuchi@openfn.org-MSF-DHIS2-UAT": {
+      "id": "8a5ead9b-5f9e-49b1-9e9a-9dc3c4ccf72d",
+      "name": "MSF DHIS2 UAT",
+      "owner": "mtuchi@openfn.org"
+    },
+    "aleksa@openfn.org-AK-Sharepoint": {
+      "id": "2eace4af-4e52-484c-82b0-ffb1717c259d",
+      "name": "AK Sharepoint",
+      "owner": "aleksa@openfn.org"
+    },
+    "mtuchi@openfn.org-mtuchi-github-token": {
+      "id": "6533e534-6ad8-4651-b27d-245b8cbb69d8",
+      "name": "mtuchi-github-token",
+      "owner": "mtuchi@openfn.org"
+    },
+    "mtuchi@openfn.org-OpenFnSharepoint": {
+      "id": "3dd044bb-6a0e-4f16-a80d-836a39f95b40",
+      "name": "OpenFnSharepoint",
+      "owner": "mtuchi@openfn.org"
+    }
+  },
+  "workflows": {
     "wf1-dhis2-omrs-migration": {
       "id": "94e04fb5-d5ae-45ad-be31-98b902f36861",
       "name": "wf1-dhis2-omrs-migration",
@@ -132,73 +113,70 @@
         }
       }
     },
-    "sharepoint-test": {
-      "id": "5e9057f9-317d-41f5-9b8d-f54a3b3cdc54",
-      "name": "sharepoint-test",
-      "inserted_at": "2024-10-17T21:25:31.362995Z",
-      "lock_version": 3,
+    "fetch-metadata-and-generate-opts-json": {
+      "id": "57a7ef39-d396-4959-a725-85c4bef08c6a",
+      "name": "fetch-metadata-and-generate-opts-json",
+      "inserted_at": "2024-10-28T08:26:44.955206Z",
+      "lock_version": 12,
       "triggers": {
         "webhook": {
           "enabled": true,
-          "id": "19fa5083-9c46-44c0-8eec-06e8e2cf393d",
+          "id": "e86ca050-ad88-4936-8c14-6eac23922017",
           "type": "webhook"
         }
       },
       "jobs": {
-        "New-job": {
-          "id": "4fd442b9-cda7-4fe5-8453-13e2c4f932e3",
-          "name": "New job",
-          "body": "\n// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\nget('sites/root/lists')\n",
+        "Get-metadata-file-from-Sharepoint": {
+          "id": "c9712182-a389-4664-8e10-f275f87fb478",
+          "name": "Get metadata file from Sharepoint",
+          "body": "const toCamelCase = text => {\n  return text\n    .toLowerCase()\n    .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase());\n};\n\nconst sheets = [\n  'OptionSets',\n  'F01-MHPSS Baseline',\n  'F02-MHPSS Follow-up',\n  'F03-mhGAP Baseline',\n  'F04-mhGAP Follow-up',\n  'F05-MHPSS Closure',\n];\n\nfn(state => {\n  state.siteId =\n    'openfnorg.sharepoint.com,4724a499-afbc-4ded-a371-34ae40bf5d8d,1d20a7d4-a6f1-407c-aa77-76bd47bb0f32';\n  return state;\n});\n\ngetDrive(\n  {\n    id: $.siteId,\n    owner: 'sites',\n  },\n  'default'\n);\n\ngetFile('/msf-metadata/LIME EMR - Iraq Metadata - Release 1.xlsx', {\n  metadata: true,\n});\n\nfn(state => {\n  const itemId = state.data.id;\n  const driveId = state.drives.default.id;\n  state.workbookBase = `sites/${state.siteId}/drives/${driveId}/items/${itemId}/workbook`;\n  return state;\n});\n\neach(\n  sheets,\n  get(`${$.workbookBase}/worksheets('${$.data}')/usedRange`, {}, state => {\n    const sheetName = toCamelCase(state.references.at(-1));\n    console.log('Fetched sheet: ', sheetName);\n    state[sheetName] = state.data.values;\n    return state;\n  })\n);\n\nfn(state => {\n  delete state.data;\n  delete state.response;\n  delete state.references;\n  return state;\n});\n",
           "adaptor": "@openfn/language-msgraph@latest",
-          "project_credential_id": "2eace4af-4e52-484c-82b0-ffb1717c259d"
-        }
-      },
-      "edges": {
-        "webhook->New-job": {
-          "enabled": true,
-          "id": "f0a1ad68-f060-4234-8821-0d4514b8a9c6",
-          "source_trigger_id": "19fa5083-9c46-44c0-8eec-06e8e2cf393d",
-          "condition_type": "always",
-          "target_job_id": "4fd442b9-cda7-4fe5-8453-13e2c4f932e3"
-        }
-      }
-    },
-    "fhir-encounters": {
-      "id": "81039c3a-0415-4330-8283-6488a17b9151",
-      "name": "fhir-encounters",
-      "inserted_at": "2024-10-17T21:25:31.365368Z",
-      "lock_version": 48,
-      "triggers": {
-        "webhook": {
-          "enabled": true,
-          "id": "fc5137c9-6239-4f95-802c-789a8c885e01",
-          "type": "webhook"
-        }
-      },
-      "jobs": {
-        "Fetch-FHIR-Encounters": {
-          "id": "2c3fe742-6630-4282-872a-ca07f8dc2a71",
-          "name": "Fetch FHIR Encounters",
-          "body": "cursor(\"2024-09-29\");\n\nget(\n  \"/ws/fhir2/R4/Encounter\",\n  { query: { _count: 10, _lastUpdated: `ge${$.cursor}` }, parseAs: \"json\" },\n  (state) => {\n    const { link, total } = state.data;\n    state.nextUrl = link\n      .find((l) => l.relation === \"next\")\n      ?.url.replace(/(_count=)\\d+/, `$1${total}`);\n\n    state.encounters = state.data;\n    return state;\n  }\n);\n\nfnIf(\n  $.nextUrl,\n  get($.nextUrl, { parseAs: \"json\" }, (state) => {\n    delete state.encounters.link;\n    state.encounters.entry.push(...state.data.entry);\n    console.log(state.encounters.entry.length);\n    return state;\n  })\n);\n",
+          "project_credential_id": null
+        },
+        "Map-metadata-file-to-option-set-Json-format": {
+          "id": "bbc012b5-4811-4354-888c-f10b0294901d",
+          "name": "Map metadata file to option-set Json format",
+          "body": "const isValidValue = value => value !== '' && value !== 'NA';\n\nconst mapArrayToObject = (item, keys) => {\n  return item.reduce((acc, value, idx) => {\n    acc[keys[idx]] = value;\n    return acc;\n  }, {});\n};\nfn(state => {\n  const { optionsets } = state;\n  const keys = optionsets[1];\n\n  const optsMap = optionsets.slice(2).map(item => mapArrayToObject(item, keys));\n\n  state.optionSets = optsMap\n    .filter(\n      o =>\n        isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE full name'])\n    )\n    .map(o => {\n      return {\n        'value.display - Answers': o['Answers'],\n        'value.uuid - External ID': o['External ID'],\n        'DHIS2 DE full name': o['DHIS2 DE full name'],\n        'DHIS2 DE UID': o['DHIS2 DE UID'],\n        'OptionSet name': o['OptionSet name'],\n        'DHIS2 Option Set UID': o['DHIS2 Option Set name'],\n        'DHIS2 Option name': o['DHIS2 Option name'],\n        'DHIS2 Option UID': o['DHIS2 Option UID'],\n        'DHIS2 Option Code': o['DHIS2 Option code'],\n      };\n    });\n\n  return state;\n});\n\nconst safeKeyValuePairs = arr => {\n  if (arr === null || arr === undefined) {\n    return arr;\n  }\n  const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));\n  try {\n    return mappedArr\n      .filter(\n        o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])\n      )\n      .reduce((acc, value) => {\n        acc[value['DHIS2 DE UID']] = value['External ID'];\n        return acc;\n      }, {});\n  } catch (error) {\n    console.error(`Error processing ${arr}:`, error);\n    return arr; // Return original value if processing fails\n  }\n};\n\nfn(\n  ({\n    optionSets,\n    f01MhpssBaseline,\n    f02MhpssFollowUp,\n    f03MhgapBaseline,\n    f04MhgapFollowUp,\n    f05MhpssClosure,\n  }) => {\n    const processedState = Object.fromEntries(\n      Object.entries({\n        f01MhpssBaseline,\n        f02MhpssFollowUp,\n        f03MhgapBaseline,\n        f04MhgapFollowUp,\n        f05MhpssClosure,\n      }).map(([key, value]) => [key, safeKeyValuePairs(value)])\n    );\n\n    return {\n      optionSets,\n      ...processedState,\n    };\n  }\n);\n",
+          "adaptor": "@openfn/language-common@latest",
+          "project_credential_id": null
+        },
+        "Save-option-set-json-to-github": {
+          "id": "56f67a06-cf99-42b5-81c5-49c058b5126c",
+          "name": "Save option-set json to github",
+          "body": "const metadataPath =\n  'repos/OpenFn/openfn-lime-pilot/contents/metadata/metadata_mapping.json';\n\nget(metadataPath, {\n  headers: {\n    'user-agent': 'OpenFn',\n  },\n});\n\nfn(state => {\n  const {\n    optionSets,\n    f01MhpssBaseline,\n    f02MhpssFollowUp,\n    f03MhgapBaseline,\n    f04MhgapFollowUp,\n    f05MhpssClosure,\n    data,\n  } = state;\n\n  state.body = {\n    message: 'Update metadata content',\n    committer: {\n      name: 'Emmanuel Evance',\n      email: 'mtuchidev@gmail.com',\n    },\n    content: util.encode(\n      JSON.stringify({\n        optionSets,\n        f01MhpssBaseline,\n        f02MhpssFollowUp,\n        f03MhgapBaseline,\n        f04MhgapFollowUp,\n        f05MhpssClosure,\n      })\n    ),\n    sha: data.sha,\n  };\n\n  return state;\n});\n\nput(metadataPath, {\n  body: $.body,\n  headers: {\n    Accept: 'application/vnd.github+json',\n    'X-GitHub-Api-Version': '2022-11-28',\n    'user-agent': 'OpenFn',\n  },\n});\n",
           "adaptor": "@openfn/language-http@latest",
-          "project_credential_id": "bee87abc-7dcf-4b66-a84f-61f9677a25b0"
+          "project_credential_id": null
         }
       },
       "edges": {
-        "webhook->Fetch-FHIR-Encounters": {
+        "webhook->Get-metadata-file-from-Sharepoint": {
           "enabled": true,
-          "id": "773d2d84-80e2-46af-8c01-b331f99590e4",
-          "source_trigger_id": "fc5137c9-6239-4f95-802c-789a8c885e01",
+          "id": "a1a8243d-dfe8-48ff-88ab-793f4176e2ce",
+          "source_trigger_id": "e86ca050-ad88-4936-8c14-6eac23922017",
           "condition_type": "always",
-          "target_job_id": "2c3fe742-6630-4282-872a-ca07f8dc2a71"
+          "target_job_id": "c9712182-a389-4664-8e10-f275f87fb478"
+        },
+        "Get-metadata-file-from-Sharepoint->Map-metadata-file-to-option-set-Json-format": {
+          "enabled": true,
+          "id": "22252bb8-2e4c-422e-8aa3-667b04d67400",
+          "source_job_id": "c9712182-a389-4664-8e10-f275f87fb478",
+          "condition_type": "on_job_success",
+          "target_job_id": "bbc012b5-4811-4354-888c-f10b0294901d"
+        },
+        "Map-metadata-file-to-option-set-Json-format->Save-option-set-json-to-github": {
+          "enabled": true,
+          "id": "3342bdc4-487d-49d2-839c-3c6d7835af8f",
+          "source_job_id": "bbc012b5-4811-4354-888c-f10b0294901d",
+          "condition_type": "on_job_success",
+          "target_job_id": "56f67a06-cf99-42b5-81c5-49c058b5126c"
         }
       }
     },
     "wf2-omrs-dhis2": {
       "id": "0f8ec062-1a2d-4f13-a8c5-b8298004512c",
       "name": "wf2-omrs-dhis2",
-      "inserted_at": "2024-10-23T11:00:56.860785Z",
-      "lock_version": 182,
+      "inserted_at": "2024-11-06T13:23:37.311975Z",
+      "lock_version": 184,
       "triggers": {
         "cron": {
           "enabled": false,
@@ -220,14 +198,14 @@
           "name": "Upsert TEIs",
           "body": "const buildPatientsUpsert = (state, patient, isNewPatient) => {\n  const { nationalityMap, statusMap, placeOflivingMap, genderOptions } = state;\n  const DHIS2_PATIENT_NUMBER = '8d79403a-c2cc-11de-8d13-0010c6dffd0f'; //DHIS2 ID or DHIS2 Patient Number\n  const OPENMRS_AUTO_ID = '05a29f94-c0ed-11e2-94be-8c13b969e334'; //MSF ID or OpenMRS Patient Number\n  const dateCreated = patient.auditInfo.dateCreated.substring(0, 10);\n  const findIdentifierByUuid = (identifiers, targetUuid) =>\n    identifiers.find(i => i.identifierType.uuid === targetUuid)?.identifier;\n\n  const enrollments = [\n    {\n      orgUnit: 'OPjuJMZFLop',\n      program: 'w9MSPn5oSqp',\n      programStage: 'MdTtRixaC1B',\n      enrollmentDate: dateCreated,\n    },\n  ];\n\n  const payload = {\n    query: {\n      ou: 'OPjuJMZFLop',\n      program: 'w9MSPn5oSqp',\n      filter: [`AYbfTPYMNJH:Eq:${patient.uuid}`], //upsert on omrs.patient.uid\n    },\n    data: {\n      program: 'w9MSPn5oSqp',\n      orgUnit: 'OPjuJMZFLop',\n      trackedEntityType: 'cHlzCA2MuEF',\n      attributes: [\n        {\n          attribute: 'fa7uwpCKIwa',\n          value: patient.person?.names[0]?.givenName,\n        },\n        {\n          attribute: 'Jt9BhFZkvP2',\n          value: patient.person?.names[0]?.familyName,\n        },\n        {\n          attribute: 'P4wdYGkldeG', //DHIS2 ID ==> \"Patient Number\"\n          value:\n            findIdentifierByUuid(patient.identifiers, DHIS2_PATIENT_NUMBER) ||\n            findIdentifierByUuid(patient.identifiers, OPENMRS_AUTO_ID), //map OMRS ID if no DHIS2 id\n        },\n        {\n          attribute: 'ZBoxuExmxcZ', //MSF ID ==> \"OpenMRS Patient Number\"\n          value: findIdentifierByUuid(patient.identifiers, OPENMRS_AUTO_ID),\n        },\n        {\n          attribute: 'AYbfTPYMNJH', //\"OpenMRS Patient UID\"\n          value: patient.uuid,\n        },\n        {\n          attribute: 'qptKDiv9uPl',\n          value: genderOptions[patient.person.gender],\n        },\n        {\n          attribute: 'T1iX2NuPyqS',\n          value: patient.person.age,\n        },\n        {\n          attribute: 'WDp4nVor9Z7',\n          value: patient.person.birthdate.slice(0, 10),\n        },\n        {\n          attribute: 'rBtrjV1Mqkz', //Place of living\n          value: placeOflivingMap[patient.person?.addresses[0]?.cityVillage],\n        },\n        {\n          attribute: 'Xvzc9e0JJmp', //nationality\n          value:\n            nationalityMap[\n              patient.person.attributes.find(\n                a =>\n                  a.attributeType.uuid ===\n                  '24d1fa23-9778-4a8e-9f7b-93f694fc25e2'\n              )?.value?.uuid\n            ], //input.attributeType = \"24d1fa23-9778-4a8e-9f7b-93f694fc25e2\"\n        },\n        {\n          attribute: 'YUIQIA2ClN6', //current status\n          value:\n            statusMap[\n              patient.person.attributes.find(\n                a =>\n                  a.attributeType.uuid ===\n                  'e0b6ed99-72c4-4847-a442-e9929eac4a0f'\n              )?.value?.uuid\n            ], //input.attributeType = \"e0b6ed99-72c4-4847-a442-e9929eac4a0f\"\n        },\n        // TODO: Qq6xQ2s6LO8 has an error, Aleksa to ask the client\n        {\n          attribute: 'Qq6xQ2s6LO8', //legal status\n          value:\n            statusMap[\n              patient.person.attributes.find(\n                a =>\n                  a.attributeType.uuid ===\n                  'a9b2c642-097f-43f8-b96b-4d2f50ffd9b1'\n              )?.value?.uuid\n            ], //input.attributeType = \"a9b2c642-097f-43f8-b96b-4d2f50ffd9b1\"\n        },\n        {\n          attribute: 'FpuGAOu6itZ', //marital status\n          value:\n            statusMap[\n              patient.person.attributes.find(\n                a =>\n                  a.attributeType.uuid ===\n                  '3884dc76-c271-4bcb-8df8-81c6fb897f53'\n              )?.value?.uuid\n            ], //input.attributeType = \"3884dc76-c271-4bcb-8df8-81c6fb897f53\"\n        },\n        {\n          attribute: 'v7k4OcXrWR8', //employment status\n          value:\n            statusMap[\n              patient.person.attributes.find(\n                a =>\n                  a.attributeType.uuid ===\n                  'dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e'\n              )?.value?.uuid\n            ], //input.attributeType = \"dd1f7f0f-ccea-4228-9aa8-a8c3b0ea4c3e\"\n        },\n        {\n          attribute: 'SVoT2cVLd5O', //Number of children\n          value: patient.person.attributes.find(\n            a => a.attributeType.uuid === 'e363161a-9d5c-4331-8463-238938f018ed'\n          )?.value, //input.attributeType = \"e363161a-9d5c-4331-8463-238938f018ed\"\n        },\n      ],\n    },\n  };\n\n  console.log('mapped dhis2 payloads:: ', JSON.stringify(payload, null, 2));\n\n  if (isNewPatient) {\n    console.log('create enrollment');\n    payload.data.enrollments = enrollments;\n  }\n\n  return payload;\n};\n\nconst delay = ms => new Promise(resolve => setTimeout(resolve, ms));\n\neach(\n  '$.patients[*]',\n  get(\n    'tracker/trackedEntities',\n    {\n      orgUnit: 'OPjuJMZFLop',\n      filter: [`AYbfTPYMNJH:Eq:${$.data?.uuid}`],\n      program: 'w9MSPn5oSqp',\n    },\n    {},\n    async state => {\n      const patient = state.references.at(-1);\n      console.log(patient.uuid, 'patient uuid');\n\n      const isNewPatient = state.data.instances.length === 0;\n\n      state.patientsUpsert ??= [];\n      state.patientsUpsert.push(\n        buildPatientsUpsert(state, patient, isNewPatient)\n      );\n      await delay(2000);\n      return state;\n    }\n  )\n);\n\n// Upsert TEIs to DHIS2\neach(\n  $.patientsUpsert,\n  upsert('trackedEntityInstances', $.data.query, $.data.data)\n);\nfn(state => {\n  const {\n    data,\n    response,\n    references,\n    patients,\n    statusMap,\n    patientsUpsert,\n    nationalityMap,\n    placeOflivingMap,\n    genderOptions,\n    ...next\n  } = state;\n\n  next.patientUuids = patients.map(p => p.uuid);\n  return next;\n});\n",
           "adaptor": "@openfn/language-dhis2@5.0.1",
-          "project_credential_id":  null
+          "project_credential_id": "8a5ead9b-5f9e-49b1-9e9a-9dc3c4ccf72d"
         },
         "Get-Encounters": {
           "id": "8fb577e5-d068-4d47-8172-81f08153ced9",
           "name": "Get Encounters",
           "body": "const formUuids = [\n  '82db23a1-4eb1-3f3c-bb65-b7ebfe95b19b',\n  '6a3e1e0e-dd13-3465-b8f5-ee2d42691fe5',\n  'be8c12f9-e6fd-369a-9bc7-46a191866f15',\n  '48577ac5-d9c0-3000-9bac-075409b38336',\n  'ee6b1b06-3163-334a-8538-be69250af727',\n];\n// Fetch patient encounters then filter by cursor date\n// OpenMRS demo instance does not support querying ALL records (q=all)\neach(\n  '$.patientUuids[*]',\n  getEncounters({ patient: $.data, v: 'full' }, state => {\n    const patientUuid = state.references.at(-1);\n    const filteredEncounters = formUuids.map(formUuid =>\n      state.data.results.filter(\n        encounter =>\n          encounter.encounterDatetime >= state.cursor &&\n          encounter?.form?.uuid === formUuid\n      )\n    );\n\n    state.encounters ??= [];\n    state.encounters.push(\n      filteredEncounters.map(encounters => encounters[0]).filter(e => e)\n    );\n\n    console.log(\n      filteredEncounters.flat().length,\n      `# of filtered encounters found in OMRS for ${patientUuid}`\n    );\n\n    return state;\n  })\n);\n\n// Log filtered encounters\nfn(state => {\n  const {\n    data,\n    index,\n    response,\n    encounters,\n    references,\n    patientUuids,\n    ...next\n  } = state;\n  next.encounters = encounters.flat();\n  console.log(next.encounters.length, '# of new encounters to sync to dhis2');\n\n  return next;\n});\n",
           "adaptor": "@openfn/language-openmrs@4.0.0",
-          "project_credential_id":  null
+          "project_credential_id": "3141d874-5456-4168-9680-ce04efb1089c"
         },
         "Get-Options-Map": {
           "id": "175ac575-ea3d-470e-8faf-61de514e222e",
@@ -241,14 +219,14 @@
           "name": "Get TEIs",
           "body": "const delay = ms => new Promise(resolve => setTimeout(resolve, ms));\n\neach(\n  '$.encounters[*]',\n  get(\n    'tracker/trackedEntities',\n    {\n      orgUnit: 'OPjuJMZFLop',\n      program: 'w9MSPn5oSqp',\n      filter: [`AYbfTPYMNJH:Eq:${$.data.patient.uuid}`],\n      fields: '*',\n    },\n    {},\n    async state => {\n      const encounter = state.references.at(-1);\n      console.log(encounter.patient.uuid, 'Encounter patient uuid');\n\n      const { trackedEntity, enrollments } = state.data?.instances?.[0] || {};\n      if (trackedEntity && enrollments) {\n        state.TEIs ??= {};\n        state.TEIs[encounter.patient.uuid] = {\n          trackedEntity,\n          enrollment: enrollments[0]?.enrollment,\n        };\n      }\n\n      await delay(2000);\n      return state;\n    }\n  )\n);\n",
           "adaptor": "@openfn/language-dhis2@5.0.1",
-          "project_credential_id":  null
+          "project_credential_id": "8a5ead9b-5f9e-49b1-9e9a-9dc3c4ccf72d"
         },
         "Create-Events": {
           "id": "932645d8-ddb8-4d00-841e-7fe7af214837",
           "name": "Create Events",
           "body": "const processAnswer = (answer, conceptUuid, dataElement, optionSets) => {\n  // console.log('Has answer', conceptUuid, dataElement);\n  return typeof answer.value === 'object'\n    ? processObjectAnswer(answer, conceptUuid, dataElement, optionSets)\n    : processOtherAnswer(answer, conceptUuid, dataElement);\n};\n\nconst processObjectAnswer = (answer, conceptUuid, dataElement, optionSets) => {\n  if (isDiagnosisByPsychologist(conceptUuid, dataElement)) {\n    return '' + answer.value.uuid === '278401ee-3d6f-4c65-9455-f1c16d0a7a98';\n  }\n  return findMatchingOption(answer, optionSets);\n};\n\nconst processOtherAnswer = (answer, conceptUuid, dataElement) => {\n  if (isPhq9Score(answer.value, conceptUuid, dataElement)) {\n    return getRangePhq(answer.value);\n  }\n  return answer.value;\n};\n\nconst processNoAnswer = (data, conceptUuid, dataElement) => {\n  // console.log('No answer', conceptUuid, dataElement);\n  if (isEncounterDate(conceptUuid, dataElement)) {\n    return data.encounterDatetime.replace('+0000', '');\n  }\n  return '';\n};\n\nconst findMatchingOption = (answer, optionSets) => {\n  const matchingOption = optionSets.find(\n    o => o['value.uuid - External ID'] === answer.value.uuid\n  )?.['DHIS2 Option Code'];\n\n  return matchingOption || '';\n};\n\nconst isEncounterDate = (conceptUuid, dataElement) => {\n  return (\n    conceptUuid === 'encounter-date' &&\n    ['CXS4qAJH2qD', 'I7phgLmRWQq', 'yUT7HyjWurN'].includes(dataElement)\n  );\n};\n\nconst isDiagnosisByPsychologist = (conceptUuid, dataElement) =>\n  conceptUuid === '722dd83a-c1cf-48ad-ac99-45ac131ccc96' &&\n  dataElement === 'pN4iQH4AEzk';\n\nconst isPhq9Score = (value, conceptUuid, dataElement) =>\n  typeof value === 'number' &&\n  conceptUuid === '5f3d618e-5c89-43bd-8c79-07e4e98c2f23' &&\n  dataElement === 'tsFOVnlc6lz';\n\nconst getRangePhq = input => {\n  if (input >= 20) return '>20';\n  if (input >= 15) return '15_19';\n  if (input >= 10) return '10_14';\n  if (input >= 5) return '5_9';\n  return '0_4';\n};\n\nconst dataValuesMapping = (data, dataValueMap, optionSets) => {\n  return Object.keys(dataValueMap)\n    .map(dataElement => {\n      const conceptUuid = dataValueMap[dataElement];\n      const answer = data.obs.find(o => o.concept.uuid === conceptUuid);\n      const value = answer\n        ? processAnswer(answer, conceptUuid, dataElement, optionSets)\n        : processNoAnswer(data, conceptUuid, dataElement);\n\n      return { dataElement, value };\n    })\n    .filter(d => d);\n};\n\n// Prepare DHIS2 data model for create events\nfn(state => {\n  state.encountersMapping = state.encounters.map(data => {\n    const form = state.formMaps[data.form.uuid];\n    const eventDate = data.encounterDatetime.replace('+0000', '');\n    const { trackedEntity, enrollment } = state.TEIs[data.patient.uuid];\n\n    const event = {\n      program: 'w9MSPn5oSqp',\n      orgUnit: 'OPjuJMZFLop',\n      trackedEntityInstance: trackedEntity,\n      enrollment,\n      eventDate,\n    };\n    if (form) {\n      return {\n        ...event,\n        programStage: form.programStage,\n        dataValues: dataValuesMapping(data, form.dataValueMap, state.optionSets),\n      };\n    }\n  });\n\n  return state;\n});\n\n// Create events for each encounter\neach(\n  '$.encountersMapping[*]',\n  create(\n    'events',\n    state => {\n      console.log('dhis2 event to import:: ', state.data);\n      return state.data;\n    },\n    {\n      params: {\n        dataElementIdScheme: 'UID',\n      },\n    }\n  )\n);\n\nfn(state => {\n  const latestGenderUpdate = state.encounters.reduce((acc, e) => {\n    const answer = e.obs.find(\n      o => o.concept.uuid === 'ec42d68d-3e23-43de-b8c5-a03bb538e7c7'\n    );\n    if (answer) {\n      const personUuid = answer.person.uuid;\n      if (\n        !acc[personUuid] ||\n        new Date(answer.obsDatetime) > new Date(acc[personUuid].obsDatetime)\n      ) {\n        acc[personUuid] = answer;\n      }\n    }\n    return acc;\n  }, {});\n\n  state.genderUpdated = Object.values(latestGenderUpdate);\n\n  return state;\n});\n\n// Return only lastRunDateTime\nfnIf(\n  state => state.genderUpdated.length === 0,\n  ({ lastRunDateTime }) => ({ lastRunDateTime })\n);\n",
           "adaptor": "@openfn/language-dhis2@5.0.1",
-          "project_credential_id":  null
+          "project_credential_id": "8a5ead9b-5f9e-49b1-9e9a-9dc3c4ccf72d"
         },
         "Mappings": {
           "id": "79b58ab5-cb0a-44a5-b230-776b4016464a",
@@ -257,12 +235,12 @@
           "adaptor": "@openfn/language-common@latest",
           "project_credential_id": null
         },
-        "Update-TEIs": {
+        "Update-TEIs-with-Sex": {
           "id": "b30b4200-d2f8-4c7a-827a-bec10c64fbc3",
-          "name": "Update TEIs",
+          "name": "Update TEIs with Sex",
           "body": "fn(state => {\n  const { optionSets, genderUpdated, TEIs } = state;\n  const genderMap = optionSets\n    .filter(o => o['DHIS2 DE UID'] === 'qptKDiv9uPl')\n    .reduce((acc, obj) => {\n      acc[obj['value.display - Answers']] = obj['DHIS2 Option Code'];\n      return acc;\n    }, {});\n\n  state.teisToUpdate = genderUpdated.map(answer => {\n    const { trackedEntity } = TEIs[answer.person.uuid];\n    return {\n      trackedEntity,\n      program: 'w9MSPn5oSqp',\n      orgUnit: 'OPjuJMZFLop',\n      trackedEntityType: 'cHlzCA2MuEF',\n      attributes: [\n        {\n          attribute: 'qptKDiv9uPl', //gender\n          value: genderMap[answer.value.display],\n        },\n        {\n          attribute: 'AYbfTPYMNJH', //OpenMRS Patient UID to use to upsert TEI\n          value: answer.person.uuid,\n        },\n      ],\n    };\n  });\n  return state;\n});\n\n// Update TEIs\ncreate(\n  'tracker',\n  { trackedEntities: $.teisToUpdate },\n  { params: { async: false, importStrategy: 'UPDATE' } }\n);\n// Return only lastRunDateTime\nfn(({ lastRunDateTime }) => ({ lastRunDateTime }));\n",
           "adaptor": "@openfn/language-dhis2@5.0.1",
-          "project_credential_id":  null
+          "project_credential_id": "8a5ead9b-5f9e-49b1-9e9a-9dc3c4ccf72d"
         }
       },
       "edges": {
@@ -283,7 +261,7 @@
           "target_job_id": "8fb577e5-d068-4d47-8172-81f08153ced9"
         },
         "Get-Encounters->Get-Options-Map": {
-          "enabled": true,
+          "enabled": false,
           "id": "e0c3565e-a875-429c-8ce3-138df39fdf4c",
           "source_job_id": "8fb577e5-d068-4d47-8172-81f08153ced9",
           "condition_expression": "state.encounters.length > 0\n",
@@ -324,7 +302,7 @@
           "condition_label": "has-patients",
           "target_job_id": "79b58ab5-cb0a-44a5-b230-776b4016464a"
         },
-        "Create-Events->Update-TEIs": {
+        "Create-Events->Update-TEIs-with-Sex": {
           "enabled": true,
           "id": "456bc7f5-04cf-4d3c-91a1-9ecbfee0c986",
           "source_job_id": "932645d8-ddb8-4d00-841e-7fe7af214837",
@@ -332,65 +310,6 @@
           "condition_type": "js_expression",
           "condition_label": "has-gender-updated",
           "target_job_id": "b30b4200-d2f8-4c7a-827a-bec10c64fbc3"
-        }
-      }
-    },
-    "fetch-metadata-and-generate-opts-json": {
-      "id": "57a7ef39-d396-4959-a725-85c4bef08c6a",
-      "name": "fetch-metadata-and-generate-opts-json",
-      "inserted_at": "2024-10-28T08:26:44.955206Z",
-      "lock_version": 12,
-      "triggers": {
-        "webhook": {
-          "enabled": true,
-          "id": "e86ca050-ad88-4936-8c14-6eac23922017",
-          "type": "webhook"
-        }
-      },
-      "jobs": {
-        "Get-metadata-file-from-Sharepoint": {
-          "id": "c9712182-a389-4664-8e10-f275f87fb478",
-          "name": "Get metadata file from Sharepoint",
-          "body": "const toCamelCase = text => {\n  return text\n    .toLowerCase()\n    .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase());\n};\n\nconst sheets = [\n  'OptionSets',\n  'F01-MHPSS Baseline',\n  'F02-MHPSS Follow-up',\n  'F03-mhGAP Baseline',\n  'F04-mhGAP Follow-up',\n  'F05-MHPSS Closure',\n];\n\nfn(state => {\n  state.siteId =\n    'openfnorg.sharepoint.com,4724a499-afbc-4ded-a371-34ae40bf5d8d,1d20a7d4-a6f1-407c-aa77-76bd47bb0f32';\n  return state;\n});\n\ngetDrive(\n  {\n    id: $.siteId,\n    owner: 'sites',\n  },\n  'default'\n);\n\ngetFile('/msf-metadata/LIME EMR - Iraq Metadata - Release 1.xlsx', {\n  metadata: true,\n});\n\nfn(state => {\n  const itemId = state.data.id;\n  const driveId = state.drives.default.id;\n  state.workbookBase = `sites/${state.siteId}/drives/${driveId}/items/${itemId}/workbook`;\n  return state;\n});\n\neach(\n  sheets,\n  get(`${$.workbookBase}/worksheets('${$.data}')/usedRange`, {}, state => {\n    const sheetName = toCamelCase(state.references.at(-1));\n    console.log('Fetched sheet: ', sheetName);\n    state[sheetName] = state.data.values;\n    return state;\n  })\n);\n\nfn(state => {\n  delete state.data;\n  delete state.response;\n  delete state.references;\n  return state;\n});\n",
-          "adaptor": "@openfn/language-msgraph@latest",
-          "project_credential_id":  null
-        },
-        "Map-metadata-file-to-option-set-Json-format": {
-          "id": "bbc012b5-4811-4354-888c-f10b0294901d",
-          "name": "Map metadata file to option-set Json format",
-          "body": "const isValidValue = value => value !== '' && value !== 'NA';\n\nconst mapArrayToObject = (item, keys) => {\n  return item.reduce((acc, value, idx) => {\n    acc[keys[idx]] = value;\n    return acc;\n  }, {});\n};\nfn(state => {\n  const { optionsets } = state;\n  const keys = optionsets[1];\n\n  const optsMap = optionsets.slice(2).map(item => mapArrayToObject(item, keys));\n\n  state.optionSets = optsMap\n    .filter(\n      o =>\n        isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE full name'])\n    )\n    .map(o => {\n      return {\n        'value.display - Answers': o['Answers'],\n        'value.uuid - External ID': o['External ID'],\n        'DHIS2 DE full name': o['DHIS2 DE full name'],\n        'DHIS2 DE UID': o['DHIS2 DE UID'],\n        'OptionSet name': o['OptionSet name'],\n        'DHIS2 Option Set UID': o['DHIS2 Option Set name'],\n        'DHIS2 Option name': o['DHIS2 Option name'],\n        'DHIS2 Option UID': o['DHIS2 Option UID'],\n        'DHIS2 Option Code': o['DHIS2 Option code'],\n      };\n    });\n\n  return state;\n});\n\nconst safeKeyValuePairs = arr => {\n  if (arr === null || arr === undefined) {\n    return arr;\n  }\n  const mappedArr = arr.slice(2).map(item => mapArrayToObject(item, arr[1]));\n  try {\n    return mappedArr\n      .filter(\n        o => isValidValue(o['External ID']) && isValidValue(o['DHIS2 DE UID'])\n      )\n      .reduce((acc, value) => {\n        acc[value['DHIS2 DE UID']] = value['External ID'];\n        return acc;\n      }, {});\n  } catch (error) {\n    console.error(`Error processing ${arr}:`, error);\n    return arr; // Return original value if processing fails\n  }\n};\n\nfn(\n  ({\n    optionSets,\n    f01MhpssBaseline,\n    f02MhpssFollowUp,\n    f03MhgapBaseline,\n    f04MhgapFollowUp,\n    f05MhpssClosure,\n  }) => {\n    const processedState = Object.fromEntries(\n      Object.entries({\n        f01MhpssBaseline,\n        f02MhpssFollowUp,\n        f03MhgapBaseline,\n        f04MhgapFollowUp,\n        f05MhpssClosure,\n      }).map(([key, value]) => [key, safeKeyValuePairs(value)])\n    );\n\n    return {\n      optionSets,\n      ...processedState,\n    };\n  }\n);\n",
-          "adaptor": "@openfn/language-common@latest",
-          "project_credential_id": null
-        },
-        "Save-option-set-json-to-github": {
-          "id": "56f67a06-cf99-42b5-81c5-49c058b5126c",
-          "name": "Save option-set json to github",
-          "body": "const metadataPath =\n  'repos/OpenFn/openfn-lime-pilot/contents/metadata/metadata_mapping.json';\n\nget(metadataPath, {\n  headers: {\n    'user-agent': 'OpenFn',\n  },\n});\n\nfn(state => {\n  const {\n    optionSets,\n    f01MhpssBaseline,\n    f02MhpssFollowUp,\n    f03MhgapBaseline,\n    f04MhgapFollowUp,\n    f05MhpssClosure,\n    data,\n  } = state;\n\n  state.body = {\n    message: 'Update metadata content',\n    committer: {\n      name: 'Emmanuel Evance',\n      email: 'mtuchidev@gmail.com',\n    },\n    content: util.encode(\n      JSON.stringify({\n        optionSets,\n        f01MhpssBaseline,\n        f02MhpssFollowUp,\n        f03MhgapBaseline,\n        f04MhgapFollowUp,\n        f05MhpssClosure,\n      })\n    ),\n    sha: data.sha,\n  };\n\n  return state;\n});\n\nput(metadataPath, {\n  body: $.body,\n  headers: {\n    Accept: 'application/vnd.github+json',\n    'X-GitHub-Api-Version': '2022-11-28',\n    'user-agent': 'OpenFn',\n  },\n});\n",
-          "adaptor": "@openfn/language-http@latest",
-          "project_credential_id":  null
-        }
-      },
-      "edges": {
-        "webhook->Get-metadata-file-from-Sharepoint": {
-          "enabled": true,
-          "id": "a1a8243d-dfe8-48ff-88ab-793f4176e2ce",
-          "source_trigger_id": "e86ca050-ad88-4936-8c14-6eac23922017",
-          "condition_type": "always",
-          "target_job_id": "c9712182-a389-4664-8e10-f275f87fb478"
-        },
-        "Get-metadata-file-from-Sharepoint->Map-metadata-file-to-option-set-Json-format": {
-          "enabled": true,
-          "id": "22252bb8-2e4c-422e-8aa3-667b04d67400",
-          "source_job_id": "c9712182-a389-4664-8e10-f275f87fb478",
-          "condition_type": "on_job_success",
-          "target_job_id": "bbc012b5-4811-4354-888c-f10b0294901d"
-        },
-        "Map-metadata-file-to-option-set-Json-format->Save-option-set-json-to-github": {
-          "enabled": true,
-          "id": "3342bdc4-487d-49d2-839c-3c6d7835af8f",
-          "source_job_id": "bbc012b5-4811-4354-888c-f10b0294901d",
-          "condition_type": "on_job_success",
-          "target_job_id": "56f67a06-cf99-42b5-81c5-49c058b5126c"
         }
       }
     }
