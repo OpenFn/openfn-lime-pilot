@@ -15,7 +15,8 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
 
   const findOptsUuid = uuid =>
     patient.person.attributes.find(a => a.attributeType.uuid === uuid)?.value
-      ?.uuid || patient.person.attributes.find(a => a.attributeType.uuid === uuid)?.value;
+      ?.uuid ||
+    patient.person.attributes.find(a => a.attributeType.uuid === uuid)?.value;
 
   const findOptCode = optUuid =>
     state.optsMap.find(o => o['value.uuid - External ID'] === optUuid)?.[
@@ -87,7 +88,6 @@ const buildPatientsUpsert = (state, patient, isNewPatient) => {
     },
   };
 
-  // TODO: AK do we need this log👇🏾?
   console.log('mapped dhis2 payloads:: ', JSON.stringify(payload, null, 2));
 
   if (isNewPatient) {
@@ -129,11 +129,7 @@ each(
 // Upsert TEIs to DHIS2
 each(
   $.patientsUpsert,
-  upsert('trackedEntityInstances', $.data.query, state => {
-    // Uncomment👇🏾 for inspecting input payload
-    // console.log('Upserting', state.data.data);
-    return state.data.data;
-  })
+  upsert('trackedEntityInstances', $.data.query, $.data.data)
 );
 fn(state => {
   const {

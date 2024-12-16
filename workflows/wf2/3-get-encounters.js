@@ -64,7 +64,6 @@ each(
   )
 );
 
-// Log filtered encounters
 fn(state => {
   const {
     data,
