@@ -42,5 +42,5 @@ create(
   { trackedEntities: $.teisToUpdate },
   { params: { async: false, importStrategy: 'UPDATE' } }
 );
-// Return only lastRunDateTime
+
 fn(({ lastRunDateTime }) => ({ lastRunDateTime }));

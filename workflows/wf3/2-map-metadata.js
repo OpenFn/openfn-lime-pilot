@@ -137,25 +137,14 @@ fn(state => {
 
   const optionSetKey = Object.entries(formMaps).reduce(
     (acc, [formKey, formValue]) => {
-      // Iterate over each object in the optionSetMap array
       formValue.optionSetMap.forEach(item => {
-        // Extract the single key-value pair from each object in the array
         const [originalKey, originalValue] = Object.entries(item)[0];
-        // Reverse key-value, adding form prefix
         acc[`${formKey}-${originalValue}`] = originalKey;
       });
       return acc;
     },
     {}
   );
-
-  // const optionSetKey = Object.entries(formMaps).reduce((acc, [formKey, formValue]) => {
-  //   // Iterate over each optionSetMap entry and reverse key-value, adding form prefix
-  //   Object.entries(formValue.optionSetMap).forEach(([originalKey, originalValue]) => {
-  //     acc[`${formKey}-${originalValue}`] = originalKey;
-  //   });
-  //   return acc;
-  // }, {})
 
   return {
     formMaps,
