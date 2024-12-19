@@ -26,12 +26,12 @@ each(
       trackedEntityType: 'cHlzCA2MuEF',
       attributes: [
         {
-          attribute: `${$.dhis2PatientNumber}`,
+          attribute: `${$.dhis2PatientNumberAttributeId}`,
           value: `${$.data.patient_number}`,
         }, //DHIS2 patient number to use as lookup key
         { attribute: 'AYbfTPYMNJH', value: `${$.data.patient.uuid}` }, //OMRS patient uuid
         {
-          attribute: `${$.openmrsAutoId}`,
+          attribute: `${$.openmrsAutoIdAttributeId}`,
           value: `${$.data.patient.identifier[0].identifier}`,
         }, //id generated in wf1-2 e.g., "IQ146-24-000-027"
       ],

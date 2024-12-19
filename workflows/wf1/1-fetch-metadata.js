@@ -22744,8 +22744,16 @@ fn(({ identifiers, optsMap, formMaps, formMetadata, ...state }) => {
     i => i.type === 'DHIS2_PATIENT_NUMBER'
   )?.['omrs identifierType']; //DHIS2 ID or DHIS2 Patient Number
 
+  state.dhis2PatientNumberAttributeId = identifiers.find(
+    i => i.type === 'DHIS2_PATIENT_NUMBER'
+  )?.['dhis2 attribute id']; //DHIS2 ID or DHIS2 Patient Number
+
   state.openmrsAutoId = identifiers.find(i => i.type === 'OPENMRS_AUTO_ID')?.[
     'omrs identifierType'
+  ]; //MSF ID or OpenMRS Patient Number
+
+  state.openmrsAutoIdAttributeId = identifiers.find(i => i.type === 'OPENMRS_AUTO_ID')?.[
+    'dhis2 attribute ide'
   ]; //MSF ID or OpenMRS Patient Number
 
   return state;

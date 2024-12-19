@@ -55,7 +55,7 @@ fn(state => {
   };
 
   state.patients = teis.map((d, i) => {
-    const patientNumber = getValueForCode(d.attributes, 'patient_number'); // Add random number for testing + Math.random()
+    const patientNumber = getValueForCode(d.attributes, 'patient_number') || d.trackedEntity; // Add random number for testing + Math.random()
 
     const lonlat = d.attributes.find(a => a.attribute === 'rBtrjV1Mqkz')?.value;
     const location = lonlat
@@ -133,7 +133,7 @@ fn(state => {
         },
         {
           uuid: d.trackedEntity,
-          identifier: patientNumber || d.trackedEntity,
+          identifier: patientNumber,
           identifierType: '8d79403a-c2cc-11de-8d13-0010c6dffd0f', //Old Identification number
           location: 'cf6fa7d4-1f19-4c85-ac50-ff824805c51c', //default location
           preferred: false, //default value for this identifiertype
