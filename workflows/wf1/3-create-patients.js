@@ -133,7 +133,7 @@ fn(state => {
         },
         {
           uuid: d.trackedEntity,
-          identifier: patientNumber,
+          identifier: patientNumber || d.trackedEntity,
           identifierType: '8d79403a-c2cc-11de-8d13-0010c6dffd0f', //Old Identification number
           location: 'cf6fa7d4-1f19-4c85-ac50-ff824805c51c', //default location
           preferred: false, //default value for this identifiertype

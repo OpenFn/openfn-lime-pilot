@@ -133,7 +133,7 @@ workflows:
         source_job: Create-Patients
         target_job: Update-Teis
         condition_type: on_job_success
-        enabled: false
+        enabled: true
   wf2-omrs-dhis2:
     name: wf2-omrs-dhis2
     jobs:
