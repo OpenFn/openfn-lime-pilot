@@ -150,28 +150,24 @@ workflows:
         credential: mtuchi@openfn.org-MSF-DHIS2-UAT
         body:
           path: workflows/wf2/2-upsert-teis.js
-
       Get-Encounters:
         name: Get Encounters
         adaptor: '@openfn/language-http@6.5.1'
         credential: 'aissatou@openfn.org-MSF-OMRS-Demo-Nov-2024-(raw)'
         body:
           path: workflows/wf2/3-get-encounters.js
-
       Get-TEIs-and-Map-Answers:
         name: Get TEIs and Map Answers
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: mtuchi@openfn.org-MSF-DHIS2-UAT
         body:
           path: workflows/wf2/5-get-teis.js
-
       Create-Events:
         name: Create Events
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: mtuchi@openfn.org-MSF-DHIS2-UAT
         body:
           path: workflows/wf2/6-create-events.js
-
       Mappings:
         name: Mappings
         adaptor: '@openfn/language-http@6.5.1'
@@ -192,20 +188,6 @@ workflows:
         cron_expression: '0 0 * * *'
         enabled: false
     edges:
-      cron->Get-Patients:
-        source_trigger: cron
-        target_job: Get-Patients
-        condition_type: always
-        enabled: true
-      Upsert-TEIs->Get-Encounters:
-        source_job: Upsert-TEIs
-        target_job: Get-Encounters
-        condition_type: js_expression
-        condition_label: has-patient-uuids
-        condition_expression: |
-          state.patientUuids.length > 0 && !state.errors
-
-        enabled: true
       Mappings->Upsert-TEIs:
         source_job: Mappings
         target_job: Upsert-TEIs
@@ -236,6 +218,20 @@ workflows:
         condition_label: has-gender-updated
         condition_expression: |
           state?.genderUpdated?.length > 0 && !state.errors
+
+        enabled: true
+      cron->Get-Patients:
+        source_trigger: cron
+        target_job: Get-Patients
+        condition_type: always
+        enabled: true
+      Upsert-TEIs->Get-Encounters:
+        source_job: Upsert-TEIs
+        target_job: Get-Encounters
+        condition_type: js_expression
+        condition_label: has-patient-uuids
+        condition_expression: |
+          state.patientUuids.length > 0 && !state.errors
 
         enabled: true
       Get-Encounters->Get-TEIs-and-Map-Answers:

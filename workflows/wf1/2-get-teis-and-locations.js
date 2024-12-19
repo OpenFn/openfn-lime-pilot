@@ -5,9 +5,11 @@ get(
     orgUnit: $.orgUnit, //'OPjuJMZFLop',
     program: $.program, //'w9MSPn5oSqp',
     programStatus: 'ACTIVE',
+    pageSize: 200
   },
   {},
   state => {
+    console.log('TEIs found ::', JSON.stringify(state.data.instances, null,2))
     const teis = state.data.instances.filter(
       tei => tei.updatedAt >= state.cursor
     );
