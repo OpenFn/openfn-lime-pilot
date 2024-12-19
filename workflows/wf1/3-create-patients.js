@@ -83,16 +83,14 @@ fn(state => {
           value = statusMap[a.value];
         }
 
-        if (!value) {
-          console.log(value)
-          console.log(state.patientAttributes[a.attribute].trim(), 'attributeType')
+        if (value) {
+          return {
+            attributeType: state.patientAttributes[a.attribute].trim(),
+            value,
+          };
         }
-        return {
-          attributeType: state.patientAttributes[a.attribute].trim(),
-          value,
-        };
+      }).filter(Boolean);
 
-      });
     return {
       patientNumber,
       person: {
