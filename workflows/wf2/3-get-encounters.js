@@ -24,10 +24,10 @@ fnIf(
 );
 
 fn(state => {
-  state.encounterUuids = state.allResponse.entry.map(p => p.resource.id);
+  state.encounterUuids = state.allResponse?.entry?.map(p => p.resource.id);
   state.patientUuids = [
     ...new Set(
-      state.allResponse.entry.map(p =>
+      state.allResponse?.entry?.map(p =>
         p.resource.subject.reference.replace('Patient/', '')
       )
     ),
@@ -64,7 +64,7 @@ each(
   )
 );
 
-fn(state => {
+fnIf($.encounters, state => {
   const {
     data,
     index,
@@ -78,3 +78,8 @@ fn(state => {
 
   return next;
 });
+
+fnIf(!$.encounters, state => {
+  console.log('No encounters found for cursor: ', state.cursor)
+  return state
+})
