@@ -22753,7 +22753,7 @@ fn(({ identifiers, optsMap, formMaps, formMetadata, ...state }) => {
   ]; //MSF ID or OpenMRS Patient Number
 
   state.openmrsAutoIdAttributeId = identifiers.find(i => i.type === 'OPENMRS_AUTO_ID')?.[
-    'dhis2 attribute ide'
+    'dhis2 attribute id'
   ]; //MSF ID or OpenMRS Patient Number
 
   return state;

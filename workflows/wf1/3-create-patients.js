@@ -154,15 +154,17 @@ each(
     state => {
       const { patientNumber, ...patient } = state.data;
       console.log(
-        'Upserting patient record\n',
+        'Upserting patient record...',
         JSON.stringify(patient, null, 2)
       );
       return patient;
     },
     state => {
       state.newPatientUuid ??= [];
+     //console.log('state.references ::', state.references)
       state.newPatientUuid.push({
         patient_number: state.references.at(-1)?.patientNumber,
+        omrs_patient_number: state.references.at(-1)?.identifiers.find(i => i.identifierType=`${state.openmrsAutoId}`),
         uuid: state.data.uuid,
       });
       return state;
