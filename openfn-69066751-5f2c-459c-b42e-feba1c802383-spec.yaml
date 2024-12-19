@@ -120,11 +120,6 @@ workflows:
         target_job: Get-Teis-and-Locations
         condition_type: on_job_success
         enabled: true
-      Create-Patients->Update-Teis:
-        source_job: Create-Patients
-        target_job: Update-Teis
-        condition_type: on_job_success
-        enabled: true
       Get-Teis-and-Locations->Create-Patients:
         source_job: Get-Teis-and-Locations
         target_job: Create-Patients
@@ -133,6 +128,11 @@ workflows:
         condition_expression: |
           state.teis.length > 0 && !state.errors
 
+        enabled: true
+      Create-Patients->Update-Teis:
+        source_job: Create-Patients
+        target_job: Update-Teis
+        condition_type: on_job_success
         enabled: true
   wf2-omrs-dhis2:
     name: wf2-omrs-dhis2

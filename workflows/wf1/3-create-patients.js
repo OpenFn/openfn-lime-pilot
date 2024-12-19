@@ -38,7 +38,9 @@ fn(state => {
     return result ? result.value : undefined;
   };
 
+
   const calculateDOB = age => {
+    if (!age) return age
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const birthYear = currentYear - age;
@@ -74,15 +76,22 @@ fn(state => {
       .filter(a => a.attribute in state.patientAttributes)
       .map(a => {
         let value = a.value;
+
         if (a.displayName === 'Nationality') {
           value = nationalityMap[a.value];
         } else if (a.displayName.includes(' status')) {
           value = statusMap[a.value];
         }
+
+        if (!value) {
+          console.log(value)
+          console.log(state.patientAttributes[a.attribute].trim(), 'attributeType')
+        }
         return {
-          attributeType: state.patientAttributes[a.attribute],
+          attributeType: state.patientAttributes[a.attribute].trim(),
           value,
         };
+
       });
     return {
       patientNumber,
