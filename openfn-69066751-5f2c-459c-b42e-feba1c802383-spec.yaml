@@ -1,6 +1,7 @@
 name: msf-lime-mosul
 description: |
   OpenFn cloud project for workflow testing between MSF and OpenFn teams
+
 credentials:
   aissatou@openfn.org-MSF-OMRS-Demo-Nov-2024:
     name: MSF OMRS Demo Nov 2024
@@ -33,50 +34,6 @@ credentials:
     name: mtuchi-github-token
     owner: mtuchi@openfn.org
 workflows:
-  fetch-metadata-and-generate-opts-json:
-    name: fetch-metadata-and-generate-opts-json
-    jobs:
-      Get-metadata-file-from-Sharepoint:
-        name: Get metadata file from Sharepoint
-        adaptor: '@openfn/language-msgraph@latest'
-        credential: mtuchi@openfn.org-OpenFnSharepoint
-        body:
-          path: workflows/wf3/1-fetch-metadata.js
-
-      Map-metadata-file-to-option-set-Json-format:
-        name: Map metadata file to option-set Json format
-        adaptor: '@openfn/language-common@latest'
-        credential: null
-        body:
-          path: workflows/wf3/2-map-metadata.js
-
-      Save-option-set-json-to-github:
-        name: Save option-set json to github
-        adaptor: '@openfn/language-http@latest'
-        credential: mtuchi@openfn.org-mtuchi-github-token
-        body:
-          path: workflows/wf3/3-save-options.js
-
-    triggers:
-      webhook:
-        type: webhook
-        enabled: true
-    edges:
-      Get-metadata-file-from-Sharepoint->Map-metadata-file-to-option-set-Json-format:
-        source_job: Get-metadata-file-from-Sharepoint
-        target_job: Map-metadata-file-to-option-set-Json-format
-        condition_type: on_job_success
-        enabled: true
-      Map-metadata-file-to-option-set-Json-format->Save-option-set-json-to-github:
-        source_job: Map-metadata-file-to-option-set-Json-format
-        target_job: Save-option-set-json-to-github
-        condition_type: on_job_success
-        enabled: true
-      webhook->Get-metadata-file-from-Sharepoint:
-        source_trigger: webhook
-        target_job: Get-metadata-file-from-Sharepoint
-        condition_type: always
-        enabled: true
   wf1-dhis2-omrs-migration:
     name: wf1-dhis2-omrs-migration
     jobs:

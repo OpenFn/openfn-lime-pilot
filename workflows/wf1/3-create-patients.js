@@ -95,7 +95,7 @@ fn(state => {
       patientNumber,
       person: {
         age: getValueForCode(d.attributes, 'age'),
-        gender: genderOptions[getValueForCode(d.attributes, 'sex')],
+        gender: genderOptions[getValueForCode(d.attributes, 'sex')] || 'U',
         birthdate:
           d.attributes.find(a => a.attribute === 'WDp4nVor9Z7')?.value ??
           calculateDOB(getValueForCode(d.attributes, 'age')),
