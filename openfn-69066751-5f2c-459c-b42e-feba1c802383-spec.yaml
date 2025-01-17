@@ -1,5 +1,6 @@
-name: msf-lime-next-staging
-description: null
+name: msf-lime-mosul
+description: |
+  OpenFn cloud project for workflow testing between MSF and OpenFn teams
 credentials:
   aissatou@openfn.org-MSF-OMRS-Demo-Nov-2024:
     name: MSF OMRS Demo Nov 2024
@@ -9,6 +10,9 @@ credentials:
     owner: aissatou@openfn.org
   aleksa@openfn.org-AK-Sharepoint:
     name: AK Sharepoint
+    owner: aleksa@openfn.org
+  aleksa@openfn.org-MSF-OMRS-Demo---Raw-with-baseUrl:
+    name: MSF OMRS Demo - Raw with baseUrl
     owner: aleksa@openfn.org
   aleksa@openfn.org-OpenMRS-Demo-Azure:
     name: OpenMRS Demo Azure
@@ -140,7 +144,7 @@ workflows:
       Get-Patients:
         name: Get Patients
         adaptor: '@openfn/language-openmrs@4.1.3'
-        credential: aissatou@openfn.org-MSF-OMRS-Demo-Nov-2024
+        credential: aleksa@openfn.org-MSF-OMRS-Demo---Raw-with-baseUrl
         body:
           path: workflows/wf2/1-get-patients.js
 
@@ -150,24 +154,28 @@ workflows:
         credential: mtuchi@openfn.org-MSF-DHIS2-UAT
         body:
           path: workflows/wf2/2-upsert-teis.js
+
       Get-Encounters:
         name: Get Encounters
         adaptor: '@openfn/language-http@6.5.1'
-        credential: 'aissatou@openfn.org-MSF-OMRS-Demo-Nov-2024-(raw)'
+        credential: aleksa@openfn.org-MSF-OMRS-Demo---Raw-with-baseUrl
         body:
           path: workflows/wf2/3-get-encounters.js
+
       Get-TEIs-and-Map-Answers:
         name: Get TEIs and Map Answers
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: mtuchi@openfn.org-MSF-DHIS2-UAT
         body:
           path: workflows/wf2/5-get-teis.js
+
       Create-Events:
         name: Create Events
         adaptor: '@openfn/language-dhis2@5.0.1'
         credential: mtuchi@openfn.org-MSF-DHIS2-UAT
         body:
           path: workflows/wf2/6-create-events.js
+
       Mappings:
         name: Mappings
         adaptor: '@openfn/language-http@6.5.1'
@@ -241,6 +249,7 @@ workflows:
         condition_label: has-encounters
         condition_expression: |
           !state.errors && state.encounters
+
         enabled: true
       Mappings->Get-Encounters:
         source_job: Mappings
@@ -249,4 +258,5 @@ workflows:
         condition_label: has-no-patients
         condition_expression: |
           !state.errors && state.patients.length === 0
+
         enabled: true
